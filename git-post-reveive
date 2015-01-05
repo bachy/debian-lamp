@@ -1,0 +1,18 @@
+#!/bin/bash
+#hook/post-receive
+#CONFIG
+
+PRODDIR="www"
+
+read oldrev newrev refname
+if [ $refname = "refs/heads/prod" ]; then
+  echo "===== DEPLOYING APP ====="
+  unset GIT_DIR
+  cd ~
+  cd $PRODDIR
+  git pull --ff-only origin prod
+  echo $?
+  echo "====== OK ====="
+else
+  echo "Warning Commit not deployed, please use prod branch"
+fi

@@ -1,0 +1,17 @@
+#!/bin/bash
+#hook/pre-receive
+#CONFIG
+PRODDIR="www"
+
+read oldrev newrev refname
+if [ $refname = "refs/heads/prod" ]; then
+  echo "===== UPDATE REPOSITORY ====="
+  unset GIT_DIR
+  cd ~
+  cd $PRODDIR
+  git add .
+  git commit -m "Auto Commit"
+  echo "====== OK ====="
+else
+  echo "Warning Commit not deployed, please use prod branch"
+fi

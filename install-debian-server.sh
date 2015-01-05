@@ -4,9 +4,12 @@
 # http://www.debian.org/doc/manuals/securing-debian-howto/
 # https://www.thefanclub.co.za/how-to/how-secure-ubuntu-1204-lts-server-part-1-basics
 # https://www.linode.com/docs/websites/lamp/lamp-server-on-debian-7-wheezy/
+# http://web-74.com/blog/reseaux/gerer-le-deploiement-facilement-avec-git/
 #
 
 echo "This script has been tested only on Linux Debian 7"
+
+_cwd="$(pwd)"
 
 echo "Installing harden"
 apt-get install harden
@@ -59,5 +62,67 @@ chown www-data /var/log/php
 
 apt-get install php5-mysql
 
+echo "installing vhost"
+read -p "hostname ? " _host_name
+cp "$_cwd"/example.org.conf /etc/apache2/sites-available/"$_host_name".conf
+sed -ir "s/example\.org/$_host_name/g" /etc/apache2/sites-available/"$_host_name".conf
+
+mkdir -p /srv/www/"$_host_name"/public_html
+mkdir /srv/www/"$_host_name"/logs
+#set proper right to user will handle the app
+chown -R root:admin  /srv/www/"$_host_name"/
+chmod -R g+w /srv/www/"$_host_name"/
+chmod -R g+r /srv/www/"$_host_name"/
+
+# create a shortcut to the site
+mkdir /home/"$user"/www/
+chown "$user":admin /home/"$user"/www/
+ln -s /srv/www/"$_host_name" /home/"$user"/www/"$_host_name"
+
+#activate teh vhost
+a2ensite "$_host_name".conf
+
+#restart apache
 service apache2 restart
 
+#installing better prompt and some goodies for root
+echo "shell prompt"
+git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd -
+
+# setup user environment
+echo "$user tasks"
+su $user
+cd ~
+echo "shell prompt"
+git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd -
+cd ~
+source .bashrc
+
+# setup bare repositorie to push to
+echo "setup git repositories"
+mkdir ~/git-repositories
+mkdir ~/git-repositories/"$_host_name".git
+cd ~/git-repositories/"$_host_name".git
+git init --bare
+
+# setup git repo on site folder
+cd /srv/www/"$_host_name"/public_html/
+git init
+# link to the bare repo
+git remote add origin ~/git-repositories/"$_host_name".git
+
+# cerate hooks that will update the site repo
+cd ~
+cp "$_cwd"/pre-receive ~/git-repositories/"$_host_name".git/hooks/
+cp "$_cwd"/post-receive ~/git-repositories/"$_host_name".git/hooks/
+
+sed -ir "s/PRODDIR=\"www\"/PRODDIR=\/srv\/www\/$_host_name\/public_html/g" ~/git-repositories/"$_host_name".git/hooks/pre-receive
+sed -ir "s/PRODDIR=\"www\"/PRODDIR=\/srv\/www\/$_host_name\/public_html/g" ~/git-repositories/"$_host_name".git/hooks/post-receive
+
+cd ~/git-repositories/"$_host_name".git/hooks/
+chmod +x post-receive pre-receive
+
+# done
+echo "install succeed"
+echo "your site stay now to ~/www/$_host_name"
+echo "you can push updates on prod branch throug $user@IP.IP.IP.IP:git-repositories/$_host_name.git"
