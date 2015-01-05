@@ -12,8 +12,9 @@ sudo apt-get git
 git clone https://github.com/bachy/debian-lamp.git
 ```
 
-3 run the script
+3 run the script as root
 ```
+su
 cd debian-lamp
 chmod a+x install-debian-server.sh
 ./install-debian-server.sh
