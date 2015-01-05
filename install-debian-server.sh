@@ -113,8 +113,8 @@ git remote add origin ~/git-repositories/"$_host_name".git
 
 # cerate hooks that will update the site repo
 cd ~
-cp "$_cwd"/pre-receive ~/git-repositories/"$_host_name".git/hooks/
-cp "$_cwd"/post-receive ~/git-repositories/"$_host_name".git/hooks/
+cp "$_cwd"/git-pre-receive ~/git-repositories/"$_host_name".git/hooks/pre-receive
+cp "$_cwd"/git-post-receive ~/git-repositories/"$_host_name".git/hooks/post-receive
 
 sed -ir "s/PRODDIR=\"www\"/PRODDIR=\/srv\/www\/$_host_name\/public_html/g" ~/git-repositories/"$_host_name".git/hooks/pre-receive
 sed -ir "s/PRODDIR=\"www\"/PRODDIR=\/srv\/www\/$_host_name\/public_html/g" ~/git-repositories/"$_host_name".git/hooks/post-receive
