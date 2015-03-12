@@ -11,9 +11,10 @@ echo -e "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
 echo "Please run this script as root"
 
 echo -n "Should we start? [Y:n]"
-read st
-st=${st:-y}
-if [$st != 'y']; then
+read yn
+yn=${yn:-y}
+if [ "$yn" != 'y']; then
+  echo "aborting script!"
   exit
 fi
 
