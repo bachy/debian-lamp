@@ -11,7 +11,7 @@
 echo "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
 echo "Please run this script as root"
 
-echo -n "Should we start? [Y:n] "
+echo -n "Should we start? [Y\n] "
 read yn
 yn=${yn:-y}
 if [ "$yn" != "y" ]; then
@@ -58,7 +58,7 @@ echo "* * *"
 
 while [ "$securssh" != "y" ] && [ "$securssh" != "n" ]
 do
-echo -n "Securing ssh (disabling root login)? [y:n] "
+echo -n "Securing ssh (disabling root login)? [y\n] "
 read securssh
 # securssh=${securssh:-y}
 done
@@ -120,7 +120,7 @@ echo "* * *"
 echo "\033[35;1mVHOST install \033[0m"
 while [ "$vh" != "y" ] && [ "$vh" != "n" ]
 do
-echo -n "Should we install a vhost? [y:n] "
+echo -n "Should we install a vhost? [y\n] "
 read vh
 # vh=${vh:-y}
 done
@@ -131,7 +131,7 @@ if [ "$vh" = "y" ]; then
   do
   read -p "enter a hostname ? " _host_name
   if [ "$_host_name" != "" ]; then
-    read -p "is hostname $_host_name correcte [y:n] " validated
+    read -p "is hostname $_host_name correcte [y\n] " validated
     if [ "$validated" = "y" ]; then
       break
     else
@@ -169,7 +169,7 @@ echo "* * *"
 #installing better prompt and some goodies for root
 echo "\033[35;1mInstalling shell prompt for root \033[0m"
 sleep 5
-git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd -
+git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd ~
 source ~/.bashrc
 echo "done"
 echo "* * *"
@@ -182,42 +182,40 @@ echo "* * *"
 
 # setup user environment
 echo "\033[35;1mInstalling shell prompt for $user \033[0m"
-su $user
 sleep 5
-cd ~
-git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd -
-cd ~
-source .bashrc
+sudo -u $user -H sh -c "cd ~; git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd ~"
 echo "done"
 echo "* * *"
 
 # setup bare repositorie to push to
-echo "\033[35;1msetup git repositories for $_host_name \033[0m"
-sleep 5
-mkdir ~/git-repositories
-mkdir ~/git-repositories/"$_host_name".git
-cd ~/git-repositories/"$_host_name".git
-git init --bare
+echo "\033[35;1msetup git repositorie \033[0m"
+while [ "$gr" != "y" ] && [ "$gr" != "n" ]
+do
+echo -n "Should we install a git repos for $_host_name in $user home? [y\n] "
+read gr
+done
+
+sudo -u $user -H sh -c "mkdir ~/git-repositories; mkdir ~/git-repositories/$_host_name.git; cd ~/git-repositories/$_host_name.git; git init --bare"
 
 # setup git repo on site folder
 cd /srv/www/"$_host_name"/public_html/
 git init
 # link to the bare repo
-git remote add origin ~/git-repositories/"$_host_name".git
+git remote add origin /home/"$user"/git-repositories/"$_host_name".git
 
 # create hooks that will update the site repo
 cd ~
-cp "$_cwd"/assets/git-pre-receive ~/git-repositories/"$_host_name".git/hooks/pre-receive
-cp "$_cwd"/assets/git-post-receive ~/git-repositories/"$_host_name".git/hooks/post-receive
+cp "$_cwd"/assets/git-pre-receive /home/"$user"/git-repositories/"$_host_name".git/hooks/pre-receive
+cp "$_cwd"/assets/git-post-receive /home/"$user"/git-repositories/"$_host_name".git/hooks/post-receive
 
-sed -ir "s/PRODDIR=\"www\"/PRODDIR=\/srv\/www\/$_host_name\/public_html/g" ~/git-repositories/"$_host_name".git/hooks/pre-receive
-sed -ir "s/PRODDIR=\"www\"/PRODDIR=\/srv\/www\/$_host_name\/public_html/g" ~/git-repositories/"$_host_name".git/hooks/post-receive
+sed -ir "s/PRODDIR=\"www\"/PRODDIR=\/srv\/www\/$_host_name\/public_html/g" /home/"$user"/git-repositories/"$_host_name".git/hooks/pre-receive
+sed -ir "s/PRODDIR=\"www\"/PRODDIR=\/srv\/www\/$_host_name\/public_html/g" /home/"$user"/git-repositories/"$_host_name".git/hooks/post-receive
 
-cd ~/git-repositories/"$_host_name".git/hooks/
+cd /home/"$user"/git-repositories/"$_host_name".git/hooks/
 chmod +x post-receive pre-receive
 
 # done
 echo "git repos for $_host_name install succeed"
-echo "your site stay now to ~/www/$_host_name"
+echo "your site stay now to /home/$user/www/$_host_name"
 echo "you can push updates on prod branch through $user@IP.IP.IP.IP:git-repositories/$_host_name.git"
 echo "* * *"
