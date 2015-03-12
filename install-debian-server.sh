@@ -11,7 +11,7 @@
 echo "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
 echo "Please run this script as root"
 
-echo -n "Should we start? [Y\n] "
+echo -n "Should we start? [Y|n] "
 read yn
 yn=${yn:-y}
 if [ "$yn" != "y" ]; then
@@ -58,7 +58,7 @@ echo "* * *"
 
 while [ "$securssh" != "y" ] && [ "$securssh" != "n" ]
 do
-echo -n "Securing ssh (disabling root login)? [y\n] "
+echo -n "Securing ssh (disabling root login)? [y|n] "
 read securssh
 # securssh=${securssh:-y}
 done
@@ -120,7 +120,7 @@ echo "* * *"
 echo "\033[35;1mVHOST install \033[0m"
 while [ "$vh" != "y" ] && [ "$vh" != "n" ]
 do
-echo -n "Should we install a vhost? [y\n] "
+echo -n "Should we install a vhost? [y|n] "
 read vh
 # vh=${vh:-y}
 done
@@ -131,7 +131,7 @@ if [ "$vh" = "y" ]; then
   do
   read -p "enter a hostname ? " _host_name
   if [ "$_host_name" != "" ]; then
-    read -p "is hostname $_host_name correcte [y\n] " validated
+    read -p "is hostname $_host_name correcte [y|n] " validated
     if [ "$validated" = "y" ]; then
       break
     else
@@ -191,7 +191,7 @@ echo "* * *"
 echo "\033[35;1msetup git repositorie \033[0m"
 while [ "$gr" != "y" ] && [ "$gr" != "n" ]
 do
-echo -n "Should we install a git repos for $_host_name in $user home? [y\n] "
+echo -n "Should we install a git repos for $_host_name in $user home? [y|n] "
 read gr
 done
 
