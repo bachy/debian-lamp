@@ -7,7 +7,14 @@
 # http://web-74.com/blog/reseaux/gerer-le-deploiement-facilement-avec-git/
 #
 
+echo '\033[95m
+    ____       __    _                                                  _            __        ____
+   / __ \___  / /_  (_)___ _____     ________  ______   _____  _____   (_)___  _____/ /_____ _/ / /
+  / / / / _ \/ __ \/ / __ `/ __ \   / ___/ _ \/ ___/ | / / _ \/ ___/  / / __ \/ ___/ __/ __ `/ / /
+ / /_/ /  __/ /_/ / / /_/ / / / /  (__  )  __/ /   | |/ /  __/ /     / / / / (__  ) /_/ /_/ / / /
+/_____/\___/_.___/_/\__,_/_/ /_/  /____/\___/_/    |___/\___/_/     /_/_/ /_/____/\__/\__,_/_/_/
 
+\033[0m'
 echo "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
 echo "Please run this script as root"
 
@@ -19,32 +26,61 @@ if [ "$yn" != "y" ]; then
   exit
 fi
 
-echo "* * *"
-
+echo '\033[95m
+   __  ______  __________  ___    ____  ______
+  / / / / __ \/ ____/ __ \/   |  / __ \/ ____/
+ / / / / /_/ / / __/ /_/ / /| | / / / / __/
+/ /_/ / ____/ /_/ / _, _/ ___ |/ /_/ / /___
+\____/_/    \____/_/ |_/_/  |_/_____/_____/
+\033[0m'
 apt-get update
 apt-get upgrade
 
 # get the current position
 _cwd="$(pwd)"
 
+echo '\033[95m
+    __  _____    ____  ____  _______   __
+   / / / /   |  / __ \/ __ \/ ____/ | / /
+  / /_/ / /| | / /_/ / / / / __/ /  |/ /
+ / __  / ___ |/ _, _/ /_/ / /___/ /|  /
+/_/ /_/_/  |_/_/ |_/_____/_____/_/ |_/
+\033[0m'
+
 echo "\033[35;1mInstalling harden \033[0m"
-sleep 5
+sleep 3
 apt-get install harden
 echo "Harden instaled"
-echo "* * *"
+echo "033[92;1m* * *033[Om"
+
+echo '\033[95m
+    ______________  _______       _____    __    __
+   / ____/  _/ __ \/ ____/ |     / /   |  / /   / /
+  / /_   / // /_/ / __/  | | /| / / /| | / /   / /
+ / __/ _/ // _, _/ /___  | |/ |/ / ___ |/ /___/ /___
+/_/   /___/_/ |_/_____/  |__/|__/_/  |_/_____/_____/
+\033[0m'
 
 echo "\033[35;1mInstalling ufw and setup firewall (allowing only ssh and http) \033[0m"
-sleep 5
+sleep 3
 apt-get install ufw
 ufw allow ssh
 ufw allow http
 ufw enable
 ufw status verbose
 echo "ufw installed and firwall configured"
-echo "* * *"
+echo "033[92;1m* * *033[Om"
+
+echo '\033[95m
+   __  _______ __________
+  / / / / ___// ____/ __ \
+ / / / /\__ \/ __/ / /_/ /
+/ /_/ /___/ / /___/ _, _/
+\____//____/_____/_/ |_|
+\033[0m'
 
 echo "\033[35;1mCreate new user (you will be asked a user name and a password) \033[0m"
-sleep 5
+sleep 3
 echo -n "Enter user name: "
 read user
 # read -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
@@ -54,7 +90,15 @@ groupadd admin
 usermod -a -G admin "$user"
 dpkg-statoverride --update --add root admin 4750 /bin/su
 echo "user $user configured"
-echo "* * *"
+echo "033[92;1m* * *033[Om"
+
+echo '\033[95m
+   __________ __  __
+  / ___/ ___// / / /
+  \__ \\__ \/ /_/ /
+ ___/ /__/ / __  /
+/____/____/_/ /_/
+\033[0m'
 
 while [ "$securssh" != "y" ] && [ "$securssh" != "n" ]
 do
@@ -67,30 +111,66 @@ if [ "$securssh" = "y" ]; then
   sed -i 's/PermitRootLogin\ yes/PermitRootLogin no/g' /etc/ssh/sshd_config
   sed -i 's/PermitEmptyPasswords\ yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
   sed -i 's/Protocol\ [0-9]/Protocol 2/g' /etc/ssh/sshd_config
+  service ssh reload
   echo "SSH secured"
 else
   echo 'root user can stile coonect through ssh'
 fi
-echo "* * *"
+echo "033[92;1m* * *033[Om"
+
 
 echo "\033[35;1mInstalling AMP web server \033[0m"
+
+echo '\033[95m
+    ___                     __        ___
+   /   |  ____  ____ ______/ /_  ___ |__ \
+  / /| | / __ \/ __ `/ ___/ __ \/ _ \__/ /
+ / ___ |/ /_/ / /_/ / /__/ / / /  __/ __/
+/_/  |_/ .___/\__,_/\___/_/ /_/\___/____/
+      /_/
+\033[0m'
+
 echo "\033[35;1mInstalling Apache2 \033[0m"
-sleep 5
+sleep 3
 apt-get install apache2
 a2enmod rewrite
+cat "$_cwd"/assets/apache2.conf > /etc/apache2/apache2.conf
+# Change logrotate for Apache2 log files to keep 10 days worth of logs
+sed -i 's/\tweekly/\tdaily/' /etc/logrotate.d/apache2
+sed -i 's/\trotate .*/\trotate 10/' /etc/logrotate.d/apache2
+# Remove Apache server information from headers.
+sed -i 's/ServerTokens .*/ServerTokens Prod/' /etc/apache2/conf.d/security
+sed -i 's/ServerSignature .*/ServerSignature Off/' /etc/apache2/conf.d/security
 service apache2 restart
 echo "Apache2 installed"
-echo "* * *"
+echo "033[92;1m* * *033[Om"
+
+echo '\033[95m
+    __  ___                 __
+   /  |/  /_  ___________ _/ /
+  / /|_/ / / / / ___/ __ `/ /
+ / /  / / /_/ (__  ) /_/ / /
+/_/  /_/\__, /____/\__, /_/
+       /____/        /_/
+\033[0m'
 
 echo "\033[35;1minstalling Mysql \033[0m"
-sleep 5
+sleep 3
 apt-get install mysql-server
 mysql_secure_installation
 echo "mysql installed"
-echo "* * *"
+echo "033[92;1m* * *033[Om"
+
+echo '\033[95m
+    ____  __  ______
+   / __ \/ / / / __ \
+  / /_/ / /_/ / /_/ /
+ / ____/ __  / ____/
+/_/   /_/ /_/_/
+\033[0m'
 
 echo "\033[35;1mInstalling PHP \033[0m"
-sleep 5
+sleep 3
 apt-get install php5 php-pear php5-gd
 echo "Configuring PHP"
 cp /etc/php5/apache2/php.ini /etc/php5/apache2/php.ini.back
@@ -109,13 +189,29 @@ chown www-data /var/log/php
 
 apt-get install php5-mysql
 echo "php installed"
-echo "* * *"
+echo "033[92;1m* * *033[Om"
 
-echo "\033[35;1mInstalling Awstat \033[0m"
-sleep 5
-apt-get install awstats
-echo "Awstat installed"
-echo "* * *"
+echo '\033[95m
+           __          __  ___      ___       __          _
+    ____  / /_  ____  /  |/  /_  __/   | ____/ /___ ___  (_)___
+   / __ \/ __ \/ __ \/ /|_/ / / / / /| |/ __  / __ `__ \/ / __ \
+  / /_/ / / / / /_/ / /  / / /_/ / ___ / /_/ / / / / / / / / / /
+ / .___/_/ /_/ .___/_/  /_/\__, /_/  |_\__,_/_/ /_/ /_/_/_/ /_/
+/_/         /_/           /____/
+\033[0m'
+
+echo "\033[35;1mInstalling phpMyAdmin \033[0m"
+apt-get install phpmyadmin
+echo "phpMyAdmin installed"
+echo "033[92;1m* * *033[Om"
+
+echo '\033[95m
+        __               __
+ _   __/ /_  ____  _____/ /_
+| | / / __ \/ __ \/ ___/ __/
+| |/ / / / / /_/ (__  ) /_
+|___/_/ /_/\____/____/\__/
+\033[0m'
 
 echo "\033[35;1mVHOST install \033[0m"
 while [ "$vh" != "y" ] && [ "$vh" != "n" ]
@@ -124,7 +220,6 @@ echo -n "Should we install a vhost? [y|n] "
 read vh
 # vh=${vh:-y}
 done
-
 if [ "$vh" = "y" ]; then
 
   while [ "$_host_name" = "" ]
@@ -164,58 +259,111 @@ if [ "$vh" = "y" ]; then
 else
   echo "Vhost installation aborted"
 fi
-echo "* * *"
+echo "033[92;1m* * *033[Om"
+
+echo '\033[95m
+    ___                __        __
+   /   |_      _______/ /_____ _/ /_
+  / /| | | /| / / ___/ __/ __ `/ __/
+ / ___ | |/ |/ (__  ) /_/ /_/ / /_
+/_/  |_|__/|__/____/\__/\__,_/\__/
+\033[0m'
+
+echo "\033[35;1mInstalling Awstat \033[0m"
+sleep 3
+apt-get install awstats
+# Configure AWStats
+temp=`grep -i sitedomain /etc/awstats/awstats.conf.local | wc -l`
+if [ $temp -lt 1 ]; then
+    echo SiteDomain="$_host_name" >> /etc/awstats/awstats.conf.local
+fi
+# Disable Awstats from executing every 10 minutes. Put a hash in front of any line.
+sed -i 's/^[^#]/#&/' /etc/cron.d/awstats
+echo "Awstat installed"
+echo "033[92;1m* * *033[Om"
+
+
+echo '\033[95m
+  ______________  _______
+ /_  __/ ____/  |/  / __ \
+  / / / __/ / /|_/ / /_/ /
+ / / / /___/ /  / / ____/
+/_/ /_____/_/  /_/_/
+\033[0m'
+
+function check_tmp_secured {
+
+  temp1=`grep -w "/var/tempFS /tmp ext3 loop,nosuid,noexec,rw 0 0" /etc/fstab | wc -l`
+  temp2=`grep -w "tmpfs /tmp tmpfs rw,noexec,nosuid 0 0" /etc/fstab | wc -l`
+
+  if [ $temp1  -gt 0 ] || [ $temp2 -gt 0 ]; then
+      return 1
+  else
+      return 0
+  fi
+} # End function check_tmp_secured
+
+function secure_tmp_tmpfs {
+
+  cp /etc/fstab /etc/fstab.bak
+  # Backup /tmp
+  cp -Rpf /tmp /tmpbackup
+
+  rm -rf /tmp
+  mkdir /tmp
+
+  mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
+  chmod 1777 /tmp
+  echo "tmpfs /tmp tmpfs rw,noexec,nosuid 0 0" >> /etc/fstab
+
+  # Restore /tmp
+  cp -Rpf /tmpbackup/* /tmp/ >/dev/null 2>&1
+
+  #Remove old tmp dir
+  rm -rf /tmpbackup
+
+  # Backup /var/tmp and link it to /tmp
+  mv /var/tmp /var/tmpbackup
+  ln -s /tmp /var/tmp
+
+  # Copy the old data back
+  cp -Rpf /var/tmpold/* /tmp/ >/dev/null 2>&1
+  # Remove old tmp dir
+  rm -rf /var/tmpbackup
+
+  echo -e "\033[35;1m /tmp and /var/tmp secured using tmpfs. \033[0m"
+} # End function secure_tmp_tmpfs
+
+check_tmp_secured
+if [ $? = 0  ]; then
+    secure_tmp_tmpfs
+else
+    echo -e "\033[35;1mFunction canceled. /tmp already secured. \033[0m"
+fi
+
+echo '\033[95m
+    ____                             __
+   / __ \_________  ____ ___  ____  / /_
+  / /_/ / ___/ __ \/ __ `__ \/ __ \/ __/
+ / ____/ /  / /_/ / / / / / / /_/ / /_
+/_/   /_/   \____/_/ /_/ /_/ .___/\__/
+                          /_/
+\033[0m'
 
 #installing better prompt and some goodies for root
 echo "\033[35;1mInstalling shell prompt for root \033[0m"
-sleep 5
+sleep 3
 git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd ~
 source ~/.bashrc
 echo "done"
-echo "* * *"
+echo "033[92;1m* * *033[Om"
 
-#    __  _______ __________
-#   / / / / ___// ____/ __ \
-#  / / / /\__ \/ __/ / /_/ /
-# / /_/ /___/ / /___/ _, _/
-# \____//____/_____/_/ |_|
+echo '\033[95m
+                  __
+  ___  ____  ____/ /
+ / _ \/ __ \/ __  /
+/  __/ / / / /_/ /
+\___/_/ /_/\__,_/
+\033[0m'
 
-# setup user environment
-echo "\033[35;1mInstalling shell prompt for $user \033[0m"
-sleep 5
-sudo -u $user -H sh -c "cd ~; git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd ~"
-echo "done"
-echo "* * *"
-
-# setup bare repositorie to push to
-echo "\033[35;1msetup git repositorie \033[0m"
-while [ "$gr" != "y" ] && [ "$gr" != "n" ]
-do
-echo -n "Should we install a git repos for $_host_name in $user home? [y|n] "
-read gr
-done
-
-sudo -u $user -H sh -c "mkdir ~/git-repositories; mkdir ~/git-repositories/$_host_name.git; cd ~/git-repositories/$_host_name.git; git init --bare"
-
-# setup git repo on site folder
-cd /srv/www/"$_host_name"/public_html/
-git init
-# link to the bare repo
-git remote add origin /home/"$user"/git-repositories/"$_host_name".git
-
-# create hooks that will update the site repo
-cd ~
-cp "$_cwd"/assets/git-pre-receive /home/"$user"/git-repositories/"$_host_name".git/hooks/pre-receive
-cp "$_cwd"/assets/git-post-receive /home/"$user"/git-repositories/"$_host_name".git/hooks/post-receive
-
-sed -ir "s/PRODDIR=\"www\"/PRODDIR=\/srv\/www\/$_host_name\/public_html/g" /home/"$user"/git-repositories/"$_host_name".git/hooks/pre-receive
-sed -ir "s/PRODDIR=\"www\"/PRODDIR=\/srv\/www\/$_host_name\/public_html/g" /home/"$user"/git-repositories/"$_host_name".git/hooks/post-receive
-
-cd /home/"$user"/git-repositories/"$_host_name".git/hooks/
-chmod +x post-receive pre-receive
-
-# done
-echo "git repos for $_host_name install succeed"
-echo "your site stay now to /home/$user/www/$_host_name"
-echo "you can push updates on prod branch through $user@IP.IP.IP.IP:git-repositories/$_host_name.git"
-echo "* * *"
+echo "\033[35;1m* * script done * * \033[0m"
