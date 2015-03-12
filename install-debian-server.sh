@@ -8,7 +8,7 @@
 #
 
 
-echo -e "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
+echo "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
 echo "Please run this script as root"
 
 echo -n "Should we start? [Y:n] "
@@ -27,13 +27,13 @@ apt-get upgrade
 # get the current position
 _cwd="$(pwd)"
 
-echo -e "\033[35;1mInstalling harden \033[0m"
+echo "\033[35;1mInstalling harden \033[0m"
 sleep 5
 apt-get install harden
 echo "Harden instaled"
 echo "* * *"
 
-echo -e "\033[35;1mInstalling ufw and setup firewall (allowing only ssh and http) \033[0m"
+echo "\033[35;1mInstalling ufw and setup firewall (allowing only ssh and http) \033[0m"
 sleep 5
 apt-get install ufw
 ufw allow ssh
@@ -43,7 +43,7 @@ ufw status verbose
 echo "ufw installed and firwall configured"
 echo "* * *"
 
-echo -e "\033[35;1mCreate new user (you will be asked a user name and a password) \033[0m"
+echo "\033[35;1mCreate new user (you will be asked a user name and a password) \033[0m"
 sleep 5
 echo -n "Enter user name: "
 read user
@@ -73,8 +73,8 @@ else
 fi
 echo "* * *"
 
-echo -e "\033[35;1mInstalling AMP web server \033[0m"
-echo -e "\033[35;1mInstalling Apache2 \033[0m"
+echo "\033[35;1mInstalling AMP web server \033[0m"
+echo "\033[35;1mInstalling Apache2 \033[0m"
 sleep 5
 apt-get install apache2
 a2enmod rewrite
@@ -82,14 +82,14 @@ service apache2 restart
 echo "Apache2 installed"
 echo "* * *"
 
-echo -e "\033[35;1minstalling Mysql \033[0m"
+echo "\033[35;1minstalling Mysql \033[0m"
 sleep 5
 apt-get install mysql-server
 mysql_secure_installation
 echo "mysql installed"
 echo "* * *"
 
-echo -e "\033[35;1mInstalling PHP \033[0m"
+echo "\033[35;1mInstalling PHP \033[0m"
 sleep 5
 apt-get install php5 php-pear php5-gd
 echo "Configuring PHP"
@@ -111,12 +111,13 @@ apt-get install php5-mysql
 echo "php installed"
 echo "* * *"
 
-echo -e "\033[35;1mInstalling Awstat \033[0m"
+echo "\033[35;1mInstalling Awstat \033[0m"
 sleep 5
 apt-get install awstats
 echo "Awstat installed"
 echo "* * *"
 
+echo "\033[35;1mVHOST install \033[0m"
 while [ "$vh" != "y" ] && [ "$vh" != "n" ]
 do
 echo -n "Should we install a vhost? [y:n] "
@@ -166,7 +167,7 @@ fi
 echo "* * *"
 
 #installing better prompt and some goodies for root
-echo -e "\033[35;1mInstalling shell prompt for root \033[0m"
+echo "\033[35;1mInstalling shell prompt for root \033[0m"
 sleep 5
 git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd -
 source ~/.bashrc
@@ -180,7 +181,8 @@ echo "* * *"
 # \____//____/_____/_/ |_|
 
 # setup user environment
-echo -e "\033[35;1mInstalling shell prompt for $user \033[0m"
+echo "\033[35;1mInstalling shell prompt for $user \033[0m"
+su $user
 sleep 5
 cd ~
 git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd -
@@ -190,7 +192,7 @@ echo "done"
 echo "* * *"
 
 # setup bare repositorie to push to
-echo -e "\033[35;1msetup git repositories for $_host_name \033[0m"
+echo "\033[35;1msetup git repositories for $_host_name \033[0m"
 sleep 5
 mkdir ~/git-repositories
 mkdir ~/git-repositories/"$_host_name".git
