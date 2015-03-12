@@ -7,20 +7,19 @@
 # http://web-74.com/blog/reseaux/gerer-le-deploiement-facilement-avec-git/
 #
 
+
 echo -e "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
 echo "Please run this script as root"
 
-echo -n "Should we start? [Y:n]"
+echo -n "Should we start? [Y:n] "
 read yn
 yn=${yn:-y}
-if [ "$yn" != 'y']; then
+if [ "$yn" != "y" ]; then
   echo "aborting script!"
   exit
 fi
 
 echo "* * *"
-
-exit
 
 apt-get update
 apt-get upgrade
@@ -46,7 +45,8 @@ echo "* * *"
 
 echo -e "\033[35;1mCreate new user (you will be asked a user name and a password) \033[0m"
 sleep 5
-read -p "Enter user name: " user
+echo -n "Enter user name: "
+read user
 # read -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
 adduser "$user"
 echo "adding $user to admin group and limiting su to the admin group"
@@ -56,8 +56,14 @@ dpkg-statoverride --update --add root admin 4750 /bin/su
 echo "user $user configured"
 echo "* * *"
 
-read -e -p "Securing ssh (disabling root login) [Y:n]" -i "y" securssh
-if [$securssh = 'y']; then
+while [ "$securssh" != "y" ] && [ "$securssh" != "n" ]
+do
+echo -n "Securing ssh (disabling root login)? [y:n] "
+read securssh
+# securssh=${securssh:-y}
+done
+
+if [ "$securssh" = "y" ]; then
   sed -i 's/PermitRootLogin\ yes/PermitRootLogin no/g' /etc/ssh/sshd_config
   sed -i 's/PermitEmptyPasswords\ yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
   sed -i 's/Protocol\ [0-9]/Protocol 2/g' /etc/ssh/sshd_config
@@ -111,9 +117,28 @@ apt-get install awstats
 echo "Awstat installed"
 echo "* * *"
 
-read -e -p "Should we install a vhost? [Y:n]" vh
-if [ $vh = "y"]; then
-  read -p "hostname ? " _host_name
+while [ "$vh" != "y" ] && [ "$vh" != "n" ]
+do
+echo -n "Should we install a vhost? [y:n] "
+read vh
+# vh=${vh:-y}
+done
+
+if [ "$vh" = "y" ]; then
+
+  while [ "$_host_name" = "" ]
+  do
+  read -p "enter a hostname ? " _host_name
+  if [ "$_host_name" != "" ]; then
+    read -p "is hostname $_host_name correcte [y:n] " validated
+    if [ "$validated" = "y" ]; then
+      break
+    else
+      _host_name=""
+    fi
+  fi
+  done
+
   cp "$_cwd"/assets/example.org.conf /etc/apache2/sites-available/"$_host_name".conf
   sed -ir "s/example\.org/$_host_name/g" /etc/apache2/sites-available/"$_host_name".conf
 
