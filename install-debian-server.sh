@@ -26,6 +26,9 @@ if [ "$yn" != "y" ]; then
   exit
 fi
 
+# get the current position
+_cwd="$(pwd)"
+
 echo '
    __  ______  __________  ___    ____  ______
   / / / / __ \/ ____/ __ \/   |  / __ \/ ____/
@@ -36,8 +39,15 @@ echo '
 apt-get update
 apt-get upgrade
 
-# get the current position
-_cwd="$(pwd)"
+echo '
+    __  ____
+   /  |/  (_)_________
+  / /|_/ / / ___/ ___/
+ / /  / / (__  ) /__
+/_/  /_/_/____/\___/
+
+'
+apt-get install vim
 
 echo '
     __  _____    ____  ____  _______   __
@@ -68,6 +78,38 @@ ufw enable
 ufw status verbose
 echo "ufw installed and firwall configured"
 echo "033[92;1m* * *033[Om"
+
+echo '
+    ______      _ _____   __
+   / ____/___ _(_) /__ \ / /_  ____ _____
+  / /_  / __ `/ / /__/ // __ \/ __ `/ __ \
+ / __/ / /_/ / / // __// /_/ / /_/ / / / /
+/_/    \__,_/_/_//____/_.___/\__,_/_/ /_/
+
+'
+echo "\033[35;1mInstalling fall2ban \033[0m"
+sleep 3
+
+echo "fail2ban installed and configured"
+echo "033[92;1m* * *033[Om"
+
+
+echo '
+    __                    __       __
+   / /______  ____  _____/ /______/ /
+  / //_/ __ \/ __ \/ ___/ //_/ __  /
+ / ,< / / / / /_/ / /__/ ,< / /_/ /
+/_/|_/_/ /_/\____/\___/_/|_|\__,_/
+
+'
+echo "\033[35;1mInstalling knockd \033[0m"
+sleep 3
+apt-get install fail2ban
+
+
+echo "knockd installed and configured"
+echo "033[92;1m* * *033[Om"
+
 
 echo '
    __  _______ __________
