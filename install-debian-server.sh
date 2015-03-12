@@ -7,14 +7,14 @@
 # http://web-74.com/blog/reseaux/gerer-le-deploiement-facilement-avec-git/
 #
 
-echo '\033[95m
-    ____       __    _                                                  _            __        ____
-   / __ \___  / /_  (_)___ _____     ________  ______   _____  _____   (_)___  _____/ /_____ _/ / /
-  / / / / _ \/ __ \/ / __ `/ __ \   / ___/ _ \/ ___/ | / / _ \/ ___/  / / __ \/ ___/ __/ __ `/ / /
- / /_/ /  __/ /_/ / / /_/ / / / /  (__  )  __/ /   | |/ /  __/ /     / / / / (__  ) /_/ /_/ / / /
-/_____/\___/_.___/_/\__,_/_/ /_/  /____/\___/_/    |___/\___/_/     /_/_/ /_/____/\__/\__,_/_/_/
+echo '
+    ____       __    _                _____
+   / __ \___  / /_  (_)___ _____     / ___/___  ______   _____  _____
+  / / / / _ \/ __ \/ / __ `/ __ \    \__ \/ _ \/ ___/ | / / _ \/ ___/
+ / /_/ /  __/ /_/ / / /_/ / / / /   ___/ /  __/ /   | |/ /  __/ /
+/_____/\___/_.___/_/\__,_/_/ /_/   /____/\___/_/    |___/\___/_/
 
-\033[0m'
+'
 echo "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
 echo "Please run this script as root"
 
@@ -26,41 +26,39 @@ if [ "$yn" != "y" ]; then
   exit
 fi
 
-echo '\033[95m
+echo '
    __  ______  __________  ___    ____  ______
   / / / / __ \/ ____/ __ \/   |  / __ \/ ____/
  / / / / /_/ / / __/ /_/ / /| | / / / / __/
 / /_/ / ____/ /_/ / _, _/ ___ |/ /_/ / /___
 \____/_/    \____/_/ |_/_/  |_/_____/_____/
-\033[0m'
+'
 apt-get update
 apt-get upgrade
 
 # get the current position
 _cwd="$(pwd)"
 
-echo '\033[95m
+echo '
     __  _____    ____  ____  _______   __
    / / / /   |  / __ \/ __ \/ ____/ | / /
   / /_/ / /| | / /_/ / / / / __/ /  |/ /
  / __  / ___ |/ _, _/ /_/ / /___/ /|  /
 /_/ /_/_/  |_/_/ |_/_____/_____/_/ |_/
-\033[0m'
-
+'
 echo "\033[35;1mInstalling harden \033[0m"
 sleep 3
 apt-get install harden
 echo "Harden instaled"
 echo "033[92;1m* * *033[Om"
 
-echo '\033[95m
+echo '
     ______________  _______       _____    __    __
    / ____/  _/ __ \/ ____/ |     / /   |  / /   / /
   / /_   / // /_/ / __/  | | /| / / /| | / /   / /
  / __/ _/ // _, _/ /___  | |/ |/ / ___ |/ /___/ /___
 /_/   /___/_/ |_/_____/  |__/|__/_/  |_/_____/_____/
-\033[0m'
-
+'
 echo "\033[35;1mInstalling ufw and setup firewall (allowing only ssh and http) \033[0m"
 sleep 3
 apt-get install ufw
@@ -71,14 +69,13 @@ ufw status verbose
 echo "ufw installed and firwall configured"
 echo "033[92;1m* * *033[Om"
 
-echo '\033[95m
+echo '
    __  _______ __________
   / / / / ___// ____/ __ \
  / / / /\__ \/ __/ / /_/ /
 / /_/ /___/ / /___/ _, _/
 \____//____/_____/_/ |_|
-\033[0m'
-
+'
 echo "\033[35;1mCreate new user (you will be asked a user name and a password) \033[0m"
 sleep 3
 echo -n "Enter user name: "
@@ -92,14 +89,13 @@ dpkg-statoverride --update --add root admin 4750 /bin/su
 echo "user $user configured"
 echo "033[92;1m* * *033[Om"
 
-echo '\033[95m
+echo '
    __________ __  __
   / ___/ ___// / / /
   \__ \\__ \/ /_/ /
  ___/ /__/ / __  /
 /____/____/_/ /_/
-\033[0m'
-
+'
 while [ "$securssh" != "y" ] && [ "$securssh" != "n" ]
 do
 echo -n "Securing ssh (disabling root login)? [y|n] "
@@ -121,15 +117,14 @@ echo "033[92;1m* * *033[Om"
 
 echo "\033[35;1mInstalling AMP web server \033[0m"
 
-echo '\033[95m
+echo '
     ___                     __        ___
    /   |  ____  ____ ______/ /_  ___ |__ \
   / /| | / __ \/ __ `/ ___/ __ \/ _ \__/ /
  / ___ |/ /_/ / /_/ / /__/ / / /  __/ __/
 /_/  |_/ .___/\__,_/\___/_/ /_/\___/____/
       /_/
-\033[0m'
-
+'
 echo "\033[35;1mInstalling Apache2 \033[0m"
 sleep 3
 apt-get install apache2
@@ -145,15 +140,14 @@ service apache2 restart
 echo "Apache2 installed"
 echo "033[92;1m* * *033[Om"
 
-echo '\033[95m
+echo '
     __  ___                 __
    /  |/  /_  ___________ _/ /
   / /|_/ / / / / ___/ __ `/ /
  / /  / / /_/ (__  ) /_/ / /
 /_/  /_/\__, /____/\__, /_/
        /____/        /_/
-\033[0m'
-
+'
 echo "\033[35;1minstalling Mysql \033[0m"
 sleep 3
 apt-get install mysql-server
@@ -161,14 +155,13 @@ mysql_secure_installation
 echo "mysql installed"
 echo "033[92;1m* * *033[Om"
 
-echo '\033[95m
+echo '
     ____  __  ______
    / __ \/ / / / __ \
   / /_/ / /_/ / /_/ /
  / ____/ __  / ____/
 /_/   /_/ /_/_/
-\033[0m'
-
+'
 echo "\033[35;1mInstalling PHP \033[0m"
 sleep 3
 apt-get install php5 php-pear php5-gd
@@ -191,28 +184,26 @@ apt-get install php5-mysql
 echo "php installed"
 echo "033[92;1m* * *033[Om"
 
-echo '\033[95m
+echo '
            __          __  ___      ___       __          _
     ____  / /_  ____  /  |/  /_  __/   | ____/ /___ ___  (_)___
    / __ \/ __ \/ __ \/ /|_/ / / / / /| |/ __  / __ `__ \/ / __ \
   / /_/ / / / / /_/ / /  / / /_/ / ___ / /_/ / / / / / / / / / /
  / .___/_/ /_/ .___/_/  /_/\__, /_/  |_\__,_/_/ /_/ /_/_/_/ /_/
 /_/         /_/           /____/
-\033[0m'
-
+'
 echo "\033[35;1mInstalling phpMyAdmin \033[0m"
 apt-get install phpmyadmin
 echo "phpMyAdmin installed"
 echo "033[92;1m* * *033[Om"
 
-echo '\033[95m
+echo '
         __               __
  _   __/ /_  ____  _____/ /_
 | | / / __ \/ __ \/ ___/ __/
 | |/ / / / / /_/ (__  ) /_
 |___/_/ /_/\____/____/\__/
-\033[0m'
-
+'
 echo "\033[35;1mVHOST install \033[0m"
 while [ "$vh" != "y" ] && [ "$vh" != "n" ]
 do
@@ -261,14 +252,13 @@ else
 fi
 echo "033[92;1m* * *033[Om"
 
-echo '\033[95m
+echo '
     ___                __        __
    /   |_      _______/ /_____ _/ /_
   / /| | | /| / / ___/ __/ __ `/ __/
  / ___ | |/ |/ (__  ) /_/ /_/ / /_
 /_/  |_|__/|__/____/\__/\__,_/\__/
-\033[0m'
-
+'
 echo "\033[35;1mInstalling Awstat \033[0m"
 sleep 3
 apt-get install awstats
@@ -283,73 +273,71 @@ echo "Awstat installed"
 echo "033[92;1m* * *033[Om"
 
 
-echo '\033[95m
-  ______________  _______
- /_  __/ ____/  |/  / __ \
-  / / / __/ / /|_/ / /_/ /
- / / / /___/ /  / / ____/
-/_/ /_____/_/  /_/_/
-\033[0m'
+# echo '
+#   ______________  _______
+#  /_  __/ ____/  |/  / __ \
+#   / / / __/ / /|_/ / /_/ /
+#  / / / /___/ /  / / ____/
+# /_/ /_____/_/  /_/_/
+# '
+# function check_tmp_secured {
 
-function check_tmp_secured {
+#   temp1=`grep -w "/var/tempFS /tmp ext3 loop,nosuid,noexec,rw 0 0" /etc/fstab | wc -l`
+#   temp2=`grep -w "tmpfs /tmp tmpfs rw,noexec,nosuid 0 0" /etc/fstab | wc -l`
 
-  temp1=`grep -w "/var/tempFS /tmp ext3 loop,nosuid,noexec,rw 0 0" /etc/fstab | wc -l`
-  temp2=`grep -w "tmpfs /tmp tmpfs rw,noexec,nosuid 0 0" /etc/fstab | wc -l`
+#   if [ $temp1  -gt 0 ] || [ $temp2 -gt 0 ]; then
+#       return 1
+#   else
+#       return 0
+#   fi
+# } # End function check_tmp_secured
 
-  if [ $temp1  -gt 0 ] || [ $temp2 -gt 0 ]; then
-      return 1
-  else
-      return 0
-  fi
-} # End function check_tmp_secured
+# function secure_tmp_tmpfs {
 
-function secure_tmp_tmpfs {
+#   cp /etc/fstab /etc/fstab.bak
+#   # Backup /tmp
+#   cp -Rpf /tmp /tmpbackup
 
-  cp /etc/fstab /etc/fstab.bak
-  # Backup /tmp
-  cp -Rpf /tmp /tmpbackup
+#   rm -rf /tmp
+#   mkdir /tmp
 
-  rm -rf /tmp
-  mkdir /tmp
+#   mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
+#   chmod 1777 /tmp
+#   echo "tmpfs /tmp tmpfs rw,noexec,nosuid 0 0" >> /etc/fstab
 
-  mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
-  chmod 1777 /tmp
-  echo "tmpfs /tmp tmpfs rw,noexec,nosuid 0 0" >> /etc/fstab
+#   # Restore /tmp
+#   cp -Rpf /tmpbackup/* /tmp/ >/dev/null 2>&1
 
-  # Restore /tmp
-  cp -Rpf /tmpbackup/* /tmp/ >/dev/null 2>&1
+#   #Remove old tmp dir
+#   rm -rf /tmpbackup
 
-  #Remove old tmp dir
-  rm -rf /tmpbackup
+#   # Backup /var/tmp and link it to /tmp
+#   mv /var/tmp /var/tmpbackup
+#   ln -s /tmp /var/tmp
 
-  # Backup /var/tmp and link it to /tmp
-  mv /var/tmp /var/tmpbackup
-  ln -s /tmp /var/tmp
+#   # Copy the old data back
+#   cp -Rpf /var/tmpold/* /tmp/ >/dev/null 2>&1
+#   # Remove old tmp dir
+#   rm -rf /var/tmpbackup
 
-  # Copy the old data back
-  cp -Rpf /var/tmpold/* /tmp/ >/dev/null 2>&1
-  # Remove old tmp dir
-  rm -rf /var/tmpbackup
+#   echo -e "\033[35;1m /tmp and /var/tmp secured using tmpfs. \033[0m"
+# } # End function secure_tmp_tmpfs
 
-  echo -e "\033[35;1m /tmp and /var/tmp secured using tmpfs. \033[0m"
-} # End function secure_tmp_tmpfs
+# check_tmp_secured
+# if [ $? = 0  ]; then
+#     secure_tmp_tmpfs
+# else
+#     echo -e "\033[35;1mFunction canceled. /tmp already secured. \033[0m"
+# fi
 
-check_tmp_secured
-if [ $? = 0  ]; then
-    secure_tmp_tmpfs
-else
-    echo -e "\033[35;1mFunction canceled. /tmp already secured. \033[0m"
-fi
-
-echo '\033[95m
+echo '
     ____                             __
    / __ \_________  ____ ___  ____  / /_
   / /_/ / ___/ __ \/ __ `__ \/ __ \/ __/
  / ____/ /  / /_/ / / / / / / /_/ / /_
 /_/   /_/   \____/_/ /_/ /_/ .___/\__/
                           /_/
-\033[0m'
-
+'
 #installing better prompt and some goodies for root
 echo "\033[35;1mInstalling shell prompt for root \033[0m"
 sleep 3
@@ -358,12 +346,11 @@ source ~/.bashrc
 echo "done"
 echo "033[92;1m* * *033[Om"
 
-echo '\033[95m
+echo '
                   __
   ___  ____  ____/ /
  / _ \/ __ \/ __  /
 /  __/ / / / /_/ /
 \___/_/ /_/\__,_/
-\033[0m'
-
+'
 echo "\033[35;1m* * script done * * \033[0m"
