@@ -7,15 +7,19 @@
 # http://web-74.com/blog/reseaux/gerer-le-deploiement-facilement-avec-git/
 #
 
-echo "This script has been tested only on Linux Debian 7"
+echo -e "\033[35;1mThis script has been tested only on Linux Debian 7  \033[0m"
 echo "Please run this script as root"
 
-read -e -p "Should we start ? [Y:n]" i "y" start
+read -e -p "Should we start ? [Y:n]" start
+name=${name:-y}
 if [start != 'y']; then
-  exit
+  break;
 fi
 
 echo "* * *"
+
+apt-get update
+apt-get upgrade
 
 # get the current position
 _cwd="$(pwd)"
