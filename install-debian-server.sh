@@ -89,10 +89,10 @@ echo '
 '
 echo "\033[35;1mInstalling fall2ban \033[0m"
 sleep 3
-
+apt-get install fail2ban
+cat "$_cwd"/assets/fail2ban.jail.conf > /etc/fail2ban/jail.conf
 echo "fail2ban installed and configured"
 echo "033[92;1m* * *033[Om"
-
 
 echo '
     __                    __       __
@@ -104,8 +104,7 @@ echo '
 '
 echo "\033[35;1mInstalling knockd \033[0m"
 sleep 3
-apt-get install fail2ban
-
+apt-get install knockd
 
 echo "knockd installed and configured"
 echo "033[92;1m* * *033[Om"
