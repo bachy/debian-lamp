@@ -7,16 +7,19 @@
 # http://web-74.com/blog/reseaux/gerer-le-deploiement-facilement-avec-git/
 #
 
-echo -e "\033[35;1mThis script has been tested only on Linux Debian 7  \033[0m"
+echo -e "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
 echo "Please run this script as root"
 
-read -e -p "Should we start ? [Y:n]" start
-name=${name:-y}
+echo -n "Should we start? [Y:n]"
+read st
+st=${st:-y}
 if [start != 'y']; then
-  break;
+  exit
 fi
 
 echo "* * *"
+
+exit
 
 apt-get update
 apt-get upgrade
@@ -24,13 +27,13 @@ apt-get upgrade
 # get the current position
 _cwd="$(pwd)"
 
-echo "Installing harden"
+echo -e "\033[35;1mInstalling harden \033[0m"
 sleep 5
 apt-get install harden
 echo "Harden instaled"
 echo "* * *"
 
-echo "Installing ufw and setup firewall (allowing only ssh and http)"
+echo -e "\033[35;1mInstalling ufw and setup firewall (allowing only ssh and http) \033[0m"
 sleep 5
 apt-get install ufw
 ufw allow ssh
@@ -40,7 +43,7 @@ ufw status verbose
 echo "ufw installed and firwall configured"
 echo "* * *"
 
-echo "Create new user (you will be asked a user name and a password)"
+echo -e "\033[35;1mCreate new user (you will be asked a user name and a password) \033[0m"
 sleep 5
 read -p "Enter user name: " user
 # read -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
@@ -63,8 +66,8 @@ else
 fi
 echo "* * *"
 
-echo "Installing AMP web server"
-echo "Installing Apache2"
+echo -e "\033[35;1mInstalling AMP web server \033[0m"
+echo -e "\033[35;1mInstalling Apache2 \033[0m"
 sleep 5
 apt-get install apache2
 a2enmod rewrite
@@ -72,14 +75,14 @@ service apache2 restart
 echo "Apache2 installed"
 echo "* * *"
 
-echo "installing Mysql"
+echo -e "\033[35;1minstalling Mysql \033[0m"
 sleep 5
 apt-get install mysql-server
 mysql_secure_installation
 echo "mysql installed"
 echo "* * *"
 
-echo "Installing PHP"
+echo -e "\033[35;1mInstalling PHP \033[0m"
 sleep 5
 apt-get install php5 php-pear php5-gd
 echo "Configuring PHP"
@@ -101,13 +104,13 @@ apt-get install php5-mysql
 echo "php installed"
 echo "* * *"
 
-echo "Installing Awstat"
+echo -e "\033[35;1mInstalling Awstat \033[0m"
 sleep 5
 apt-get install awstats
 echo "Awstat installed"
 echo "* * *"
 
-read -e -p "Should we installe vhost [Y:n]" -i "y" vh
+read -e -p "Should we install a vhost? [Y:n]" vh
 if [ $vh = "y"]; then
   read -p "hostname ? " _host_name
   cp "$_cwd"/assets/example.org.conf /etc/apache2/sites-available/"$_host_name".conf
@@ -137,7 +140,7 @@ fi
 echo "* * *"
 
 #installing better prompt and some goodies for root
-echo "Installing shell prompt for root"
+echo -e "\033[35;1mInstalling shell prompt for root \033[0m"
 sleep 5
 git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd -
 source ~/.bashrc
@@ -151,7 +154,7 @@ echo "* * *"
 # \____//____/_____/_/ |_|
 
 # setup user environment
-echo "Installing shell prompt for $user"
+echo -e "\033[35;1mInstalling shell prompt for $user \033[0m"
 sleep 5
 cd ~
 git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd -
@@ -161,7 +164,7 @@ echo "done"
 echo "* * *"
 
 # setup bare repositorie to push to
-echo "setup git repositories for $_host_name"
+echo -e "\033[35;1msetup git repositories for $_host_name \033[0m"
 sleep 5
 mkdir ~/git-repositories
 mkdir ~/git-repositories/"$_host_name".git
