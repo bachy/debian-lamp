@@ -23,8 +23,9 @@ chmod a+x install-debian-server.sh
 
 
 ## ref
-http://www.debian.org/doc/manuals/securing-debian-howto/
-https://www.thefanclub.co.za/how-to/how-secure-ubuntu-1204-lts-server-part-1-basics
-https://www.linode.com/docs/websites/lamp/lamp-server-on-debian-7-wheezy
-https://www.evernote.com/Home.action#n=28425519-ee9f-4efc-a13b-5426f4b31a78&ses=1&sh=5&sds=5&x=git%2520deploy&
+http://www.debian.org/doc/manuals/securing-debian-howto/   
+https://www.thefanclub.co.za/how-to/how-secure-ubuntu-1204-lts-server-part-1-basics   
+https://www.linode.com/docs/websites/lamp/lamp-server-on-debian-7-wheezy   
+https://www.evernote.com/Home.action#n=28425519-ee9f-4efc-a13b-5426f4b31a78&ses=1&sh=5&sds=5&x=git%2520deploy&    
+https://github.com/Mins/TuxLite    
 
