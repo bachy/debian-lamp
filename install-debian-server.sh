@@ -13,7 +13,7 @@ echo "Please run this script as root"
 echo -n "Should we start? [Y:n]"
 read st
 st=${st:-y}
-if [start != 'y']; then
+if [st != 'y']; then
   exit
 fi
 
