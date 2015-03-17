@@ -88,7 +88,6 @@ echo '
 
 '
 echo "\033[35;1mInstalling fall2ban \033[0m"
-sleep 3
 apt-get install fail2ban
 cat "$_cwd"/assets/fail2ban.jail.conf > /etc/fail2ban/jail.conf
 echo "fail2ban installed and configured"
@@ -103,12 +102,21 @@ echo '
 
 '
 echo "\033[35;1mInstalling knockd \033[0m"
+echo "031[92;1m!! Experimental !!033[Om"
 sleep 3
 apt-get install knockd
-
+echo -n "define a sequence number for opening (as 7000,8000,9000) : "
+read sq1
+echo -n "define a sequence number for closing (as 9000,8000,7000) : "
+read sq2
+sed -i "s/7000,8000,9000/$sq1/g" /etc/knockd.conf
+sed -i "s/9000,8000,7000/$sq2/g" /etc/knockd.conf
+sed -i 's/START_KNOCKD=0/START_KNOCKD=1/g' /etc/default/knockd
 echo "knockd installed and configured"
+echo "please note these sequences then hit enter to continue"
+echo -n "opening : $sq1 ; closing : $sq2"
+echo "031[92;1m!! PLEASE CHECK THESE VALUES on /etc/knockd.conf !!033[Om"
 echo "033[92;1m* * *033[Om"
-
 
 echo '
    __  _______ __________
@@ -151,9 +159,11 @@ if [ "$securssh" = "y" ]; then
   service ssh reload
   echo "SSH secured"
 else
-  echo 'root user can stile coonect through ssh'
+  echo 'root user can still conect through ssh'
 fi
 echo "033[92;1m* * *033[Om"
+
+# TODO : allow ssh/ftp connection only from given ips
 
 
 echo "\033[35;1mInstalling AMP web server \033[0m"
