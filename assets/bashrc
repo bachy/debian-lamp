@@ -9,7 +9,7 @@
 export LS_OPTIONS='--color=always'
 eval "`dircolors`"
 alias ls='ls $LS_OPTIONS -lsh'
-alias ll='la $LS_OPTIONS -lsah'
+alias la='ls $LS_OPTIONS -lsah'
 alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e
 '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'''
 

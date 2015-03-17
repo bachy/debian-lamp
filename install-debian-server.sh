@@ -7,14 +7,14 @@
 # http://web-74.com/blog/reseaux/gerer-le-deploiement-facilement-avec-git/
 #
 
-echo '
+echo '\033[35m
     ____       __    _                _____
    / __ \___  / /_  (_)___ _____     / ___/___  ______   _____  _____
   / / / / _ \/ __ \/ / __ `/ __ \    \__ \/ _ \/ ___/ | / / _ \/ ___/
  / /_/ /  __/ /_/ / / /_/ / / / /   ___/ /  __/ /   | |/ /  __/ /
 /_____/\___/_.___/_/\__,_/_/ /_/   /____/\___/_/    |___/\___/_/
 
-'
+\033[0m'
 echo "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
 echo "Please run this script as root"
 
@@ -29,51 +29,46 @@ fi
 # get the current position
 _cwd="$(pwd)"
 
-echo '
+echo '\033[35m
    __  ______  __________  ___    ____  ______
   / / / / __ \/ ____/ __ \/   |  / __ \/ ____/
  / / / / /_/ / / __/ /_/ / /| | / / / / __/
 / /_/ / ____/ /_/ / _, _/ ___ |/ /_/ / /___
 \____/_/    \____/_/ |_/_/  |_/_____/_____/
-'
+\033[0m'
 apt-get update
 apt-get upgrade
 
-echo '
+echo '\033[35m
     __  ____
    /  |/  (_)_________
   / /|_/ / / ___/ ___/
  / /  / / (__  ) /__
 /_/  /_/_/____/\___/
 
-'
+\033[0m'
 apt-get install vim
-# TODO colorize vim
-cat "syntax on" >> ~/.vimrc
-# TODO colorize ls
-cat "$_cwd"/assets/.bashrc > ~/.bashrc
 
-
-echo '
+echo '\033[35m
     __  _____    ____  ____  _______   __
    / / / /   |  / __ \/ __ \/ ____/ | / /
   / /_/ / /| | / /_/ / / / / __/ /  |/ /
  / __  / ___ |/ _, _/ /_/ / /___/ /|  /
 /_/ /_/_/  |_/_/ |_/_____/_____/_/ |_/
-'
+\033[0m'
 echo "\033[35;1mInstalling harden \033[0m"
 sleep 3
 apt-get install harden
 echo "Harden instaled"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
     ______________  _______       _____    __    __
    / ____/  _/ __ \/ ____/ |     / /   |  / /   / /
   / /_   / // /_/ / __/  | | /| / / /| | / /   / /
  / __/ _/ // _, _/ /___  | |/ |/ / ___ |/ /___/ /___
 /_/   /___/_/ |_/_____/  |__/|__/_/  |_/_____/_____/
-'
+\033[0m'
 echo "\033[35;1mInstalling ufw and setup firewall (allowing only ssh and http) \033[0m"
 sleep 3
 apt-get install ufw
@@ -82,32 +77,29 @@ ufw allow http
 ufw enable
 ufw status verbose
 echo "ufw installed and firwall configured"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
     ______      _ _____   __
    / ____/___ _(_) /__ \ / /_  ____ _____
   / /_  / __ `/ / /__/ // __ \/ __ `/ __ \
  / __/ / /_/ / / // __// /_/ / /_/ / / / /
 /_/    \__,_/_/_//____/_.___/\__,_/_/ /_/
-
-'
+\033[0m'
 echo "\033[35;1mInstalling fall2ban \033[0m"
 apt-get install fail2ban
 cat "$_cwd"/assets/fail2ban.jail.conf > /etc/fail2ban/jail.conf
 echo "fail2ban installed and configured"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
     __                    __       __
    / /______  ____  _____/ /______/ /
   / //_/ __ \/ __ \/ ___/ //_/ __  /
  / ,< / / / / /_/ / /__/ ,< / /_/ /
 /_/|_/_/ /_/\____/\___/_/|_|\__,_/
-
-'
+\033[0m'
 echo "\033[35;1mInstalling knockd \033[0m"
-echo "031[92;1m!! Experimental !!033[Om"
 sleep 3
 apt-get install knockd
 echo -n "define a sequence number for opening (as 7000,8000,9000) : "
@@ -118,18 +110,17 @@ sed -i "s/7000,8000,9000/$sq1/g" /etc/knockd.conf
 sed -i "s/9000,8000,7000/$sq2/g" /etc/knockd.conf
 sed -i 's/START_KNOCKD=0/START_KNOCKD=1/g' /etc/default/knockd
 echo "knockd installed and configured"
-echo "please note these sequences then hit enter to continue"
-echo -n "opening : $sq1 ; closing : $sq2"
-echo "031[92;1m!! PLEASE CHECK THESE VALUES on /etc/knockd.conf !!033[Om"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1mplease note these sequences for future knocking\033[Om"
+echo "opening : $sq1 ; closing : $sq2"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
    __  _______ __________
   / / / / ___// ____/ __ \
  / / / /\__ \/ __/ / /_/ /
 / /_/ /___/ / /___/ _, _/
 \____//____/_____/_/ |_|
-'
+\033[0m'
 echo "\033[35;1mCreate new user (you will be asked a user name and a password) \033[0m"
 sleep 3
 echo -n "Enter user name: "
@@ -141,15 +132,15 @@ groupadd admin
 usermod -a -G admin "$user"
 dpkg-statoverride --update --add root admin 4750 /bin/su
 echo "user $user configured"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
    __________ __  __
   / ___/ ___// / / /
   \__ \\__ \/ /_/ /
  ___/ /__/ / __  /
 /____/____/_/ /_/
-'
+\033[0m'
 while [ "$securssh" != "y" ] && [ "$securssh" != "n" ]
 do
 echo -n "Securing ssh (disabling root login)? [y|n] "
@@ -166,21 +157,21 @@ if [ "$securssh" = "y" ]; then
 else
   echo 'root user can still conect through ssh'
 fi
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
 # TODO : allow ssh/ftp connection only from given ips
 
 
 echo "\033[35;1mInstalling AMP web server \033[0m"
 
-echo '
+echo '\033[35m
     ___                     __        ___
    /   |  ____  ____ ______/ /_  ___ |__ \
   / /| | / __ \/ __ `/ ___/ __ \/ _ \__/ /
  / ___ |/ /_/ / /_/ / /__/ / / /  __/ __/
 /_/  |_/ .___/\__,_/\___/_/ /_/\___/____/
       /_/
-'
+\033[0m'
 echo "\033[35;1mInstalling Apache2 \033[0m"
 sleep 3
 apt-get install apache2
@@ -194,30 +185,30 @@ sed -i 's/ServerTokens .*/ServerTokens Prod/' /etc/apache2/conf.d/security
 sed -i 's/ServerSignature .*/ServerSignature Off/' /etc/apache2/conf.d/security
 service apache2 restart
 echo "Apache2 installed"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
     __  ___                 __
    /  |/  /_  ___________ _/ /
   / /|_/ / / / / ___/ __ `/ /
  / /  / / /_/ (__  ) /_/ / /
 /_/  /_/\__, /____/\__, /_/
        /____/        /_/
-'
+\033[0m'
 echo "\033[35;1minstalling Mysql \033[0m"
 sleep 3
 apt-get install mysql-server
 mysql_secure_installation
 echo "mysql installed"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
     ____  __  ______
    / __ \/ / / / __ \
   / /_/ / /_/ / /_/ /
  / ____/ __  / ____/
 /_/   /_/ /_/_/
-'
+\033[0m'
 echo "\033[35;1mInstalling PHP \033[0m"
 sleep 3
 apt-get install php5 php-pear php5-gd
@@ -238,28 +229,28 @@ chown www-data /var/log/php
 
 apt-get install php5-mysql
 echo "php installed"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
            __          __  ___      ___       __          _
     ____  / /_  ____  /  |/  /_  __/   | ____/ /___ ___  (_)___
    / __ \/ __ \/ __ \/ /|_/ / / / / /| |/ __  / __ `__ \/ / __ \
   / /_/ / / / / /_/ / /  / / /_/ / ___ / /_/ / / / / / / / / / /
  / .___/_/ /_/ .___/_/  /_/\__, /_/  |_\__,_/_/ /_/ /_/_/_/ /_/
 /_/         /_/           /____/
-'
+\033[0m'
 echo "\033[35;1mInstalling phpMyAdmin \033[0m"
 apt-get install phpmyadmin
 echo "phpMyAdmin installed"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
         __               __
  _   __/ /_  ____  _____/ /_
 | | / / __ \/ __ \/ ___/ __/
 | |/ / / / / /_/ (__  ) /_
 |___/_/ /_/\____/____/\__/
-'
+\033[0m'
 echo "\033[35;1mVHOST install \033[0m"
 while [ "$vh" != "y" ] && [ "$vh" != "n" ]
 do
@@ -306,15 +297,15 @@ if [ "$vh" = "y" ]; then
 else
   echo "Vhost installation aborted"
 fi
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
     ___                __        __
    /   |_      _______/ /_____ _/ /_
   / /| | | /| / / ___/ __/ __ `/ __/
  / ___ | |/ |/ (__  ) /_/ /_/ / /_
 /_/  |_|__/|__/____/\__/\__,_/\__/
-'
+\033[0m'
 echo "\033[35;1mInstalling Awstat \033[0m"
 sleep 3
 apt-get install awstats
@@ -326,16 +317,16 @@ fi
 # Disable Awstats from executing every 10 minutes. Put a hash in front of any line.
 sed -i 's/^[^#]/#&/' /etc/cron.d/awstats
 echo "Awstat installed"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
 
-# echo '
+# echo '\033[35m
 #   ______________  _______
 #  /_  __/ ____/  |/  / __ \
 #   / / / __/ / /|_/ / /_/ /
 #  / / / /___/ /  / / ____/
 # /_/ /_____/_/  /_/_/
-# '
+# \033[0m'
 # function check_tmp_secured {
 
 #   temp1=`grep -w "/var/tempFS /tmp ext3 loop,nosuid,noexec,rw 0 0" /etc/fstab | wc -l`
@@ -386,27 +377,27 @@ echo "033[92;1m* * *033[Om"
 #     echo -e "\033[35;1mFunction canceled. /tmp already secured. \033[0m"
 # fi
 
-echo '
-    ____                             __
-   / __ \_________  ____ ___  ____  / /_
-  / /_/ / ___/ __ \/ __ `__ \/ __ \/ __/
- / ____/ /  / /_/ / / / / / / /_/ / /_
-/_/   /_/   \____/_/ /_/ /_/ .___/\__/
-                          /_/
-'
+echo '\033[35m
+    ____        __     _______ __
+   / __ \____  / /_   / ____(_) /__  _____
+  / / / / __ \/ __/  / /_  / / / _ \/ ___/
+ / /_/ / /_/ / /_   / __/ / / /  __(__  )
+/_____/\____/\__/  /_/   /_/_/\___/____/
+\033[0m'
 #installing better prompt and some goodies for root
 echo "\033[35;1mInstalling shell prompt for root \033[0m"
 sleep 3
+echo "cloning github.com/bachy/dotfiles-server"
 git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd ~
 source ~/.bashrc
 echo "done"
-echo "033[92;1m* * *033[Om"
+echo "\033[92;1m* * *\033[Om"
 
-echo '
+echo '\033[35m
                   __
   ___  ____  ____/ /
  / _ \/ __ \/ __  /
 /  __/ / / / /_/ /
 \___/_/ /_/\__,_/
-'
-echo "\033[35;1m* * script done * * \033[0m"
+\033[0m'
+echo "\033[35;1m* * script done * *\033[0m"
