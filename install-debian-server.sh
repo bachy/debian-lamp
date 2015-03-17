@@ -48,6 +48,11 @@ echo '
 
 '
 apt-get install vim
+# TODO colorize vim
+cat "syntax on" >> ~/.vimrc
+# TODO colorize ls
+cat "$_cwd"/assets/.bashrc > ~/.bashrc
+
 
 echo '
     __  _____    ____  ____  _______   __
