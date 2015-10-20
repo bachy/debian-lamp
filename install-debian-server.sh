@@ -59,8 +59,7 @@ echo '\033[35m
 echo "\033[35;1mInstalling harden \033[0m"
 sleep 3
 apt-get install harden
-echo "Harden instaled"
-echo "\033[92;1m* * *\033[Om"
+echo "\033[92;1mHarden instaled\033[Om"
 
 echo '\033[35m
     ______________  _______       _____    __    __
@@ -76,8 +75,7 @@ ufw allow ssh
 ufw allow http
 ufw enable
 ufw status verbose
-echo "ufw installed and firwall configured"
-echo "\033[92;1m* * *\033[Om"
+echo "\033[92;1mufw installed and firwall configured\033[Om"
 
 echo '\033[35m
     ______      _ _____   __
@@ -89,8 +87,7 @@ echo '\033[35m
 echo "\033[35;1mInstalling fall2ban \033[0m"
 apt-get install fail2ban
 cat "$_cwd"/assets/fail2ban.jail.conf > /etc/fail2ban/jail.conf
-echo "fail2ban installed and configured"
-echo "\033[92;1m* * *\033[Om"
+echo "\033[92;1mfail2ban installed and configured\033[Om"
 
 echo '\033[35m
     __                    __       __
@@ -109,10 +106,9 @@ read sq2
 sed -i "s/7000,8000,9000/$sq1/g" /etc/knockd.conf
 sed -i "s/9000,8000,7000/$sq2/g" /etc/knockd.conf
 sed -i 's/START_KNOCKD=0/START_KNOCKD=1/g' /etc/default/knockd
-echo "knockd installed and configured"
+echo "\033[92;1mknockd installed and configured\033[Om"
 echo "\033[92;1mplease note these sequences for future knocking\033[Om"
 echo "opening : $sq1 ; closing : $sq2"
-echo "\033[92;1m* * *\033[Om"
 
 echo '\033[35m
    __  _______ __________
@@ -131,8 +127,7 @@ echo "adding $user to admin group and limiting su to the admin group"
 groupadd admin
 usermod -a -G admin "$user"
 dpkg-statoverride --update --add root admin 4750 /bin/su
-echo "user $user configured"
-echo "\033[92;1m* * *\033[Om"
+echo "\033[92;1muser $user configured\033[Om"
 
 echo '\033[35m
    __________ __  __
@@ -153,14 +148,53 @@ if [ "$securssh" = "y" ]; then
   sed -i 's/PermitEmptyPasswords\ yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
   sed -i 's/Protocol\ [0-9]/Protocol 2/g' /etc/ssh/sshd_config
   service ssh reload
-  echo "SSH secured"
+  echo "\033[92;1mSSH secured\033[Om"
 else
   echo 'root user can still conect through ssh'
 fi
-echo "\033[92;1m* * *\033[Om"
+
+echo '\033[35m
+  ______ _______ _____
+ |  ____|__   __|  __ \
+ | |__     | |  | |__) |
+ |  __|    | |  |  ___/
+ | |       | |  | |
+ |_|       |_|  |_|
+\033[0m'
+
+echo -n "Should we install ftp server? [Y|n] "
+read yn
+yn=${yn:-y}
+if [ "$yn" != "y" ]; then
+  echo "installing proftpd"
+  apt-get install proftpd
+  while [ "$_server_name" = "" ]
+  do
+  read -p "enter a server name ? " _server_name
+  if [ "$_server_name" != "" ]; then
+    read -p "is server name $_server_name correcte [y|n] " validated
+    if [ "$validated" = "y" ]; then
+      break
+    else
+      _server_name=""
+    fi
+  fi
+  done
+
+  echo "Configuring proftpd"
+  cp "$_cwd"/assets/proftpd.conf /etc/proftpd/conf.d/"$_server_name".conf
+  sed -ir "s/example/$_server_name/g" /etc/proftpd/conf.d/"$_server_name".conf
+
+  ufw allow ftp
+  
+  addgroup ftpuser
+  echo "ftp installtion done"
+  echo "to permit to a user to connect through ftp, add him to the ftpuser group"
+  echo "FTP users are jailed on their home by default"
+
+fi
 
 # TODO : allow ssh/ftp connection only from given ips
-
 
 echo "\033[35;1mInstalling AMP web server \033[0m"
 
@@ -184,8 +218,7 @@ sed -i 's/\trotate .*/\trotate 10/' /etc/logrotate.d/apache2
 sed -i 's/ServerTokens .*/ServerTokens Prod/' /etc/apache2/conf.d/security
 sed -i 's/ServerSignature .*/ServerSignature Off/' /etc/apache2/conf.d/security
 service apache2 restart
-echo "Apache2 installed"
-echo "\033[92;1m* * *\033[Om"
+echo "\033[92;1mApache2 installed\033[Om"
 
 echo '\033[35m
     __  ___                 __
@@ -199,8 +232,7 @@ echo "\033[35;1minstalling Mysql \033[0m"
 sleep 3
 apt-get install mysql-server
 mysql_secure_installation
-echo "mysql installed"
-echo "\033[92;1m* * *\033[Om"
+echo "\033[92;1mmysql installed\033[Om"
 
 echo '\033[35m
     ____  __  ______
@@ -228,8 +260,7 @@ mkdir /var/log/php
 chown www-data /var/log/php
 
 apt-get install php5-mysql
-echo "php installed"
-echo "\033[92;1m* * *\033[Om"
+echo "\033[92;1mphp installed\033[Om"
 
 echo '\033[35m
            __          __  ___      ___       __          _
@@ -241,8 +272,8 @@ echo '\033[35m
 \033[0m'
 echo "\033[35;1mInstalling phpMyAdmin \033[0m"
 apt-get install phpmyadmin
-echo "phpMyAdmin installed"
-echo "\033[92;1m* * *\033[Om"
+echo "include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
+echo "\033[92;1mphpMyAdmin installed\033[Om"
 
 echo '\033[35m
         __               __
@@ -293,11 +324,10 @@ if [ "$vh" = "y" ]; then
 
   #restart apache
   service apache2 restart
-  echo "vhost $_host_name configured"
+  echo "\033[92;1mvhost $_host_name configured\033[Om"
 else
   echo "Vhost installation aborted"
 fi
-echo "\033[92;1m* * *\033[Om"
 
 echo '\033[35m
     ___                __        __
@@ -316,8 +346,7 @@ if [ $temp -lt 1 ]; then
 fi
 # Disable Awstats from executing every 10 minutes. Put a hash in front of any line.
 sed -i 's/^[^#]/#&/' /etc/cron.d/awstats
-echo "Awstat installed"
-echo "\033[92;1m* * *\033[Om"
+echo "\033[92;1mAwstat installed\033[Om"
 
 
 # echo '\033[35m
@@ -390,8 +419,8 @@ sleep 3
 echo "cloning github.com/bachy/dotfiles-server"
 git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/.dotfiles-server && ./install.sh && cd ~
 source ~/.bashrc
-echo "done"
-echo "\033[92;1m* * *\033[Om"
+echo "\033[92;1mDot files installed for root, you should installed them manually for $USER\033[0m"
+
 
 echo '\033[35m
                   __
@@ -400,4 +429,4 @@ echo '\033[35m
 /  __/ / / / /_/ /
 \___/_/ /_/\__,_/
 \033[0m'
-echo "\033[35;1m* * script done * *\033[0m"
+echo "\033[35;1m* * script done * * \033[0m"
