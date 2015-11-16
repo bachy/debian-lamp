@@ -186,7 +186,7 @@ if [ "$yn" != "y" ]; then
   sed -ir "s/example/$_server_name/g" /etc/proftpd/conf.d/"$_server_name".conf
 
   ufw allow ftp
-  
+
   addgroup ftpuser
   echo "ftp installtion done"
   echo "to permit to a user to connect through ftp, add him to the ftpuser group"
@@ -272,8 +272,10 @@ echo '\033[35m
 \033[0m'
 echo "\033[35;1mInstalling phpMyAdmin \033[0m"
 apt-get install phpmyadmin
-echo "include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
+# echo "include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
+ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf.d/phpmyadmin.conf
 echo "\033[92;1mphpMyAdmin installed\033[Om"
+echo "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
 
 echo '\033[35m
         __               __
@@ -421,6 +423,7 @@ git clone git://github.com/bachy/dotfiles-server.git ~/.dotfiles-server && cd ~/
 source ~/.bashrc
 echo "\033[92;1mDot files installed for root, you should installed them manually for $USER\033[0m"
 
+# TODO add warning message on ssh connection if system needs updates
 
 echo '\033[35m
                   __
