@@ -274,6 +274,13 @@ echo "\033[35;1mInstalling phpMyAdmin \033[0m"
 apt-get install phpmyadmin
 # echo "include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
 ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf.d/phpmyadmin.conf
+echo "\033[35;1msecuring phpMyAdmin \033[0m"
+sed -i "s/DirectoryIndex index.php/DirectoryIndex index.php\nAllowOverride all/"
+cp "$_cwd"/assets/phpmyadmin_htaccess > /usr/share/phpmyadmin/.htaccess
+echo -n "define a user name for phpmyadmin : "
+read un
+htpasswd -c /etc/phpmyadmin/.htpasswd $un
+service apache2 restart
 echo "\033[92;1mphpMyAdmin installed\033[Om"
 echo "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
 
@@ -424,6 +431,9 @@ source ~/.bashrc
 echo "\033[92;1mDot files installed for root, you should installed them manually for $USER\033[0m"
 
 # TODO add warning message on ssh connection if system needs updates
+
+# TODO install and configure tmux
+
 
 echo '\033[35m
                   __
