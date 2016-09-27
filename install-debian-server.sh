@@ -339,6 +339,85 @@ else
 fi
 
 echo '\033[35m
+   __  ___          _ __      __  __  ___          _
+  /  |/  /__  ___  (_) /_   _/_/ /  |/  /_ _____  (_)__
+ / /|_/ / _ \/ _ \/ / __/ _/_/  / /|_/ / // / _ \/ / _ \
+/_/  /_/\___/_//_/_/\__/ /_/   /_/  /_/\_,_/_//_/_/_//_/
+\033[0m'
+echo "\033[35;1mInstalling Munin \033[0m"
+sleep 3
+# https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/
+apt-get install munin munin-node munin-plugins-extra
+# Configure Munin
+# enable plugins
+ln -s /usr/share/munin/plugins/mysql_ /etc/munin/plugins/mysql_
+ln -s /usr/share/munin/plugins/mysql_bytes /etc/munin/plugins/mysql_bytes
+ln -s /usr/share/munin/plugins/mysql_innodb /etc/munin/plugins/mysql_innodb
+ln -s /usr/share/munin/plugins/mysql_isam_space_ /etc/munin/plugins/mysql_isam_space_
+ln -s /usr/share/munin/plugins/mysql_queries /etc/munin/plugins/mysql_queries
+ln -s /usr/share/munin/plugins/mysql_slowqueries /etc/munin/plugins/mysql_slowqueries
+ln -s /usr/share/munin/plugins/mysql_threads /etc/munin/plugins/mysql_threads
+
+ln -s /usr/share/munin/plugins/apache_accesses /etc/munin/plugins/
+ln -s /usr/share/munin/plugins/apache_processes /etc/munin/plugins/
+ln -s /usr/share/munin/plugins/apache_volume /etc/munin/plugins/
+
+# ln -s /usr/share/munin/plugins/fail2ban /etc/munin/plugins/
+
+# dbdir, htmldir, logdir, rundir, and tmpldir
+sed -i 's/^#dbdir/dbdir/' /etc/munin/munin.conf
+sed -i 's/^#htmldir/htmldir/' /etc/munin/munin.conf
+sed -i 's/^#logdir/logdir/' /etc/munin/munin.conf
+sed -i 's/^#rundir/rundir/' /etc/munin/munin.conf
+sed -i 's/^#tmpldir/tmpldir/' /etc/munin/munin.conf
+
+sed -i "s/^\[localhost.localdomain\]/[${HOSTNAME}]/" /etc/munin/munin.conf
+
+# ln -s /etc/munin/apache24.conf /etc/apache2/conf-enabled/munin.conf
+sed -i 's/Require local/Require all granted\nOptions FollowSymLinks SymLinksIfOwnerMatch/g' /etc/munin/apache24.conf
+htpasswd -c /etc/munin/munin-htpasswd admin
+sed -i 's/Require all granted/AuthUserFile \/etc\/munin\/munin-htpasswd\nAuthName "Munin"\nAuthType Basic\nRequire valid-user/g' /etc/munin/apache24.conf
+
+
+service apache2 restart
+service munin-node restart
+echo "\033[92;1mMunin installed\033[Om"
+
+echo "\033[35;1mInstalling Monit \033[0m"
+sleep 3
+# https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/2/
+apt-get install monit
+# TODO setup monit rc
+cat "$_cwd"/assets/monitrc > /etc/monit/monitrc
+
+# TODO setup webaccess
+passok=0
+while [ "$passok" = "0" ]
+do
+  echo -n "Write web access password to monit"
+  read passwda
+  echo -n "ReWrite web access password to monit"
+  read passwdb
+  if [ "$passwda" = "$passwdb" ]; then
+    sed -i 's/PASSWD_TO_REPLACE/$passwda/g' /etc/monit/monitrc
+    passok=1
+  else
+    echo "pass words don't match, please try again"
+  fi
+done
+
+# TODO setup mail settings
+sed -i "s/server1\.example\.com/$HOSTNAME/g" /etc/monit/monitrc
+
+mkdir /var/www/html/monit
+echo "hello" > /var/www/html/monit/token
+
+service monit start
+
+echo "\033[92;1mMonit installed\033[Om"
+
+
+echo '\033[35m
     ___                __        __
    /   |_      _______/ /_____ _/ /_
   / /| | | /| / / ___/ __/ __ `/ __/
