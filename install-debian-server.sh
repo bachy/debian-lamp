@@ -129,6 +129,20 @@ usermod -a -G admin "$user"
 dpkg-statoverride --update --add root admin 4750 /bin/su
 echo "\033[92;1muser $user configured\033[Om"
 
+
+echo '\033[35m
+    __  ______    ______
+   /  |/  /   |  /  _/ /
+  / /|_/ / /| |  / // /
+ / /  / / ___ |_/ // /___
+/_/  /_/_/  |_/___/_____/
+\033[0m'
+echo "\033[35;1mEnable mail sending for php \033[0m"
+# http://www.sycha.com/lamp-setup-debian-linux-apache-mysql-php#anchor13
+sleep 3
+dpkg-reconfigure exim4-config
+
+
 echo '\033[35m
    __________ __  __
   / ___/ ___// / / /
