@@ -26,9 +26,12 @@ fi
 done
 adduser "$user"
 
+
 mkdir /home/$user/logs
 mkdir /home/$user/public_html
 mkdir /home/$user/backups
+
+chmod -w /home/"$user"
 
 echo '\033[35m
         __               __
@@ -73,3 +76,50 @@ a2ensite "$_host_name".conf
 #restart apache
 service apache2 restart
 echo "\033[92;1mvhost $_host_name configured\033[Om"
+
+
+# todo add mysql user and database
+
+echo '\033[35m
+    __  ___                 __
+   /  |/  /_  ___________ _/ /
+  / /|_/ / / / / ___/ __ `/ /
+ / /  / / /_/ (__  ) /_/ / /
+/_/  /_/\__, /____/\__, /_/
+       /____/        /_/
+\033[0m'
+echo "\033[35;1mMysql database \033[0m"
+
+while [ "$_dbname" = "" ]
+do
+read -p "enter a database name ? " _dbname
+if [ "$_dbname" != "" ]; then
+  read -p "is database name $_dbname correcte [y|n] " validated
+  if [ "$validated" = "y" ]; then
+    break
+  else
+    _dbname=""
+  fi
+fi
+done
+
+passok=0
+while [ "$passok" = "0" ]
+do
+  echo -n "Write database password for $user"
+  read passwda
+  echo -n "confirm password"
+  read passwdb
+  if [ "$passwda" = "$passwdb" ]; then
+    $_pswd=$passwda
+    passok=1
+  else
+    echo "pass words don't match, please try again"
+  fi
+done
+
+
+# mysql> create user '$_dbname'@'localhost' identified by '$_pswd';
+# mysql> create database $_dbname;
+# mysql> grant all privileges on esadhar_eval.* to 'esadhar_eval'@'localhost';
+# mysql> flush privileges;

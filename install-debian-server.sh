@@ -87,6 +87,7 @@ echo '\033[35m
 echo "\033[35;1mInstalling fall2ban \033[0m"
 apt-get install fail2ban
 cat "$_cwd"/assets/fail2ban.jail.conf > /etc/fail2ban/jail.conf
+service fail2ban restart
 echo "\033[92;1mfail2ban installed and configured\033[Om"
 
 echo '\033[35m
