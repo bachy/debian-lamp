@@ -1,10 +1,12 @@
-# Install Lamp server and secure it on debian 7
+# Install Lamp server and secure it on debian 9
 
 ## how to use it
 on a fresh install
+as root
+
 1 install git
 ```
-sudo apt-get install git
+apt-get install git
 ```
 
 2 clone the repo

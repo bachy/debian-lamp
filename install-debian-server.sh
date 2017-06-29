@@ -15,7 +15,7 @@ echo '\033[35m
 /_____/\___/_.___/_/\__,_/_/ /_/   /____/\___/_/    |___/\___/_/
 
 \033[0m'
-echo "\033[35;1mThis script has been tested only on Linux Debian 7 \033[0m"
+echo "\033[35;1mThis script has been tested only on Linux Debian 9 \033[0m"
 echo "Please run this script as root"
 
 echo -n "Should we start? [Y|n] "
@@ -48,18 +48,21 @@ echo '\033[35m
 
 \033[0m'
 apt-get install vim
+sed -i "s/^# en_GB.UTF-8/en_GB.UTF-8/g" /etc/locale.gen
+locale-gen
 
-echo '\033[35m
-    __  _____    ____  ____  _______   __
-   / / / /   |  / __ \/ __ \/ ____/ | / /
-  / /_/ / /| | / /_/ / / / / __/ /  |/ /
- / __  / ___ |/ _, _/ /_/ / /___/ /|  /
-/_/ /_/_/  |_/_/ |_/_____/_____/_/ |_/
-\033[0m'
-echo "\033[35;1mInstalling harden \033[0m"
-sleep 3
-apt-get install harden
-echo "\033[92;1mHarden instaled\033[Om"
+
+# echo '\033[35m
+#     __  _____    ____  ____  _______   __
+#    / / / /   |  / __ \/ __ \/ ____/ | / /
+#   / /_/ / /| | / /_/ / / / / __/ /  |/ /
+#  / __  / ___ |/ _, _/ /_/ / /___/ /|  /
+# /_/ /_/_/  |_/_/ |_/_____/_____/_/ |_/
+# \033[0m'
+# echo "\033[35;1mInstalling harden \033[0m"
+# sleep 3
+# apt-get install harden
+# echo "\033[92;1mHarden instaled\033[Om"
 
 echo '\033[35m
     ______________  _______       _____    __    __
@@ -216,7 +219,7 @@ echo '\033[35m
 echo -n "Should we install ftp server? [Y|n] "
 read yn
 yn=${yn:-y}
-if [ "$yn" != "y" ]; then
+if [ "$yn" = "y" ]; then
   echo "installing proftpd"
   apt-get install proftpd
   while [ "$_server_name" = "" ]
@@ -261,6 +264,7 @@ echo "\033[35;1mInstalling Apache2 \033[0m"
 sleep 3
 apt-get install apache2
 a2enmod rewrite
+cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.back
 cat "$_cwd"/assets/apache2.conf > /etc/apache2/apache2.conf
 # Change logrotate for Apache2 log files to keep 10 days worth of logs
 sed -i 's/\tweekly/\tdaily/' /etc/logrotate.d/apache2
