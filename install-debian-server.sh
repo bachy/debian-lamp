@@ -51,19 +51,6 @@ apt-get install vim
 sed -i "s/^# en_GB.UTF-8/en_GB.UTF-8/g" /etc/locale.gen
 locale-gen
 
-
-# echo '\033[35m
-#     __  _____    ____  ____  _______   __
-#    / / / /   |  / __ \/ __ \/ ____/ | / /
-#   / /_/ / /| | / /_/ / / / / __/ /  |/ /
-#  / __  / ___ |/ _, _/ /_/ / /___/ /|  /
-# /_/ /_/_/  |_/_/ |_/_____/_____/_/ |_/
-# \033[0m'
-# echo "\033[35;1mInstalling harden \033[0m"
-# sleep 3
-# apt-get install harden
-# echo "\033[92;1mHarden instaled\033[Om"
-
 echo '\033[35m
     ______________  _______       _____    __    __
    / ____/  _/ __ \/ ____/ |     / /   |  / /   / /
@@ -89,7 +76,8 @@ echo '\033[35m
 \033[0m'
 echo "\033[35;1mInstalling fall2ban \033[0m"
 apt-get install fail2ban
-cat "$_cwd"/assets/fail2ban.jail.conf > /etc/fail2ban/jail.conf
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+# ToDo ask for email and configure jail.local with it
 service fail2ban restart
 echo "\033[92;1mfail2ban installed and configured\033[Om"
 
