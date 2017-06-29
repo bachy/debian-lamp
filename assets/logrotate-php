@@ -1,0 +1,7 @@
+/var/log/php/php_errors.log {
+  weekly
+  missingok
+  rotate 4
+  notifempty
+  create
+}
