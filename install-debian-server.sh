@@ -78,7 +78,8 @@ echo "\033[35;1mInstalling fall2ban \033[0m"
 apt-get install fail2ban
 cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 # ToDo ask for email and configure jail.local with it
-service fail2ban restart
+systemctl enable fail2ban
+systemctl restart fail2ban
 echo "\033[92;1mfail2ban installed and configured\033[Om"
 
 echo '\033[35m
@@ -98,7 +99,8 @@ read sq2
 sed -i "s/7000,8000,9000/$sq1/g" /etc/knockd.conf
 sed -i "s/9000,8000,7000/$sq2/g" /etc/knockd.conf
 sed -i 's/START_KNOCKD=0/START_KNOCKD=1/g' /etc/default/knockd
-service knockd start
+systemctl enable knockd
+systemctl start knockd
 echo "\033[92;1mknockd installed and configured\033[Om"
 echo "\033[92;1mplease note these sequences for future knocking\033[Om"
 echo "opening : $sq1 ; closing : $sq2"
@@ -149,7 +151,8 @@ if [ "$configexim" = "y" ]; then
 else
   echo 'exim not configured'
 fi
-service exim4 restart
+systemctl enable exim4
+systemctl restart exim4
 
 # dkim spf
 # https://debian-administration.org/article/718/DKIM-signing_outgoing_mail_with_exim4
@@ -175,7 +178,7 @@ if [ "$installdkim" = "y" ]; then
   sed -ir "s/DATE_TO_CHANGE/$selector/g" /etc/exim4/conf.d/main/00_local_macros
 
   update-exim4.conf
-  service exim4 restart
+  systemctl restart exim4
   echo "please create a TXT entry in your dns zone : $selector._domainkey.$domain \n"
   echo "your public key is : \n"
   cat /etc/exim4/dkim/"$domain".pem
@@ -205,7 +208,7 @@ if [ "$securssh" = "y" ]; then
   sed -i 's/PermitRootLogin\ yes/PermitRootLogin no/g' /etc/ssh/sshd_config
   sed -i 's/PermitEmptyPasswords\ yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
   sed -i 's/Protocol\ [0-9]/Protocol 2/g' /etc/ssh/sshd_config
-  service ssh reload
+  systemctl reload ssh
   echo "\033[92;1mSSH secured\033[Om"
 else
   echo 'root user can still conect through ssh'
@@ -246,269 +249,296 @@ if [ "$yn" = "y" ]; then
   ufw allow ftp
 
   addgroup ftpuser
+
+  systemctl enable proftpd
+  systemctl restart proftpd
+
   echo "ftp installtion done"
-  echo "to permit to a user to connect through ftp, add him to the ftpuser group by running : usermod -a -G admin USERNAME"
+  echo "to permit to a user to connect through ftp, add him to the ftpuser group by running : usermod -a -G ftpuser USERNAME"
   echo "FTP users are jailed on their home by default"
 
 fi
 
 # TODO : allow ssh/ftp connection only from given ips
 
-echo "\033[35;1mInstalling AMP web server \033[0m"
 
 echo '\033[35m
-    __  ___                 __
-   /  |/  /_  ___________ _/ /
-  / /|_/ / / / / ___/ __ `/ /
- / /  / / /_/ (__  ) /_/ / /
-/_/  /_/\__, /____/\__, /_/
-       /____/        /_/
+    __
+   / /__  ____ ___  ____
+  / / _ \/ __ `__ \/ __ \
+ / /  __/ / / / / / /_/ /
+/_/\___/_/ /_/ /_/ .___/
+                /_/
 \033[0m'
-echo "\033[35;1minstalling Mysql \033[0m"
+echo "\033[35;1mLEMP server (Nginx Mysql Php) \033[0m"
 sleep 3
-apt-get install mariadb-server
-mysql_secure_installation
-systemctl restart mariadb.service
-echo "\033[92;1mmysql installed\033[Om"
-
-
-echo '\033[35m
-    ___                     __        ___
-   /   |  ____  ____ ______/ /_  ___ |__ \
-  / /| | / __ \/ __ `/ ___/ __ \/ _ \__/ /
- / ___ |/ /_/ / /_/ / /__/ / / /  __/ __/
-/_/  |_/ .___/\__,_/\___/_/ /_/\___/____/
-      /_/
-\033[0m'
-echo "\033[35;1mInstalling Apache2 \033[0m"
-sleep 3
-apt-get install apache2
-a2enmod rewrite
-# cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.back
-# cat "$_cwd"/assets/apache2.conf > /etc/apache2/apache2.conf
-# Change logrotate for Apache2 log files to keep 10 days worth of logs
-sed -i 's/\tweekly/\tdaily/' /etc/logrotate.d/apache2
-sed -i 's/\trotate .*/\trotate 10/' /etc/logrotate.d/apache2
-# Remove Apache server information from headers.
-sed -i 's/ServerTokens .*/ServerTokens Prod/' /etc/apache2/conf-enabled/security.conf
-sed -i 's/ServerSignature .*/ServerSignature Off/' /etc/apache2/conf-enabled/security.conf
-service apache2 restart
-echo "\033[92;1mApache2 installed\033[Om"
-
-
-echo '\033[35m
-    ____  __  ______
-   / __ \/ / / / __ \
-  / /_/ / /_/ / /_/ /
- / ____/ __  / ____/
-/_/   /_/ /_/_/
-\033[0m'
-echo "\033[35;1mInstalling PHP \033[0m"
-sleep 3
-apt-get install php7.0 php-pear php7-gd
-echo "Configuring PHP"
-cp "$_cwd"/assets/99-lamp-php.ini /etc/php/7.0/apache2/conf.d/
-# conffile=/etc/php/7.0/apache2/conf.d/99-lamp-php.ini
-# cp /etc/php/7.0/apache2/php.ini $conffile
-# sed -i "s/max_execution_time\ =\ [0-9]\+/max_execution_time = 60/g" $conffile
-# sed -i "s/max_input_time\ =\ [0-9]\+/max_input_time = 60/g" $conffile
-# sed -i "s/memory_limit\ =\ [0-9]\+M/memory_limit = 512M/g" $conffile
-# sed -i "s/;\?error_reporting\ =\ [^\n]\+/error_reporting = E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR/g" $conffile
-# sed -i "s/;\?display_errors\ =\ On/display_errors = Off/g" $conffile
-# sed -i "s/;\?log_errors\ =\ Off/log_errors = On/g" $conffile
-# echo "register_globals = Off" >> $conffile
-# following command doesn't work, make teh change manualy
-#sed -ri ":a;$!{N;ba};s/;\?\ \?error_log\ =\ [^\n]\+([^\n]*\n(\n|$))/error_log = \/var\/log\/php\/error.log\1/g" /etc/php5/apache2/php.ini
-
-mkdir /var/log/php
-chown www-data /var/log/php
-cp "$_cwd"/assets/logrotate-php /etc/logrotate.d/php
-
-apt-get install php7.0-mysql php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached
-
-apt-get install memcached
-sed -i "s/-m\s64/-m 128/g" /etc/memcached.conf
-
-systemctl start memcached
-
-echo "\033[92;1mphp installed\033[Om"
-
-echo '\033[35m
-           __          __  ___      ___       __          _
-    ____  / /_  ____  /  |/  /_  __/   | ____/ /___ ___  (_)___
-   / __ \/ __ \/ __ \/ /|_/ / / / / /| |/ __  / __ `__ \/ / __ \
-  / /_/ / / / / /_/ / /  / / /_/ / ___ / /_/ / / / / / / / / / /
- / .___/_/ /_/ .___/_/  /_/\__, /_/  |_\__,_/_/ /_/ /_/_/_/ /_/
-/_/         /_/           /____/
-\033[0m'
-echo "\033[35;1mInstalling phpMyAdmin \033[0m"
-apt-get install phpmyadmin
-# echo "include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
-ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
-a2enconf phpmyadmin.conf
-echo "\033[35;1msecuring phpMyAdmin \033[0m"
-# sed -i "s/DirectoryIndex index.php/DirectoryIndex index.php\nAllowOverride all/"
-cp "$_cwd"/assets/phpmyadmin_htaccess > /usr/share/phpmyadmin/.htaccess
-echo -n "define a user name for phpmyadmin : "
-read un
-htpasswd -c /etc/phpmyadmin/.htpasswd $un
-service apache2 restart
-echo "\033[92;1mphpMyAdmin installed\033[Om"
-echo "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
-
-echo '\033[35m
-        __               __
- _   __/ /_  ____  _____/ /_
-| | / / __ \/ __ \/ ___/ __/
-| |/ / / / / /_/ (__  ) /_
-|___/_/ /_/\____/____/\__/
-\033[0m'
-echo "\033[35;1mVHOST install \033[0m"
-while [ "$vh" != "y" ] && [ "$vh" != "n" ]
+while [ "$lemp" != "y" ] && [ "$lemp" != "n" ]
 do
-echo -n "Should we install a vhost? [y|n] "
-read vh
-# vh=${vh:-y}
+  echo -n "Should we install lemp ? [y|n] "
+  read lemp
 done
-if [ "$vh" = "y" ]; then
+if [ "$lemp" = "y" ]; then
 
-  while [ "$_host_name" = "" ]
-  do
-  read -p "enter a hostname ? " _host_name
-  if [ "$_host_name" != "" ]; then
-    read -p "is hostname $_host_name correcte [y|n] " validated
-    if [ "$validated" = "y" ]; then
-      break
-    else
-      _host_name=""
-    fi
-  fi
-  done
+  echo '\033[35m
+      __  ___                 __
+     /  |/  /_  ___________ _/ /
+    / /|_/ / / / / ___/ __ `/ /
+   / /  / / /_/ (__  ) /_/ / /
+  /_/  /_/\__, /____/\__, /_/
+         /____/        /_/
+  \033[0m'
+  echo "\033[35;1minstalling Mysql \033[0m"
+  sleep 3
+  apt-get install mariadb-server
+  mysql_secure_installation
+  systemctl enable mariadb.service
+  systemctl restart mariadb.service
+  echo "\033[92;1mmysql installed\033[Om"
 
-  cp "$_cwd"/assets/example.org.conf /etc/apache2/sites-available/"$_host_name".conf
-  sed -ir "s/example\.org/$_host_name/g" /etc/apache2/sites-available/"$_host_name".conf
 
-  mkdir -p /srv/www/"$_host_name"/public_html
-  mkdir /srv/www/"$_host_name"/logs
-  #set proper right to user will handle the app
-  chown -R root:admin  /srv/www/"$_host_name"/
-  chmod -R g+w /srv/www/"$_host_name"/
-  chmod -R g+r /srv/www/"$_host_name"/
+  echo '\033[35m
+      _   __      _
+     / | / /___ _(_)___  _  __
+    /  |/ / __ `/ / __ \| |/_/
+   / /|  / /_/ / / / / />  <
+  /_/ |_/\__, /_/_/ /_/_/|_|
+        /____/
+  \033[0m'
+  echo "\033[35;1mInstalling Nginx \033[0m"
+  sleep 3
+  apt-get install nginx
+  cp "$_cwd"/assets/nginx.conf /etc/nginx/conf.d/
 
-  # create a shortcut to the site
-  mkdir /home/"$user"/www/
-  chown "$user":admin /home/"$user"/www/
-  ln -s /srv/www/"$_host_name" /home/"$user"/www/"$_host_name"
+  systemctl enable nginx
+  systemctl restart nginx
+  echo "\033[92;1mNginx installed\033[Om"
 
-  #activate the vhost
-  a2ensite "$_host_name".conf
+  echo '\033[35m
+      ____  __  ______
+     / __ \/ / / / __ \
+    / /_/ / /_/ / /_/ /
+   / ____/ __  / ____/
+  /_/   /_/ /_/_/
+  \033[0m'
+  echo "\033[35;1mInstalling PHP 7.0 \033[0m"
+  sleep 3
+  apt-get install php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached
 
-  #restart apache
-  service apache2 restart
-  echo "\033[92;1mvhost $_host_name configured\033[Om"
+
+  echo "Configuring PHP"
+
+  mkdir /var/log/php
+  chown www-data /var/log/php
+  cp "$_cwd"/assets/logrotate-php /etc/logrotate.d/php
+
+
+  # echo "Installing memecached"
+  # replaced by redis
+  # apt-get install memcached
+  # sed -i "s/-m\s64/-m 128/g" /etc/memcached.conf
+  #
+  # systemctl start memcached
+
+  echo "\033[92;1mphp installed\033[Om"
+
+  echo '\033[35m
+             __          __  ___      ___       __          _
+      ____  / /_  ____  /  |/  /_  __/   | ____/ /___ ___  (_)___
+     / __ \/ __ \/ __ \/ /|_/ / / / / /| |/ __  / __ `__ \/ / __ \
+    / /_/ / / / / /_/ / /  / / /_/ / ___ / /_/ / / / / / / / / / /
+   / .___/_/ /_/ .___/_/  /_/\__, /_/  |_\__,_/_/ /_/ /_/_/_/ /_/
+  /_/         /_/           /____/
+  \033[0m'
+  echo "\033[35;1mInstalling phpMyAdmin \033[0m"
+  apt-get install phpmyadmin
+  # echo "include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
+  # ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
+  # a2enconf phpmyadmin.conf
+  echo "\033[35;1msecuring phpMyAdmin \033[0m"
+  # sed -i "s/DirectoryIndex index.php/DirectoryIndex index.php\nAllowOverride all/"
+  cp "$_cwd"/assets/phpmyadmin_htaccess > /usr/share/phpmyadmin/.htaccess
+  echo -n "define a user name for phpmyadmin : "
+  read un
+  htpasswd -c /etc/phpmyadmin/.htpasswd $un
+  # service apache2 restart
+  echo "\033[92;1mphpMyAdmin installed\033[Om"
+  echo "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
+
+
+  echo '\033[35m
+      ____           ___
+     / __ \___  ____/ (_)____
+    / /_/ / _ \/ __  / / ___/
+   / _, _/  __/ /_/ / (__  )
+  /_/ |_|\___/\__,_/_/____/
+  \033[0m'
+  echo "\033[35;1mInstalling Redis \033[0m"
+  sleep 3
+  apt-get install redis-server php-redis
+  # cp "$_cwd"/assets/nginx.conf /etc/nginx/conf.d/
+
+  systemctl enable redis-server
+  systemctl restart redis-server
+  echo "\033[92;1mRedis installed\033[Om"
+
+  # echo '\033[35m
+  #         __               __
+  #  _   __/ /_  ____  _____/ /_
+  # | | / / __ \/ __ \/ ___/ __/
+  # | |/ / / / / /_/ (__  ) /_
+  # |___/_/ /_/\____/____/\__/
+  # \033[0m'
+  # echo "\033[35;1mVHOST install \033[0m"
+  # while [ "$vh" != "y" ] && [ "$vh" != "n" ]
+  # do
+  # echo -n "Should we install a vhost? [y|n] "
+  # read vh
+  # # vh=${vh:-y}
+  # done
+  # if [ "$vh" = "y" ]; then
+  #
+  #   while [ "$_host_name" = "" ]
+  #   do
+  #   read -p "enter a hostname ? " _host_name
+  #   if [ "$_host_name" != "" ]; then
+  #     read -p "is hostname $_host_name correcte [y|n] " validated
+  #     if [ "$validated" = "y" ]; then
+  #       break
+  #     else
+  #       _host_name=""
+  #     fi
+  #   fi
+  #   done
+  #
+  #   cp "$_cwd"/assets/example.org.conf /etc/apache2/sites-available/"$_host_name".conf
+  #   sed -ir "s/example\.org/$_host_name/g" /etc/apache2/sites-available/"$_host_name".conf
+  #
+  #   mkdir -p /srv/www/"$_host_name"/public_html
+  #   mkdir /srv/www/"$_host_name"/logs
+  #   #set proper right to user will handle the app
+  #   chown -R root:admin  /srv/www/"$_host_name"/
+  #   chmod -R g+w /srv/www/"$_host_name"/
+  #   chmod -R g+r /srv/www/"$_host_name"/
+  #
+  #   # create a shortcut to the site
+  #   mkdir /home/"$user"/www/
+  #   chown "$user":admin /home/"$user"/www/
+  #   ln -s /srv/www/"$_host_name" /home/"$user"/www/"$_host_name"
+  #
+  #   #activate the vhost
+  #   a2ensite "$_host_name".conf
+  #
+  #   #restart apache
+  #   service apache2 restart
+  #   echo "\033[92;1mvhost $_host_name configured\033[Om"
+  # else
+  #   echo "Vhost installation aborted"
+  # fi
+
+
+  # TODO supervising
+  # echo '\033[35m
+  #    __  ___          _ __      __  __  ___          _
+  #   /  |/  /__  ___  (_) /_   _/_/ /  |/  /_ _____  (_)__
+  #  / /|_/ / _ \/ _ \/ / __/ _/_/  / /|_/ / // / _ \/ / _ \
+  # /_/  /_/\___/_//_/_/\__/ /_/   /_/  /_/\_,_/_//_/_/_//_/
+  # \033[0m'
+  # echo "\033[35;1mInstalling Munin \033[0m"
+  # sleep 3
+  # # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/
+  # apt-get install munin munin-node munin-plugins-extra
+  # # Configure Munin
+  # # enable plugins
+  # ln -s /usr/share/munin/plugins/mysql_ /etc/munin/plugins/mysql_
+  # ln -s /usr/share/munin/plugins/mysql_bytes /etc/munin/plugins/mysql_bytes
+  # ln -s /usr/share/munin/plugins/mysql_innodb /etc/munin/plugins/mysql_innodb
+  # ln -s /usr/share/munin/plugins/mysql_isam_space_ /etc/munin/plugins/mysql_isam_space_
+  # ln -s /usr/share/munin/plugins/mysql_queries /etc/munin/plugins/mysql_queries
+  # ln -s /usr/share/munin/plugins/mysql_slowqueries /etc/munin/plugins/mysql_slowqueries
+  # ln -s /usr/share/munin/plugins/mysql_threads /etc/munin/plugins/mysql_threads
+  #
+  # ln -s /usr/share/munin/plugins/apache_accesses /etc/munin/plugins/
+  # ln -s /usr/share/munin/plugins/apache_processes /etc/munin/plugins/
+  # ln -s /usr/share/munin/plugins/apache_volume /etc/munin/plugins/
+  #
+  # # ln -s /usr/share/munin/plugins/fail2ban /etc/munin/plugins/
+  #
+  # # dbdir, htmldir, logdir, rundir, and tmpldir
+  # sed -i 's/^#dbdir/dbdir/' /etc/munin/munin.conf
+  # sed -i 's/^#htmldir/htmldir/' /etc/munin/munin.conf
+  # sed -i 's/^#logdir/logdir/' /etc/munin/munin.conf
+  # sed -i 's/^#rundir/rundir/' /etc/munin/munin.conf
+  # sed -i 's/^#tmpldir/tmpldir/' /etc/munin/munin.conf
+  #
+  # sed -i "s/^\[localhost.localdomain\]/[${HOSTNAME}]/" /etc/munin/munin.conf
+  #
+  # # ln -s /etc/munin/apache24.conf /etc/apache2/conf-enabled/munin.conf
+  # sed -i 's/Require local/Require all granted\nOptions FollowSymLinks SymLinksIfOwnerMatch/g' /etc/munin/apache24.conf
+  # htpasswd -c /etc/munin/munin-htpasswd admin
+  # sed -i 's/Require all granted/AuthUserFile \/etc\/munin\/munin-htpasswd\nAuthName "Munin"\nAuthType Basic\nRequire valid-user/g' /etc/munin/apache24.conf
+  #
+  #
+  # service apache2 restart
+  # service munin-node restart
+  # echo "\033[92;1mMunin installed\033[Om"
+  #
+  # echo "\033[35;1mInstalling Monit \033[0m"
+  # sleep 3
+  # # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/2/
+  # apt-get install monit
+  # # TODO setup monit rc
+  # cat "$_cwd"/assets/monitrc > /etc/monit/monitrc
+  #
+  # # TODO setup webaccess
+  # passok=0
+  # while [ "$passok" = "0" ]
+  # do
+  #   echo -n "Write web access password to monit"
+  #   read passwda
+  #   echo -n "ReWrite web access password to monit"
+  #   read passwdb
+  #   if [ "$passwda" = "$passwdb" ]; then
+  #     sed -i 's/PASSWD_TO_REPLACE/$passwda/g' /etc/monit/monitrc
+  #     passok=1
+  #   else
+  #     echo "pass words don't match, please try again"
+  #   fi
+  # done
+  #
+  # # TODO setup mail settings
+  # sed -i "s/server1\.example\.com/$HOSTNAME/g" /etc/monit/monitrc
+  #
+  # mkdir /var/www/html/monit
+  # echo "hello" > /var/www/html/monit/token
+  #
+  # service monit start
+  #
+  # echo "\033[92;1mMonit installed\033[Om"
+
+
+  # echo '\033[35m
+  #     ___                __        __
+  #    /   |_      _______/ /_____ _/ /_
+  #   / /| | | /| / / ___/ __/ __ `/ __/
+  #  / ___ | |/ |/ (__  ) /_/ /_/ / /_
+  # /_/  |_|__/|__/____/\__/\__,_/\__/
+  # \033[0m'
+  # echo "\033[35;1mInstalling Awstat \033[0m"
+  # sleep 3
+  # apt-get install awstats
+  # # Configure AWStats
+  # temp=`grep -i sitedomain /etc/awstats/awstats.conf.local | wc -l`
+  # if [ $temp -lt 1 ]; then
+  #     echo SiteDomain="$_host_name" >> /etc/awstats/awstats.conf.local
+  # fi
+  # # Disable Awstats from executing every 10 minutes. Put a hash in front of any line.
+  # sed -i 's/^[^#]/#&/' /etc/cron.d/awstats
+  # echo "\033[92;1mAwstat installed\033[Om"
+
+
 else
-  echo "Vhost installation aborted"
+  echo 'lemp server not installed'
 fi
-
-
-# TODO supervising
-# echo '\033[35m
-#    __  ___          _ __      __  __  ___          _
-#   /  |/  /__  ___  (_) /_   _/_/ /  |/  /_ _____  (_)__
-#  / /|_/ / _ \/ _ \/ / __/ _/_/  / /|_/ / // / _ \/ / _ \
-# /_/  /_/\___/_//_/_/\__/ /_/   /_/  /_/\_,_/_//_/_/_//_/
-# \033[0m'
-# echo "\033[35;1mInstalling Munin \033[0m"
-# sleep 3
-# # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/
-# apt-get install munin munin-node munin-plugins-extra
-# # Configure Munin
-# # enable plugins
-# ln -s /usr/share/munin/plugins/mysql_ /etc/munin/plugins/mysql_
-# ln -s /usr/share/munin/plugins/mysql_bytes /etc/munin/plugins/mysql_bytes
-# ln -s /usr/share/munin/plugins/mysql_innodb /etc/munin/plugins/mysql_innodb
-# ln -s /usr/share/munin/plugins/mysql_isam_space_ /etc/munin/plugins/mysql_isam_space_
-# ln -s /usr/share/munin/plugins/mysql_queries /etc/munin/plugins/mysql_queries
-# ln -s /usr/share/munin/plugins/mysql_slowqueries /etc/munin/plugins/mysql_slowqueries
-# ln -s /usr/share/munin/plugins/mysql_threads /etc/munin/plugins/mysql_threads
-#
-# ln -s /usr/share/munin/plugins/apache_accesses /etc/munin/plugins/
-# ln -s /usr/share/munin/plugins/apache_processes /etc/munin/plugins/
-# ln -s /usr/share/munin/plugins/apache_volume /etc/munin/plugins/
-#
-# # ln -s /usr/share/munin/plugins/fail2ban /etc/munin/plugins/
-#
-# # dbdir, htmldir, logdir, rundir, and tmpldir
-# sed -i 's/^#dbdir/dbdir/' /etc/munin/munin.conf
-# sed -i 's/^#htmldir/htmldir/' /etc/munin/munin.conf
-# sed -i 's/^#logdir/logdir/' /etc/munin/munin.conf
-# sed -i 's/^#rundir/rundir/' /etc/munin/munin.conf
-# sed -i 's/^#tmpldir/tmpldir/' /etc/munin/munin.conf
-#
-# sed -i "s/^\[localhost.localdomain\]/[${HOSTNAME}]/" /etc/munin/munin.conf
-#
-# # ln -s /etc/munin/apache24.conf /etc/apache2/conf-enabled/munin.conf
-# sed -i 's/Require local/Require all granted\nOptions FollowSymLinks SymLinksIfOwnerMatch/g' /etc/munin/apache24.conf
-# htpasswd -c /etc/munin/munin-htpasswd admin
-# sed -i 's/Require all granted/AuthUserFile \/etc\/munin\/munin-htpasswd\nAuthName "Munin"\nAuthType Basic\nRequire valid-user/g' /etc/munin/apache24.conf
-#
-#
-# service apache2 restart
-# service munin-node restart
-# echo "\033[92;1mMunin installed\033[Om"
-#
-# echo "\033[35;1mInstalling Monit \033[0m"
-# sleep 3
-# # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/2/
-# apt-get install monit
-# # TODO setup monit rc
-# cat "$_cwd"/assets/monitrc > /etc/monit/monitrc
-#
-# # TODO setup webaccess
-# passok=0
-# while [ "$passok" = "0" ]
-# do
-#   echo -n "Write web access password to monit"
-#   read passwda
-#   echo -n "ReWrite web access password to monit"
-#   read passwdb
-#   if [ "$passwda" = "$passwdb" ]; then
-#     sed -i 's/PASSWD_TO_REPLACE/$passwda/g' /etc/monit/monitrc
-#     passok=1
-#   else
-#     echo "pass words don't match, please try again"
-#   fi
-# done
-#
-# # TODO setup mail settings
-# sed -i "s/server1\.example\.com/$HOSTNAME/g" /etc/monit/monitrc
-#
-# mkdir /var/www/html/monit
-# echo "hello" > /var/www/html/monit/token
-#
-# service monit start
-#
-# echo "\033[92;1mMonit installed\033[Om"
-
-
-# echo '\033[35m
-#     ___                __        __
-#    /   |_      _______/ /_____ _/ /_
-#   / /| | | /| / / ___/ __/ __ `/ __/
-#  / ___ | |/ |/ (__  ) /_/ /_/ / /_
-# /_/  |_|__/|__/____/\__/\__,_/\__/
-# \033[0m'
-# echo "\033[35;1mInstalling Awstat \033[0m"
-# sleep 3
-# apt-get install awstats
-# # Configure AWStats
-# temp=`grep -i sitedomain /etc/awstats/awstats.conf.local | wc -l`
-# if [ $temp -lt 1 ]; then
-#     echo SiteDomain="$_host_name" >> /etc/awstats/awstats.conf.local
-# fi
-# # Disable Awstats from executing every 10 minutes. Put a hash in front of any line.
-# sed -i 's/^[^#]/#&/' /etc/cron.d/awstats
-# echo "\033[92;1mAwstat installed\033[Om"
 
 
 # echo '\033[35m
@@ -609,9 +639,6 @@ read email
 sed -ir "s/EMAIL=\"root\"/EMAIL=\"$email\"/g" /etc/apticron/apticron.conf
 # sed -ir "s/# DIFF_ONLY=\"1\"/DIFF_ONLY=\"1\"/g" /etc/apticron/apticron.conf
 sed -ir "s/# NOTIFY_NEW=\"0\"/NOTIFY_NEW=\"0\"/g" /etc/apticron/apticron.conf
-
-
-
 
 echo "\033[92;1mApticron installed and configured\033[0m"
 
