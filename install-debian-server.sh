@@ -89,21 +89,21 @@ echo '\033[35m
  / ,< / / / / /_/ / /__/ ,< / /_/ /
 /_/|_/_/ /_/\____/\___/_/|_|\__,_/
 \033[0m'
-echo "\033[35;1mInstalling knockd \033[0m"
+echo "\033[35;1mInstalling knockd to control ssh port opening\033[0m"
 sleep 3
 apt-get --yes --force-yes install knockd
-echo -n "define a sequence number for opening (as 7000,8000,9000) : "
-read sq1
-echo -n "define a sequence number for closing (as 9000,8000,7000) : "
-read sq2
-sed -i "s/7000,8000,9000/$sq1/g" /etc/knockd.conf
-sed -i "s/9000,8000,7000/$sq2/g" /etc/knockd.conf
+
+mv /etc/knockd/knockd.conf /etc/knockd/knockd.conf.ori
+cp "$_cwd"/assets/knockd.conf /etc/knockd/knockd.conf
+echo -n "define a sequence number for opening ssh (as 7000,8000,9000) : "
+read sq
+sed -i "s/7000,8000,9000/$sq/g" /etc/knockd.conf
 sed -i 's/START_KNOCKD=0/START_KNOCKD=1/g' /etc/default/knockd
-systemctl enable knockd
-systemctl start knockd
+/etc/init.d/knockd start
 echo "\033[92;1mknockd installed and configured\033[Om"
-echo "\033[92;1mplease note these sequences for future knocking\033[Om"
-echo "opening : $sq1 ; closing : $sq2"
+echo "\033[92;1mplease note this sequence for future ssh knocking\033[Om"
+echo "$sq1"
+sleep 3
 
 echo '\033[35m
    __  _______ __________
