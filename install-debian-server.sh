@@ -93,8 +93,8 @@ echo "\033[35;1mInstalling knockd to control ssh port opening\033[0m"
 sleep 3
 apt-get --yes --force-yes install knockd
 
-mv /etc/knockd/knockd.conf /etc/knockd/knockd.conf.ori
-cp "$_cwd"/assets/knockd.conf /etc/knockd/knockd.conf
+mv /etc/knockd.conf /etc/knockd.conf.ori
+cp "$_cwd"/assets/knockd.conf /etc/knockd.conf
 echo -n "define a sequence number for opening ssh (as 7000,8000,9000) : "
 read sq
 sed -i "s/7000,8000,9000/$sq/g" /etc/knockd.conf
