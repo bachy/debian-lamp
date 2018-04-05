@@ -379,7 +379,6 @@ if [ "$lemp" = "y" ]; then
   echo "\033[35;1mInstalling Redis \033[0m"
   sleep 3
   apt-get --yes --force-yes install redis-server php-redis
-  # cp "$_cwd"/assets/nginx.conf /etc/nginx/conf.d/
 
   systemctl enable redis-server
   systemctl restart redis-server
@@ -418,16 +417,16 @@ if [ "$lemp" = "y" ]; then
     sed -ir "s/yourdomain\.ltd/$_host_name/g" /etc/nginx/sites-available/"$_host_name".conf
 
     mkdir -p /var/www/"$_host_name"/public_html
-    mkdir /srv/www/"$_host_name"/logs
+    mkdir /var/www/"$_host_name"/logs
     #set proper right to user will handle the app
-    chown -R root:admin  /srv/www/"$_host_name"/
-    chmod -R g+w /srv/www/"$_host_name"/
-    chmod -R g+r /srv/www/"$_host_name"/
+    chown -R root:admin  /var/www/"$_host_name"/
+    chmod -R g+w /var/www/"$_host_name"/
+    chmod -R g+r /var/www/"$_host_name"/
 
     # create a shortcut to the site
     mkdir /home/"$user"/www/
     chown "$user":admin /home/"$user"/www/
-    ln -s /srv/www/"$_host_name" /home/"$user"/www/"$_host_name"
+    ln -s /var/www/"$_host_name" /home/"$user"/www/"$_host_name"
 
     # activate the vhost
     # a2ensite "$_host_name".conf
