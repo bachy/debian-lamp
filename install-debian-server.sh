@@ -45,10 +45,10 @@ echo '\033[35m
 /_/  /_/_/____/\___/
 
 \033[0m'
-apt-get install vim
+apt-get --yes --force-yes install vim
 sed -i "s/^# en_GB.UTF-8/en_GB.UTF-8/g" /etc/locale.gen
 locale-gen
-apt-get install ntp
+apt-get --yes --force-yes install ntp
 
 echo '\033[35m
     ______________  _______       _____    __    __
@@ -59,7 +59,7 @@ echo '\033[35m
 \033[0m'
 echo "\033[35;1mInstalling ufw and setup firewall (allowing only ssh and http) \033[0m"
 sleep 3
-apt-get install ufw
+apt-get --yes --force-yes install ufw
 # ufw allow ssh # knockd will open the ssh port
 ufw allow http
 ufw allow https
@@ -75,7 +75,7 @@ echo '\033[35m
 /_/    \__,_/_/_//____/_.___/\__,_/_/ /_/
 \033[0m'
 echo "\033[35;1mInstalling fall2ban \033[0m"
-apt-get install fail2ban
+apt-get --yes --force-yes install fail2ban
 cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 # ToDo ask for email and configure jail.local with it
 systemctl enable fail2ban
@@ -91,7 +91,7 @@ echo '\033[35m
 \033[0m'
 echo "\033[35;1mInstalling knockd \033[0m"
 sleep 3
-apt-get install knockd
+apt-get --yes --force-yes install knockd
 echo -n "define a sequence number for opening (as 7000,8000,9000) : "
 read sq1
 echo -n "define a sequence number for closing (as 9000,8000,7000) : "
@@ -136,7 +136,7 @@ echo '\033[35m
 echo "\033[35;1mEnable mail sending for php \033[0m"
 # http://www.sycha.com/lamp-setup-debian-linux-apache-mysql-php#anchor13
 sleep 3
-apt-get install exim4
+apt-get --yes --force-yes install exim4
 echo "\033[35;1mConfiguring EXIM4 \033[0m"
 while [ "$configexim" != "y" ] && [ "$configexim" != "n" ]
 do
@@ -228,7 +228,7 @@ read yn
 yn=${yn:-y}
 if [ "$yn" = "y" ]; then
   echo "installing proftpd"
-  apt-get install proftpd
+  apt-get --yes --force-yes install proftpd
   while [ "$_server_name" = "" ]
   do
   read -p "enter a server name ? " _server_name
@@ -289,7 +289,7 @@ if [ "$lemp" = "y" ]; then
   \033[0m'
   echo "\033[35;1minstalling Mysql \033[0m"
   sleep 3
-  apt-get install mariadb-server
+  apt-get --yes --force-yes install mariadb-server
   mysql_secure_installation
   systemctl enable mariadb.service
   systemctl restart mariadb.service
@@ -306,7 +306,7 @@ if [ "$lemp" = "y" ]; then
   \033[0m'
   echo "\033[35;1mInstalling Nginx \033[0m"
   sleep 3
-  apt-get install nginx
+  apt-get --yes --force-yes install nginx
   cp "$_cwd"/assets/nginx.conf /etc/nginx/conf.d/
 
   systemctl enable nginx
@@ -322,7 +322,7 @@ if [ "$lemp" = "y" ]; then
   \033[0m'
   echo "\033[35;1mInstalling PHP 7.0 \033[0m"
   sleep 3
-  apt-get install php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached
+  apt-get --yes --force-yes install php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached
 
 
   echo "Configuring PHP"
@@ -334,7 +334,7 @@ if [ "$lemp" = "y" ]; then
 
   # echo "Installing memecached"
   # replaced by redis
-  # apt-get install memcached
+  # apt-get --yes --force-yes install memcached
   # sed -i "s/-m\s64/-m 128/g" /etc/memcached.conf
   #
   # systemctl start memcached
@@ -350,7 +350,7 @@ if [ "$lemp" = "y" ]; then
   /_/         /_/           /____/
   \033[0m'
   echo "\033[35;1mInstalling phpMyAdmin \033[0m"
-  apt-get install phpmyadmin
+  apt-get --yes --force-yes install phpmyadmin
   # echo "include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
   # ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
   # a2enconf phpmyadmin.conf
@@ -374,7 +374,7 @@ if [ "$lemp" = "y" ]; then
   \033[0m'
   echo "\033[35;1mInstalling Redis \033[0m"
   sleep 3
-  apt-get install redis-server php-redis
+  apt-get --yes --force-yes install redis-server php-redis
   # cp "$_cwd"/assets/nginx.conf /etc/nginx/conf.d/
 
   systemctl enable redis-server
@@ -446,7 +446,7 @@ if [ "$lemp" = "y" ]; then
   # echo "\033[35;1mInstalling Munin \033[0m"
   # sleep 3
   # # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/
-  # apt-get install munin munin-node munin-plugins-extra
+  # apt-get --yes --force-yes install munin munin-node munin-plugins-extra
   # # Configure Munin
   # # enable plugins
   # ln -s /usr/share/munin/plugins/mysql_ /etc/munin/plugins/mysql_
@@ -485,7 +485,7 @@ if [ "$lemp" = "y" ]; then
   # echo "\033[35;1mInstalling Monit \033[0m"
   # sleep 3
   # # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/2/
-  # apt-get install monit
+  # apt-get --yes --force-yes install monit
   # # TODO setup monit rc
   # cat "$_cwd"/assets/monitrc > /etc/monit/monitrc
   #
@@ -525,7 +525,7 @@ if [ "$lemp" = "y" ]; then
   # \033[0m'
   # echo "\033[35;1mInstalling Awstat \033[0m"
   # sleep 3
-  # apt-get install awstats
+  # apt-get --yes --force-yes install awstats
   # # Configure AWStats
   # temp=`grep -i sitedomain /etc/awstats/awstats.conf.local | wc -l`
   # if [ $temp -lt 1 ]; then
@@ -630,7 +630,7 @@ echo '\033[35m
 # https://www.bisolweb.com/tutoriels/serveur-vps-ovh-partie-5-installation-apticron/
 
 echo "\033[35;1mInstalling apticron \033[0m"
-apt-get install apticron
+apt-get --yes --force-yes install apticron
 
 sleep 3
 echo -n "Enter an email: "
