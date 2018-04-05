@@ -49,6 +49,7 @@ apt-get --yes --force-yes install vim
 sed -i "s/^# en_GB.UTF-8/en_GB.UTF-8/g" /etc/locale.gen
 locale-gen
 apt-get --yes --force-yes install ntp
+dpkg-reconfigure tzdata
 
 echo '\033[35m
     ______________  _______       _____    __    __
@@ -295,7 +296,6 @@ if [ "$lemp" = "y" ]; then
   systemctl restart mariadb.service
   echo "\033[92;1mmysql installed\033[Om"
 
-
   echo '\033[35m
       _   __      _
      / | / /___ _(_)___  _  __
@@ -324,6 +324,8 @@ if [ "$lemp" = "y" ]; then
   sleep 3
   apt-get --yes --force-yes install php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached
 
+  mv /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.back
+  cp "$_cwd"/assets/php-fpm.ini /etc/php/7.0/fpm/php.ini
 
   echo "Configuring PHP"
 
@@ -331,6 +333,8 @@ if [ "$lemp" = "y" ]; then
   chown www-data /var/log/php
   cp "$_cwd"/assets/logrotate-php /etc/logrotate.d/php
 
+  systemctl enable php7.0-fpm
+  systemctl start php7.0-fpm
 
   # echo "Installing memecached"
   # replaced by redis
@@ -381,59 +385,60 @@ if [ "$lemp" = "y" ]; then
   systemctl restart redis-server
   echo "\033[92;1mRedis installed\033[Om"
 
-  # echo '\033[35m
-  #         __               __
-  #  _   __/ /_  ____  _____/ /_
-  # | | / / __ \/ __ \/ ___/ __/
-  # | |/ / / / / /_/ (__  ) /_
-  # |___/_/ /_/\____/____/\__/
-  # \033[0m'
-  # echo "\033[35;1mVHOST install \033[0m"
-  # while [ "$vh" != "y" ] && [ "$vh" != "n" ]
-  # do
-  # echo -n "Should we install a vhost? [y|n] "
-  # read vh
-  # # vh=${vh:-y}
-  # done
-  # if [ "$vh" = "y" ]; then
-  #
-  #   while [ "$_host_name" = "" ]
-  #   do
-  #   read -p "enter a hostname ? " _host_name
-  #   if [ "$_host_name" != "" ]; then
-  #     read -p "is hostname $_host_name correcte [y|n] " validated
-  #     if [ "$validated" = "y" ]; then
-  #       break
-  #     else
-  #       _host_name=""
-  #     fi
-  #   fi
-  #   done
-  #
-  #   cp "$_cwd"/assets/example.org.conf /etc/apache2/sites-available/"$_host_name".conf
-  #   sed -ir "s/example\.org/$_host_name/g" /etc/apache2/sites-available/"$_host_name".conf
-  #
-  #   mkdir -p /srv/www/"$_host_name"/public_html
-  #   mkdir /srv/www/"$_host_name"/logs
-  #   #set proper right to user will handle the app
-  #   chown -R root:admin  /srv/www/"$_host_name"/
-  #   chmod -R g+w /srv/www/"$_host_name"/
-  #   chmod -R g+r /srv/www/"$_host_name"/
-  #
-  #   # create a shortcut to the site
-  #   mkdir /home/"$user"/www/
-  #   chown "$user":admin /home/"$user"/www/
-  #   ln -s /srv/www/"$_host_name" /home/"$user"/www/"$_host_name"
-  #
-  #   #activate the vhost
-  #   a2ensite "$_host_name".conf
-  #
-  #   #restart apache
-  #   service apache2 restart
-  #   echo "\033[92;1mvhost $_host_name configured\033[Om"
-  # else
-  #   echo "Vhost installation aborted"
-  # fi
+  echo '\033[35m
+          __               __
+   _   __/ /_  ____  _____/ /_
+  | | / / __ \/ __ \/ ___/ __/
+  | |/ / / / / /_/ (__  ) /_
+  |___/_/ /_/\____/____/\__/
+  \033[0m'
+  echo "\033[35;1mVHOST install \033[0m"
+  while [ "$vh" != "y" ] && [ "$vh" != "n" ]
+  do
+  echo -n "Should we install a vhost? [y|n] "
+  read vh
+  # vh=${vh:-y}
+  done
+  if [ "$vh" = "y" ]; then
+
+    while [ "$_host_name" = "" ]
+    do
+    read -p "enter a hostname ? " _host_name
+    if [ "$_host_name" != "" ]; then
+      read -p "is hostname $_host_name correcte [y|n] " validated
+      if [ "$validated" = "y" ]; then
+        break
+      else
+        _host_name=""
+      fi
+    fi
+    done
+
+    cp "$_cwd"/assets/nginx.conf /etc/nginx/sites-available/"$_host_name".conf
+    sed -ir "s/yourdomain\.ltd/$_host_name/g" /etc/nginx/sites-available/"$_host_name".conf
+
+    mkdir -p /var/www/"$_host_name"/public_html
+    mkdir /srv/www/"$_host_name"/logs
+    #set proper right to user will handle the app
+    chown -R root:admin  /srv/www/"$_host_name"/
+    chmod -R g+w /srv/www/"$_host_name"/
+    chmod -R g+r /srv/www/"$_host_name"/
+
+    # create a shortcut to the site
+    mkdir /home/"$user"/www/
+    chown "$user":admin /home/"$user"/www/
+    ln -s /srv/www/"$_host_name" /home/"$user"/www/"$_host_name"
+
+    # activate the vhost
+    # a2ensite "$_host_name".conf
+    ln -s /etc/nginx/sites-available/"$_host_name".conf /etc/nginx/sites-enabled/"$_host_name".conf
+
+    # restart nginx
+    systemctl restart nginx
+    echo "\033[92;1mvhost $_host_name configured\033[Om"
+  else
+    echo "Vhost installation aborted"
+  fi
 
 
   # TODO supervising
