@@ -297,23 +297,6 @@ if [ "$lemp" = "y" ]; then
   echo "\033[92;1mmysql installed\033[Om"
 
   echo '\033[35m
-      _   __      _
-     / | / /___ _(_)___  _  __
-    /  |/ / __ `/ / __ \| |/_/
-   / /|  / /_/ / / / / />  <
-  /_/ |_/\__, /_/_/ /_/_/|_|
-        /____/
-  \033[0m'
-  echo "\033[35;1mInstalling Nginx \033[0m"
-  sleep 3
-  apt-get --yes --force-yes install nginx
-  cp "$_cwd"/assets/nginx.conf /etc/nginx/conf.d/
-
-  systemctl enable nginx
-  systemctl restart nginx
-  echo "\033[92;1mNginx installed\033[Om"
-
-  echo '\033[35m
       ____  __  ______
      / __ \/ / / / __ \
     / /_/ / /_/ / /_/ /
@@ -346,6 +329,24 @@ if [ "$lemp" = "y" ]; then
   echo "\033[92;1mphp installed\033[Om"
 
   echo '\033[35m
+      _   __      _
+     / | / /___ _(_)___  _  __
+    /  |/ / __ `/ / __ \| |/_/
+   / /|  / /_/ / / / / />  <
+  /_/ |_/\__, /_/_/ /_/_/|_|
+        /____/
+  \033[0m'
+  echo "\033[35;1mInstalling Nginx \033[0m"
+  sleep 3
+  apt-get --yes --force-yes install nginx
+  mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.ori
+  cp "$_cwd"/assets/default.nginxconf /etc/nginx/sites-available/default
+
+  systemctl enable nginx
+  systemctl restart nginx
+  echo "\033[92;1mNginx installed\033[Om"
+
+  echo '\033[35m
              __          __  ___      ___       __          _
       ____  / /_  ____  /  |/  /_  __/   | ____/ /___ ___  (_)___
      / __ \/ __ \/ __ \/ /|_/ / / / / /| |/ __  / __ `__ \/ / __ \
@@ -355,10 +356,11 @@ if [ "$lemp" = "y" ]; then
   \033[0m'
   echo "\033[35;1mInstalling phpMyAdmin \033[0m"
   apt-get --yes --force-yes install phpmyadmin
-  cp "$_cwd"/assets/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
-  ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
+  ln -s /usr/share/phpmyadmin /var/www/html/
+  # cp "$_cwd"/assets/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
+  # ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
 
-  echo "\033[35;1msecuring phpMyAdmin \033[0m"
+  # echo "\033[35;1msecuring phpMyAdmin \033[0m"
   # sed -i "s/DirectoryIndex index.php/DirectoryIndex index.php\nAllowOverride all/"
   # cp "$_cwd"/assets/phpmyadmin_htaccess > /usr/share/phpmyadmin/.htaccess
   # echo -n "define a user name for phpmyadmin : "
@@ -443,8 +445,9 @@ if [ "$lemp" = "y" ]; then
       fi
     fi
     done
+    # TODO ask for simple php conf or drupal conf
 
-    cp "$_cwd"/assets/nginx.conf /etc/nginx/sites-available/"$_host_name".conf
+    cp "$_cwd"/assets/simple-phpfpm.nginxconf /etc/nginx/sites-available/"$_host_name".conf
     sed -ir "s/yourdomain\.ltd/$_host_name/g" /etc/nginx/sites-available/"$_host_name".conf
 
     mkdir -p /var/www/"$_host_name"/public_html
