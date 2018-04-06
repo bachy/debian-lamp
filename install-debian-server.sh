@@ -45,7 +45,7 @@ echo '\033[35m
 /_/  /_/_/____/\___/
 
 \033[0m'
-apt-get --yes --force-yes install vim
+apt-get --yes --force-yes install vim curl
 sed -i "s/^# en_GB.UTF-8/en_GB.UTF-8/g" /etc/locale.gen
 locale-gen
 apt-get --yes --force-yes install ntp
@@ -355,19 +355,18 @@ if [ "$lemp" = "y" ]; then
   \033[0m'
   echo "\033[35;1mInstalling phpMyAdmin \033[0m"
   apt-get --yes --force-yes install phpmyadmin
-  # echo "include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
-  # ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
-  # a2enconf phpmyadmin.conf
+  cp "$_cwd"/assets/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
+  ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
+
   echo "\033[35;1msecuring phpMyAdmin \033[0m"
   # sed -i "s/DirectoryIndex index.php/DirectoryIndex index.php\nAllowOverride all/"
-  cp "$_cwd"/assets/phpmyadmin_htaccess > /usr/share/phpmyadmin/.htaccess
-  echo -n "define a user name for phpmyadmin : "
-  read un
-  htpasswd -c /etc/phpmyadmin/.htpasswd $un
+  # cp "$_cwd"/assets/phpmyadmin_htaccess > /usr/share/phpmyadmin/.htaccess
+  # echo -n "define a user name for phpmyadmin : "
+  # read un
+  # htpasswd -c /etc/phpmyadmin/.htpasswd $un
   # service apache2 restart
   echo "\033[92;1mphpMyAdmin installed\033[Om"
   echo "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
-
 
   echo '\033[35m
       ____           ___
@@ -383,6 +382,38 @@ if [ "$lemp" = "y" ]; then
   systemctl enable redis-server
   systemctl restart redis-server
   echo "\033[92;1mRedis installed\033[Om"
+
+  echo '\033[35m
+     ______
+    / ____/___  ____ ___  ____  ____  ________  _____
+   / /   / __ \/ __ `__ \/ __ \/ __ \/ ___/ _ \/ ___/
+  / /___/ /_/ / / / / / / /_/ / /_/ (__  )  __/ /
+  \____/\____/_/ /_/ /_/ .___/\____/____/\___/_/
+                      /_/
+  \033[0m'
+  echo "\033[35;1mInstalling Composer \033[0m"
+  sleep 3
+  export COMPOSER_HOME=/usr/local/composer
+  curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+  echo "\033[92;1mComposer installed\033[Om"
+
+
+  echo '\033[35m
+      ____                  __
+     / __ \_______  _______/ /_
+    / / / / ___/ / / / ___/ __ \
+   / /_/ / /  / /_/ (__  ) / / /
+  /_____/_/   \__,_/____/_/ /_/
+  \033[0m'
+  echo "\033[35;1mInstalling Drush and DrupalConsole\033[0m"
+  sleep 3
+  curl https://drupalconsole.com/installer -L -o /usr/local/bin/drupal
+	chmod +x /usr/local/bin/drupal
+  curl https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar -L -o /usr/local/bin/drush
+	chmod +x /usr/local/bin/drush
+  echo "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
+
 
   echo '\033[35m
           __               __
@@ -429,8 +460,10 @@ if [ "$lemp" = "y" ]; then
     ln -s /var/www/"$_host_name" /home/"$user"/www/"$_host_name"
 
     # activate the vhost
-    # a2ensite "$_host_name".conf
     ln -s /etc/nginx/sites-available/"$_host_name".conf /etc/nginx/sites-enabled/"$_host_name".conf
+
+    # TODO : lets'encrypt
+    # https://certbot.eff.org/lets-encrypt/debianstretch-nginx
 
     # restart nginx
     systemctl restart nginx
