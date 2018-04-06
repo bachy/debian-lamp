@@ -1,8 +1,8 @@
 # https://www.nginx.com/resources/wiki/start/topics/recipes/drupal/
 server {
     listen 80;
-    server_name yourdomain.ltd;
-    root /var/www/yourdomain.ltd/public_html;
+    server_name DOMAIN.LTD;
+    root /var/www/DOMAIN.LTD/public_html;
 
     charset utf-8;
 
@@ -62,7 +62,7 @@ server {
     }
 
     access_log on;
-    error_log /var/www/yourdomain.ltd/log/error.log;
+    error_log /var/www/DOMAIN.LTD/log/error.log;
 
     sendfile off;
 
