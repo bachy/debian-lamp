@@ -56,6 +56,8 @@ if [ "$vh" = "y" ]; then
     read _letsencrypt
   done
 
+  systemctl stop nginx
+
   # lets'encrypt
   # https://certbot.eff.org/lets-encrypt/debianstretch-nginx
   if [ "$_letsencrypt" = "yes" ]; then
@@ -138,7 +140,7 @@ if [ "$vh" = "y" ]; then
   ln -s /etc/nginx/sites-available/"$_domain".conf /etc/nginx/sites-enabled/"$_domain".conf
 
   # restart nginx
-  systemctl restart nginx
+  systemctl start nginx
   echo -e "\033[92;1mvhost $_domain configured \033[Om"
 else
   echo -e "Vhost installation aborted"
