@@ -15,6 +15,18 @@ do
 done
 if [ "$vh" = "y" ]; then
 
+  # get the current position
+  _cwd="$(pwd)"
+  # check for assets forlder
+  _assets="$_cwd/assets"
+  if [ ! -d "$_assets" ]; then
+    _assets="$_cwd/../assets"
+    if [ ! -d "$_assets" ]; then
+      echo "!! can't find assets directory !!"
+      exit
+    fi
+  fi
+
   while [ "$_domain" = "" ]
   do
   read -p "enter a hostname ? " _domain
@@ -47,7 +59,7 @@ if [ "$vh" = "y" ]; then
   # lets'encrypt
   # https://certbot.eff.org/lets-encrypt/debianstretch-nginx
   if [ "$_letsencrypt" = "yes" ]; then
-    apt-get install certbot
+    apt-get --yes --force-yes install certbot
     certbot certonly --cert-name "$_domain" --standalone –d "$_domain"
     openssl dhparam –out /etc/nginx/dhparam.pem 2048
     # TODO renewing
@@ -72,7 +84,7 @@ if [ "$vh" = "y" ]; then
     fi
   fi
 
-  cp "$_cwd"/assets/"$_conffile" /etc/nginx/sites-available/"$_domain".conf
+  cp "$_assets/$_conffile" /etc/nginx/sites-available/"$_domain".conf
   sed -ir "s/DOMAIN\.LTD/$_domain/g" /etc/nginx/sites-available/"$_domain".conf
 
   mkdir -p /var/www/"$_domain"/public_html
@@ -127,7 +139,7 @@ if [ "$vh" = "y" ]; then
 
   # restart nginx
   systemctl restart nginx
-  echo -e "\033[92;1mvhost $_domain configured\033[Om"
+  echo -e "\033[92;1mvhost $_domain configured \033[Om"
 else
   echo -e "Vhost installation aborted"
 fi
