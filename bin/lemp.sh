@@ -10,8 +10,8 @@ echo '\033[35m
 \033[0m'
 echo "\033[35;1mLEMP server (Nginx Mysql Php-fpm) \033[0m"
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
   exit
 fi
 

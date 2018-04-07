@@ -9,8 +9,8 @@ echo '\033[35m
 /____/____/_/ /_/
 \033[0m'
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
   exit
 fi
 

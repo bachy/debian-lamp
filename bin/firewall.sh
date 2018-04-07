@@ -11,8 +11,8 @@ echo '\033[35m
 \033[0m'
 echo "\033[35;1mInstalling ufw and setup firewall (allowing only ssh and http) \033[0m"
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
   exit
 fi
 

@@ -11,10 +11,11 @@ echo '\033[35m
 
 \033[0m'
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
   exit
 fi
+
 sleep 2
 apt-get --yes --force-yes install vim curl
 sed -i "s/^# en_GB.UTF-8/en_GB.UTF-8/g" /etc/locale.gen

@@ -15,8 +15,8 @@ echo '\033[35m
 \033[0m'
 echo "\033[35;1mThis script has been tested only on Linux Debian 9 \033[0m"
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
   exit
 fi
 

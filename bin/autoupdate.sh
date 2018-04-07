@@ -11,8 +11,8 @@ echo '\033[35m
 # https://www.howtoforge.com/how-to-configure-automatic-updates-on-debian-wheezy
 # https://www.bisolweb.com/tutoriels/serveur-vps-ovh-partie-5-installation-apticron/
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
   exit
 fi
 
