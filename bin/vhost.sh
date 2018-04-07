@@ -63,7 +63,8 @@ if [ "$vh" = "y" ]; then
   if [ "$_letsencrypt" = "yes" ]; then
     apt-get --yes --force-yes install certbot
     certbot certonly --standalone -d "$_domain" --cert-name "$_domain"
-    openssl dhparam -out /etc/nginx/dhparam.pem 2048
+    mkdir -p /etc/nginx/ssl/certs/"$_domain"
+    openssl dhparam -out /etc/nginx/ssl/certs/"$_domain"/dhparam.pem 2048
     # renewing
     touch /var/spool/cron/crontabs/root
     crontab -l > mycron
@@ -113,7 +114,7 @@ if [ "$vh" = "y" ]; then
       do
         read -p "enter an existing user name ? " user
         if [ "$user" != "" ]; then
-          check if user already exists
+          # check if user already exists
           if id "$user" >/dev/null 2>&1; then
             read -p "is user name $user correcte [y|n] " validated
             if [ "$validated" = "y" ]; then
@@ -135,6 +136,7 @@ if [ "$vh" = "y" ]; then
     mkdir /home/"$user"/www/
     chown "$user":admin /home/"$user"/www/
     ln -s /var/www/"$_domain" /home/"$user"/www/"$_domain"
+    chown "$user":admin /home/"$user"/www/"$_domain"
 
   else
     echo -e 'no shortcut installed'
