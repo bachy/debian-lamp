@@ -12,86 +12,118 @@ echo -e '\033[35m
 \____/_/\__/
 \033[0m'
 echo -e "\033[35;1mCreate new git barre repos and deploy script\033[0m"
+echo "Git barre repo will be installed in chosen user home directory"
+echo "git prod repos will be installed in public_html directory of provided domain, the domain have to exists as shortcut in chosen user/www before running this script. Please run first vhost.sh script and say yes to the question create a shortcut !"
 
-# get the current position
-_cwd="$(pwd)"
-# check for assets forlder
-_assets="$_cwd/assets"
-if [ ! -d "$_assets" ]; then
-  _assets="$_cwd/../assets"
+while [ "$vh" != "yes" ] && [ "$vh" != "no" ]
+do
+  echo -n "Should we create a barre repo? [yes|no] "
+  read vh
+  # vh=${vh:-y}
+done
+if [ "$vh" = "yes" ]; then
+
+
+  # get the current position
+  _cwd="$(pwd)"
+  # check for assets forlder
+  _assets="$_cwd/assets"
   if [ ! -d "$_assets" ]; then
-    echo "!! can't find assets directory !!"
+    _assets="$_cwd/../assets"
+    if [ ! -d "$_assets" ]; then
+      echo "!! can't find assets directory !!"
+      exit
+    fi
+  fi
+
+  # if $user var does not exists (vhost.sh ran directly) ask for it
+  if [ -z ${user+x} ]; then
+    while [ "$user" = "" ]
+    do
+      read -p "enter an existing user name ? " user
+      if [ "$user" != "" ]; then
+        # check if user already exists
+        if id "$user" >/dev/null 2>&1; then
+          read -p "is user name $user correcte [y|n] " validated
+          if [ "$validated" = "y" ]; then
+            break
+          else
+            user=""
+          fi
+        else
+          echo -e "user $user doesn't exists, you must provide an existing user"
+          user=""
+        fi
+      fi
+    done
+  fi
+
+
+  while [ "$_domain" = "" ]
+  do
+  read -p "enter a domain name ? " _domain
+  if [ "$_domain" != "" ]; then
+    read -p "is domain $_domain correcte [y|n] " validated
+    if [ "$validated" = "y" ]; then
+      break
+    else
+      _domain=""
+    fi
+  fi
+  done
+
+  # ask for simple php conf or drupal conf
+  while [ "$_drupal" != "yes" ] && [ "$_drupal" != "no" ]
+  do
+    echo -n "Is your site is a drupal one? [yes|no] "
+    read _drupal
+  done
+
+  # TODO check for /home/"$user"/www/"$_domain"
+  if [ ! -d /home/"$user"/www/"$_domain" ]; then
+    echo "/home/$user/www/$_domain does not exists !"
     exit
   fi
-fi
 
+  # setup bare repositorie to push to
+  mkdir /home/"$user"/git-repositories
+  mkdir /home/"$user"/git-repositories/"$_domain".git
+  cd /home/"$user"/git-repositories/"$_domain".git
+  git init --bare
 
-while [ "$_bare_name" = "" ]
-do
-  read -p "enter the bare repos folder name ? " _bare_name
-  if [ "$_bare_name" != "" ]; then
-    read -p "is bare folder name $_bare_name correcte [y|n] " validated
-    if [ "$validated" = "y" ]; then
-      break
-    else
-      _bare_name=""
-    fi
+  # add deploy script
+  if [ "$_drupal" = "yes" ]; then
+    cp "$_assets"/deploy-drupal.sh /home/"$user"/www/"$_domain"/deploy.sh
+  else
+    cp "$_assets"/deploy-simple.sh /home/"$user"/www/"$_domain"/deploy.sh
   fi
-done
 
-while [ "$_prod_folder_path" = "" ]
-do
-  read -p "enter the prod folder path (must be a public_html parent's) ? " _prod_folder_path
-  if [ "$_prod_folder_path" != "" ]; then
-    # TODO check if path exists
-    read -p "is prod folder path $_prod_folder_path correcte [y|n] " validated
-    if [ "$validated" = "y" ]; then
-      break
-    else
-      _prod_folder_path=""
-    fi
-  fi
-done
+  # create hooks that will update the site repo
+  cp "$_assets"/git-pre-receive /home/"$user"/git-repositories/"$_domain".git/hooks/pre-receive
+  cp "$_assets"/git-post-receive /home/"$user"/git-repositories/"$_domain".git/hooks/post-receive
 
-# ask for simple php conf or drupal conf
-while [ "$_drupal" != "yes" ] && [ "$_drupal" != "no" ]
-do
-  echo -n "Is your site is a drupal one? [yes|no] "
-  read _drupal
-done
+  sed -ir "s/PRODDIR=\"www\"/PRODDIR=$_prod_folder_path/g" /home/"$USER"/git-repositories/"$_domain".git/hooks/pre-receive
+  sed -ir "s/PRODDIR=\"www\"/PRODDIR=$_prod_folder_path/g" /home/"$USER"/git-repositories/"$_domain".git/hooks/post-receive
 
-# setup bare repositorie to push to
-mkdir ~/git-repositories
-mkdir ~/git-repositories/"$_bare_name".git
-cd ~/git-repositories/"$_bare_name".git
-git init --bare
+  chown -R "$user":"$user" /home/"$USER"/git-repositories
 
-# add deploy script
-if [ "$_drupal" = "yes" ]; then
-  cp "$_assets"/deploy-drupal.sh "$_prod_folder_path"/deploy.sh
+  cd /home/"$USER"/git-repositories/"$_domain".git/hooks/
+  chmod +x post-receive pre-receive
+
+  # setup git repo on site folder
+  cd /home/"$user"/www/"$_domain"/public_html
+  git init
+  # link to the bare repo
+  git remote add origin /home/"$user"/git-repositories/"$_domain".git
+
+  chown -R "$user":"$user" /home/"$user"/www/"$_domain"/public_html
+
+  cd "$_cwd"
+  # done
+  echo "git repos for $_domain install succeed"
+  echo "your site stay now to /home/$user/www/$_domain"
+  echo "you can push updates on prod branch through $user@IP.IP.IP.IP:git-repositories/$_domain.git"
+  echo "* * *"
 else
-  cp "$_assets"/deploy-simple.sh "$_prod_folder_path"/deploy.sh
+  echo "Git barre repo creation aborted"
 fi
-
-# setup git repo on site folder
-cd "$_prod_folder_path"
-git init
-# link to the bare repo
-git remote add origin /home/"$USER"/git-repositories/"$_bare_name".git
-
-# create hooks that will update the site repo
-cd ~
-cp "$_assets"/git-pre-receive /home/"$USER"/git-repositories/"$_bare_name".git/hooks/pre-receive
-cp "$_assets"/git-post-receive /home/"$USER"/git-repositories/"$_bare_name".git/hooks/post-receive
-
-sed -ir "s/PRODDIR=\"www\"/PRODDIR=$_prod_folder_path/g" /home/"$USER"/git-repositories/"$_bare_name".git/hooks/pre-receive
-sed -ir "s/PRODDIR=\"www\"/PRODDIR=$_prod_folder_path/g" /home/"$USER"/git-repositories/"$_bare_name".git/hooks/post-receive
-
-cd /home/"$USER"/git-repositories/"$_bare_name".git/hooks/
-chmod +x post-receive pre-receive
-
-# done
-echo "git repos for $_bare_name install succeed"
-echo "your site stay now to $_prod_folder_path"
-echo "you can push updates on prod branch through $USER@IP.IP.IP.IP:git-repositories/$_bare_name.git"
-echo "* * *"

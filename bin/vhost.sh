@@ -29,9 +29,9 @@ if [ "$vh" = "y" ]; then
 
   while [ "$_domain" = "" ]
   do
-  read -p "enter a hostname ? " _domain
+  read -p "enter a domain name ? " _domain
   if [ "$_domain" != "" ]; then
-    read -p "is hostname $_domain correcte [y|n] " validated
+    read -p "is domain $_domain correcte [y|n] " validated
     if [ "$validated" = "y" ]; then
       break
     else
@@ -50,7 +50,7 @@ if [ "$vh" = "y" ]; then
   # ask for let's encrypt
   while [ "$_letsencrypt" != "yes" ] && [ "$_letsencrypt" != "no" ]
   do
-    echo -e "Let's encrypt"
+    echo -e "\033[35;1mLet's encrypt \033[0m"
     echo -e "Let's encrypt needs a public registered domain name with proper DNS records ( A records or CNAME records for subdomains pointing to your server)."
     echo -n "Should we install let's encrypt certificate with $_domain? [yes|no] "
     read _letsencrypt
