@@ -2,6 +2,7 @@
 # bachir soussi chiadmi
 
 
+# TODO check if root
 
 echo '\033[35m
    __  _______ __________
@@ -55,9 +56,6 @@ if [ "$_host_name" != "" ]; then
 fi
 done
 
-cp "$_cwd"/assets/example.org.conf /etc/apache2/sites-available/"$_host_name".conf
-sed -ir "s/example\.org/$_host_name/g" /etc/apache2/sites-available/"$_host_name".conf
-
 #set proper right to user will handle the app
 chown -R "$user":admin  /home/"$user"/public_html
 chown -R "$user":admin  /home/"$user"/logs
@@ -70,11 +68,13 @@ mkdir -p /var/www/"$_host_name"
 ln -s /home/"$user"/public_html /var/www/"$_host_name"/public_html
 ln -s /home/"$user"/logs /var/www/"$_host_name"/logs
 
+# TODO create nginx vhost
+# cp "$_cwd"/assets/example.org.conf /etc/apache2/sites-available/"$_host_name".conf
+# sed -ir "s/example\.org/$_host_name/g" /etc/apache2/sites-available/"$_host_name".conf
 #activate the vhost
-a2ensite "$_host_name".conf
-
+# a2ensite "$_host_name".conf
 #restart apache
-service apache2 restart
+# service apache2 restart
 echo "\033[92;1mvhost $_host_name configured\033[Om"
 
 
@@ -118,8 +118,9 @@ do
   fi
 done
 
-
-# mysql> create user '$_dbname'@'localhost' identified by '$_pswd';
-# mysql> create database $_dbname;
-# mysql> grant all privileges on esadhar_eval.* to 'esadhar_eval'@'localhost';
-# mysql> flush privileges;
+if [ "$passok" = 1 ]; then
+  # mysql> create user '$_dbname'@'localhost' identified by '$_pswd';
+  # mysql> create database $_dbname;
+  # mysql> grant all privileges on esadhar_eval.* to 'esadhar_eval'@'localhost';
+  # mysql> flush privileges;
+fi
