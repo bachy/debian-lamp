@@ -1,6 +1,7 @@
 #!/bin/bash
 #hook/pre-receive
 #CONFIG
+
 PRODDIR="www"
 
 read oldrev newrev refname

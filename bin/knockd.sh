@@ -25,7 +25,11 @@ echo -n "define a sequence number for opening ssh (as 7000,8000,9000) : "
 read sq
 sed -i "s/7000,8000,9000/$sq/g" /etc/knockd.conf
 sed -i 's/START_KNOCKD=0/START_KNOCKD=1/g' /etc/default/knockd
-/etc/init.d/knockd start
+# /etc/init.d/knockd start
+systemctl start knockd
+# patch https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=868015
+# systemctl enable knockd
+
 echo "\033[92;1mknockd installed and configured\033[Om"
 echo "\033[92;1mplease note this sequence for future ssh knocking\033[Om"
 echo "$sq1"

@@ -72,6 +72,8 @@ else
   echo 'lemp server not installed'
 fi
 
+. bin/vhost.sh
+
 . bin/dotfiles.sh
 . bin/autoupdate.sh
 

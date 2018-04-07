@@ -10,7 +10,9 @@ if [ $refname = "refs/heads/prod" ]; then
   unset GIT_DIR
   cd ~
   cd $PRODDIR
-  git pull --ff-only origin prod
+  # git pull --ff-only origin prod
+  # run deploy script instead
+  . deploy.sh
   echo $?
   echo "====== OK ====="
 else
