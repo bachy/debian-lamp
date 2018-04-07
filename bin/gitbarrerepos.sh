@@ -7,29 +7,29 @@ _cwd="$(pwd)"
 
 while [ "$_bare_name" = "" ]
 do
-read -p "enter the bare repos folder name ? " _bare_name
-if [ "$_bare_name" != "" ]; then
-  read -p "is bare folder name $_bare_name correcte [y|n] " validated
-  if [ "$validated" = "y" ]; then
-    break
-  else
-    _bare_name=""
+  read -p "enter the bare repos folder name ? " _bare_name
+  if [ "$_bare_name" != "" ]; then
+    read -p "is bare folder name $_bare_name correcte [y|n] " validated
+    if [ "$validated" = "y" ]; then
+      break
+    else
+      _bare_name=""
+    fi
   fi
-fi
 done
 
 while [ "$_prod_folder_path" = "" ]
 do
-read -p "enter the prod folder path (must be a public_html parent's) ? " _prod_folder_path
-if [ "$_prod_folder_path" != "" ]; then
-  # TODO check if path exists
-  read -p "is prod folder path $_prod_folder_path correcte [y|n] " validated
-  if [ "$validated" = "y" ]; then
-    break
-  else
-    _prod_folder_path=""
+  read -p "enter the prod folder path (must be a public_html parent's) ? " _prod_folder_path
+  if [ "$_prod_folder_path" != "" ]; then
+    # TODO check if path exists
+    read -p "is prod folder path $_prod_folder_path correcte [y|n] " validated
+    if [ "$validated" = "y" ]; then
+      break
+    else
+      _prod_folder_path=""
+    fi
   fi
-fi
 done
 
 # ask for simple php conf or drupal conf

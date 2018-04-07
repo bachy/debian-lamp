@@ -16,10 +16,28 @@ fi
 
 sleep 3
 
-# TODO check if root
-
 echo -n "Enter user name: "
 read user
+while [ "$user" = "" ]
+do
+  read -p "enter a user name ? " user
+  if [ "$user" != "" ]; then
+    # check if user already exists
+    if id "$user" >/dev/null 2>&1; then
+      echo "user $user alreday exists, you must provide a non existing user name."
+      user=""
+    else
+      read -p "is user name $user correcte [y|n] " validated
+      if [ "$validated" = "y" ]; then
+        break
+      else
+        user=""
+      fi
+    fi
+  fi
+done
+
+
 # read -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
 adduser "$user"
 echo "adding $user to admin group and limiting su to the admin group"

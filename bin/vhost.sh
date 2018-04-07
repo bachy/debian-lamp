@@ -9,9 +9,9 @@ echo '\033[35m
 echo "\033[35;1mNginx VHOST install \033[0m"
 while [ "$vh" != "y" ] && [ "$vh" != "n" ]
 do
-echo -n "Should we install a vhost? [y|n] "
-read vh
-# vh=${vh:-y}
+  echo -n "Should we install a vhost? [y|n] "
+  read vh
+  # vh=${vh:-y}
 done
 if [ "$vh" = "y" ]; then
 
@@ -84,10 +84,44 @@ if [ "$vh" = "y" ]; then
 
   # create a shortcut to the site
   # TODO ask for $user name if not existing
-  mkdir /home/"$user"/www/
-  chown "$user":admin /home/"$user"/www/
-  ln -s /var/www/"$_domain" /home/"$user"/www/"$_domain"
 
+  echo -n "Should we install a shortcut for a user? [Y|n] "
+  read yn
+  yn=${yn:-y}
+  if [ "$yn" = "y" ]; then
+    if [ -z ${user+x} ]; then
+      echo -n "Enter an existing user name: "
+      read user
+      while [ "$user" = "" ]
+      do
+        read -p "enter a user name ? " user
+        if [ "$user" != "" ]; then
+          check if user already exists
+          if id "$user" >/dev/null 2>&1; then
+            read -p "is user name $user correcte [y|n] " validated
+            if [ "$validated" = "y" ]; then
+              break
+            else
+              user=""
+            fi
+          else
+            echo "user $user doesn't exists, you must provide an existing user"
+            user=""
+          fi
+        fi
+      done
+    fi
+
+    echo "shortcut will be installed for '$user'";
+    sleep 3
+
+    mkdir /home/"$user"/www/
+    chown "$user":admin /home/"$user"/www/
+    ln -s /var/www/"$_domain" /home/"$user"/www/"$_domain"
+
+  else
+    echo 'no shortcut installed'
+  fi
   # activate the vhost
   ln -s /etc/nginx/sites-available/"$_domain".conf /etc/nginx/sites-enabled/"$_domain".conf
 
