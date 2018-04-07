@@ -4,6 +4,15 @@
 # get the current position
 _cwd="$(pwd)"
 
+echo -e '\033[35m
+   _______ __
+  / ____(_) /_
+ / / __/ / __/
+/ /_/ / / /_
+\____/_/\__/             
+\033[0m'
+echo -e "\033[35;1mCreate new git barre repos and deploy script\033[0m"
+
 
 while [ "$_bare_name" = "" ]
 do

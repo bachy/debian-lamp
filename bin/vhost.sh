@@ -1,12 +1,12 @@
 
-echo '\033[35m
+echo -e '\033[35m
         __               __
  _   __/ /_  ____  _____/ /_
 | | / / __ \/ __ \/ ___/ __/
 | |/ / / / / /_/ (__  ) /_
 |___/_/ /_/\____/____/\__/
 \033[0m'
-echo "\033[35;1mNginx VHOST install \033[0m"
+echo -e "\033[35;1mNginx VHOST install \033[0m"
 while [ "$vh" != "y" ] && [ "$vh" != "n" ]
 do
   echo -n "Should we install a vhost? [y|n] "
@@ -38,8 +38,8 @@ if [ "$vh" = "y" ]; then
   # ask for let's encrypt
   while [ "$_letsencrypt" != "yes" ] && [ "$_letsencrypt" != "no" ]
   do
-    echo "Let's encrypt"
-    echo "Let's encrypt needs a public registered domain name with proper DNS records ( A records or CNAME records for subdomains pointing to your server)."
+    echo -e "Let's encrypt"
+    echo -e "Let's encrypt needs a public registered domain name with proper DNS records ( A records or CNAME records for subdomains pointing to your server)."
     echo -n "Should we install let's encrypt certificate with $_domain? [yes|no] "
     read _letsencrypt
   done
@@ -53,7 +53,7 @@ if [ "$vh" = "y" ]; then
     # TODO renewing
     touch /var/spool/crontab/root
     crontab -l > mycron
-    echo "0 3 * * * certbot renew --pre-hook 'systemctl stop nginx' --post-hook 'systemctl start nginx' --cert-name $_domain" >> mycron
+    echo -e "0 3 * * * certbot renew --pre-hook 'systemctl stop nginx' --post-hook 'systemctl start nginx' --cert-name $_domain" >> mycron
     crontab mycron
     rm mycron
   fi
@@ -105,14 +105,14 @@ if [ "$vh" = "y" ]; then
               user=""
             fi
           else
-            echo "user $user doesn't exists, you must provide an existing user"
+            echo -e "user $user doesn't exists, you must provide an existing user"
             user=""
           fi
         fi
       done
     fi
 
-    echo "shortcut will be installed for '$user'";
+    echo -e "shortcut will be installed for '$user'";
     sleep 3
 
     mkdir /home/"$user"/www/
@@ -120,14 +120,14 @@ if [ "$vh" = "y" ]; then
     ln -s /var/www/"$_domain" /home/"$user"/www/"$_domain"
 
   else
-    echo 'no shortcut installed'
+    echo -e 'no shortcut installed'
   fi
   # activate the vhost
   ln -s /etc/nginx/sites-available/"$_domain".conf /etc/nginx/sites-enabled/"$_domain".conf
 
   # restart nginx
   systemctl restart nginx
-  echo "\033[92;1mvhost $_domain configured\033[Om"
+  echo -e "\033[92;1mvhost $_domain configured\033[Om"
 else
-  echo "Vhost installation aborted"
+  echo -e "Vhost installation aborted"
 fi
