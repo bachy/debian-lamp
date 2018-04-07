@@ -60,10 +60,10 @@ if [ "$vh" = "y" ]; then
   # https://certbot.eff.org/lets-encrypt/debianstretch-nginx
   if [ "$_letsencrypt" = "yes" ]; then
     apt-get --yes --force-yes install certbot
-    certbot certonly --cert-name "$_domain" --standalone –d "$_domain"
-    openssl dhparam –out /etc/nginx/dhparam.pem 2048
-    # TODO renewing
-    touch /var/spool/crontab/root
+    certbot certonly --standalone -d "$_domain" --cert-name "$_domain"
+    openssl dhparam -out /etc/nginx/dhparam.pem 2048
+    # renewing
+    touch /var/spool/cron/crontabs/root
     crontab -l > mycron
     echo -e "0 3 * * * certbot renew --pre-hook 'systemctl stop nginx' --post-hook 'systemctl start nginx' --cert-name $_domain" >> mycron
     crontab mycron
@@ -72,15 +72,15 @@ if [ "$vh" = "y" ]; then
 
   if [ "$_drupal" = "yes" ]; then
     if [ "$_letsencrypt" = "yes" ]; then
-      _conffile = "drupal-ssl.nginxconf"
+      _conffile="drupal-ssl.nginxconf"
     else
-      _conffile = "drupal.nginxconf"
+      _conffile="drupal.nginxconf"
     fi
   else
     if [ "$_letsencrypt" = "yes" ]; then
-      _conffile = "simple-phpfpm-ssl.nginxconf"
+      _conffile="simple-phpfpm-ssl.nginxconf"
     else
-      _conffile = "simple-phpfpm.nginxconf"
+      _conffile="simple-phpfpm.nginxconf"
     fi
   fi
 
