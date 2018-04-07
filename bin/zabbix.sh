@@ -17,7 +17,7 @@ fi
 cd
 
 wget -P /tmp/ http://repo.zabbix.com/zabbix/3.4/debian/pool/main/z/zabbix-release/zabbix-release_3.4-1+stretch_all.deb
-dpkg -i /tmp/zabbix-release_3.0-2+stretch_all.deb
+dpkg -i /tmp/zabbix-release_3.4-1+stretch_all.deb
 
 apt-get update -y
 
