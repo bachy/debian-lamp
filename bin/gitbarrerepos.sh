@@ -99,15 +99,15 @@ if [ "$vh" = "yes" ]; then
   fi
 
   # create hooks that will update the site repo
-  cp "$_assets"/git-pre-receive /home/"$user"/git-repositories/"$_domain".git/hooks/pre-receive
+  # cp "$_assets"/git-pre-receive /home/"$user"/git-repositories/"$_domain".git/hooks/pre-receive
   cp "$_assets"/git-post-receive /home/"$user"/git-repositories/"$_domain".git/hooks/post-receive
 
-  sed -ir "s/PRODDIR=\"www\"/PRODDIR=$_prod_folder_path/g" /home/"$USER"/git-repositories/"$_domain".git/hooks/pre-receive
-  sed -ir "s/PRODDIR=\"www\"/PRODDIR=$_prod_folder_path/g" /home/"$USER"/git-repositories/"$_domain".git/hooks/post-receive
+  # sed -ir "s/PRODDIR=\"www\"/PRODDIR=/home/$user/www/$_domain/g" /home/"$user"/git-repositories/"$_domain".git/hooks/pre-receive
+  sed -ir "s/PRODDIR=\"www\"/PRODDIR=/home/$user/www/$_domain/g" /home/"$user"/git-repositories/"$_domain".git/hooks/post-receive
 
-  chown -R "$user":"$user" /home/"$USER"/git-repositories
+  chown -R "$user":"$user" /home/"$user"/git-repositories
 
-  cd /home/"$USER"/git-repositories/"$_domain".git/hooks/
+  cd /home/"$user"/git-repositories/"$_domain".git/hooks/
   chmod +x post-receive pre-receive
 
   # setup git repo on site folder
