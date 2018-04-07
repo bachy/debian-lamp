@@ -21,6 +21,9 @@ apt-get --yes --force-yes install ufw
 # ufw allow ssh # knockd will open the ssh port
 ufw allow http
 ufw allow https
+
+# TODO ask for allowing ssh for some ip 
+
 ufw enable
 ufw status verbose
 echo "\033[92;1mufw installed and firwall configured\033[Om"

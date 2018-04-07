@@ -9,9 +9,21 @@ echo -e '\033[35m
   / ____(_) /_
  / / __/ / __/
 / /_/ / / /_
-\____/_/\__/             
+\____/_/\__/
 \033[0m'
 echo -e "\033[35;1mCreate new git barre repos and deploy script\033[0m"
+
+# get the current position
+_cwd="$(pwd)"
+# check for assets forlder
+_assets="$_cwd/assets"
+if [ ! -d "$_assets" ]; then
+  _assets="$_cwd/../assets"
+  if [ ! -d "$_assets" ]; then
+    echo "!! can't find assets directory !!"
+    exit
+  fi
+fi
 
 
 while [ "$_bare_name" = "" ]
@@ -56,9 +68,9 @@ git init --bare
 
 # add deploy script
 if [ "$_drupal" = "yes" ]; then
-  cp "$_cwd"/assets/deploy-drupal.sh "$_prod_folder_path"/deploy.sh
+  cp "$_assets"/deploy-drupal.sh "$_prod_folder_path"/deploy.sh
 else
-  cp "$_cwd"/assets/deploy-simple.sh "$_prod_folder_path"/deploy.sh
+  cp "$_assets"/deploy-simple.sh "$_prod_folder_path"/deploy.sh
 fi
 
 # setup git repo on site folder
@@ -69,8 +81,8 @@ git remote add origin /home/"$USER"/git-repositories/"$_bare_name".git
 
 # create hooks that will update the site repo
 cd ~
-cp "$_cwd"/assets/git-pre-receive /home/"$USER"/git-repositories/"$_bare_name".git/hooks/pre-receive
-cp "$_cwd"/assets/git-post-receive /home/"$USER"/git-repositories/"$_bare_name".git/hooks/post-receive
+cp "$_assets"/git-pre-receive /home/"$USER"/git-repositories/"$_bare_name".git/hooks/pre-receive
+cp "$_assets"/git-post-receive /home/"$USER"/git-repositories/"$_bare_name".git/hooks/post-receive
 
 sed -ir "s/PRODDIR=\"www\"/PRODDIR=$_prod_folder_path/g" /home/"$USER"/git-repositories/"$_bare_name".git/hooks/pre-receive
 sed -ir "s/PRODDIR=\"www\"/PRODDIR=$_prod_folder_path/g" /home/"$USER"/git-repositories/"$_bare_name".git/hooks/post-receive

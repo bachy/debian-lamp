@@ -15,6 +15,18 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
+# get the current position
+_cwd="$(pwd)"
+# check for assets forlder
+_assets="$_cwd/assets"
+if [ ! -d "$_assets" ]; then
+  _assets="$_cwd/../assets"
+  if [ ! -d "$_assets" ]; then
+    echo "!! can't find assets directory !!"
+    exit
+  fi
+fi
+
 sleep 2
 
 echo -e '\033[35m
@@ -45,13 +57,13 @@ sleep 3
 apt-get --yes --force-yes install php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached
 
 mv /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.back
-cp "$_cwd"/assets/php-fpm.ini /etc/php/7.0/fpm/php.ini
+cp "$_assets"/php-fpm.ini /etc/php/7.0/fpm/php.ini
 
 echo -e "Configuring PHP"
 
 mkdir /var/log/php
 chown www-data /var/log/php
-cp "$_cwd"/assets/logrotate-php /etc/logrotate.d/php
+cp "$_assets"/logrotate-php /etc/logrotate.d/php
 
 systemctl enable php7.0-fpm
 systemctl start php7.0-fpm
@@ -77,7 +89,7 @@ echo -e "\033[35;1mInstalling Nginx \033[0m"
 sleep 3
 apt-get --yes --force-yes install nginx
 mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.ori
-cp "$_cwd"/assets/default.nginxconf /etc/nginx/sites-available/default
+cp "$_assets"/default.nginxconf /etc/nginx/sites-available/default
 
 systemctl enable nginx
 systemctl restart nginx
@@ -94,12 +106,12 @@ echo -e '\033[35m
 echo -e "\033[35;1mInstalling phpMyAdmin \033[0m"
 apt-get --yes --force-yes install phpmyadmin
 ln -s /usr/share/phpmyadmin /var/www/html/
-# cp "$_cwd"/assets/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
+# cp "$_assets"/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
 # ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
 
 # echo -e "\033[35;1msecuring phpMyAdmin \033[0m"
 # sed -i "s/DirectoryIndex index.php/DirectoryIndex index.php\nAllowOverride all/"
-# cp "$_cwd"/assets/phpmyadmin_htaccess > /usr/share/phpmyadmin/.htaccess
+# cp "$_assets"/phpmyadmin_htaccess > /usr/share/phpmyadmin/.htaccess
 # echo -n "define a user name for phpmyadmin : "
 # read un
 # htpasswd -c /etc/phpmyadmin/.htpasswd $un
@@ -206,7 +218,7 @@ echo -e "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 # # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/2/
 # apt-get --yes --force-yes install monit
 # # TODO setup monit rc
-# cat "$_cwd"/assets/monitrc > /etc/monit/monitrc
+# cat "$_assets"/monitrc > /etc/monit/monitrc
 #
 # # TODO setup webaccess
 # passok=0

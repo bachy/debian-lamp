@@ -14,6 +14,18 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
+# get the current position
+_cwd="$(pwd)"
+# check for assets forlder
+_assets="$_cwd/assets"
+if [ ! -d "$_assets" ]; then
+  _assets="$_cwd/../assets"
+  if [ ! -d "$_assets" ]; then
+    echo "!! can't find assets directory !!"
+    exit
+  fi
+fi
+
 # http://www.sycha.com/lamp-setup-debian-linux-apache-mysql-php#anchor13
 sleep 2
 apt-get --yes --force-yes install exim4
@@ -53,7 +65,7 @@ if [ "$installdkim" = "y" ]; then
   chown root:Debian-exim /etc/exim4/dkim/"$domain"-private.pem
   chmod 440 /etc/exim4/dkim/"$domain"-private.pem
 
-  cp "$_cwd"/assets/exima4_dkim.conf /etc/exim4/conf.d/main/00_local_macros
+  cp "$_assets"/exima4_dkim.conf /etc/exim4/conf.d/main/00_local_macros
   sed -ir "s/DOMAIN_TO_CHANGE/$domain/g" /etc/exim4/conf.d/main/00_local_macros
   sed -ir "s/DATE_TO_CHANGE/$selector/g" /etc/exim4/conf.d/main/00_local_macros
 

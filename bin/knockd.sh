@@ -16,11 +16,23 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
+# get the current position
+_cwd="$(pwd)"
+# check for assets forlder
+_assets="$_cwd/assets"
+if [ ! -d "$_assets" ]; then
+  _assets="$_cwd/../assets"
+  if [ ! -d "$_assets" ]; then
+    echo "!! can't find assets directory !!"
+    exit
+  fi
+fi
+
 sleep 2
 apt-get --yes --force-yes install knockd
 
 mv /etc/knockd.conf /etc/knockd.conf.ori
-cp "$_cwd"/assets/knockd.conf /etc/knockd.conf
+cp "$_assets"/knockd.conf /etc/knockd.conf
 echo -n "define a sequence number for opening ssh (as 7000,8000,9000) : "
 read sq
 sed -i "s/7000,8000,9000/$sq/g" /etc/knockd.conf

@@ -15,6 +15,17 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+# get the current position
+_cwd="$(pwd)"
+# check for assets forlder
+_assets="$_cwd/assets"
+if [ ! -d "$_assets" ]; then
+  _assets="$_cwd/../assets"
+  if [ ! -d "$_assets" ]; then
+    echo "!! can't find assets directory !!"
+    exit
+  fi
+fi
 
 echo "installing proftpd"
 apt-get --yes --force-yes install proftpd
@@ -32,7 +43,7 @@ fi
 done
 
 echo "Configuring proftpd"
-cp "$_cwd"/assets/proftpd.conf /etc/proftpd/conf.d/"$_server_name".conf
+cp "$_assets"/proftpd.conf /etc/proftpd/conf.d/"$_server_name".conf
 sed -ir "s/example/$_server_name/g" /etc/proftpd/conf.d/"$_server_name".conf
 
 ufw allow ftp
