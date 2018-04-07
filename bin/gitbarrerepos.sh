@@ -91,24 +91,24 @@ if [ "$vh" = "yes" ]; then
   cd /home/"$user"/git-repositories/"$_domain".git
   git init --bare
 
-  # add deploy script
+  echo "adding deploy script"
   if [ "$_drupal" = "yes" ]; then
     cp "$_assets"/deploy-drupal.sh /home/"$user"/www/"$_domain"/deploy.sh
   else
     cp "$_assets"/deploy-simple.sh /home/"$user"/www/"$_domain"/deploy.sh
   fi
 
-  # create hooks that will update the site repo
+  echo "creating hooks that will update the site repo"
   # cp "$_assets"/git-pre-receive /home/"$user"/git-repositories/"$_domain".git/hooks/pre-receive
   cp "$_assets"/git-post-receive /home/"$user"/git-repositories/"$_domain".git/hooks/post-receive
 
   # sed -ir "s/PRODDIR=\"www\"/PRODDIR=/home/$user/www/$_domain/g" /home/"$user"/git-repositories/"$_domain".git/hooks/pre-receive
-  sed -ir "s/PRODDIR=\"www\"/PRODDIR=/home/$user/www/$_domain/g" /home/"$user"/git-repositories/"$_domain".git/hooks/post-receive
+  sed -ir "s#PRODDIR=\"www\"#PRODDIR=\"/home/$user/www/$_domain\"#g" /home/"$user"/git-repositories/"$_domain".git/hooks/post-receive
 
   chown -R "$user":"$user" /home/"$user"/git-repositories
 
   cd /home/"$user"/git-repositories/"$_domain".git/hooks/
-  chmod +x post-receive pre-receive
+  chmod +x post-receive # pre-receive
 
   # setup git repo on site folder
   cd /home/"$user"/www/"$_domain"/public_html
