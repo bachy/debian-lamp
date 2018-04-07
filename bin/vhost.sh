@@ -90,25 +90,28 @@ if [ "$vh" = "y" ]; then
   sed -ir "s/DOMAIN\.LTD/$_domain/g" /etc/nginx/sites-available/"$_domain".conf
 
   mkdir -p /var/www/"$_domain"/public_html
-  mkdir /var/www/"$_domain"/logs
+  mkdir /var/www/"$_domain"/log
+
+  cp "$_assets/index.php" /var/www/"$_domain"/public_html/
+  sed -ir "s/DOMAIN\.LTD/$_domain/g" /var/www/"$_domain"/public_html/index.php
+
   #set proper right to user will handle the app
   chown -R root:admin  /var/www/"$_domain"/
   chmod -R g+w /var/www/"$_domain"/
   chmod -R g+r /var/www/"$_domain"/
 
-  # create a shortcut to the site
-  # TODO ask for $user name if not existing
 
+
+  # create a shortcut to the site
   echo -n "Should we install a shortcut for a user? [Y|n] "
   read yn
   yn=${yn:-y}
   if [ "$yn" = "y" ]; then
+    # if $user var does not exists (vhost.sh ran directly) ask for it
     if [ -z ${user+x} ]; then
-      echo -n "Enter an existing user name: "
-      read user
       while [ "$user" = "" ]
       do
-        read -p "enter a user name ? " user
+        read -p "enter an existing user name ? " user
         if [ "$user" != "" ]; then
           check if user already exists
           if id "$user" >/dev/null 2>&1; then
