@@ -10,7 +10,13 @@ echo '\033[35m
 /_/   /___/_/ |_/_____/  |__/|__/_/  |_/_____/_____/
 \033[0m'
 echo "\033[35;1mInstalling ufw and setup firewall (allowing only ssh and http) \033[0m"
-sleep 3
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+sleep 2
 apt-get --yes --force-yes install ufw
 # ufw allow ssh # knockd will open the ssh port
 ufw allow http

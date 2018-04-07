@@ -10,7 +10,13 @@ echo '\033[35m
 /_/|_/_/ /_/\____/\___/_/|_|\__,_/
 \033[0m'
 echo "\033[35;1mInstalling knockd to control ssh port opening\033[0m"
-sleep 3
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+sleep 2
 apt-get --yes --force-yes install knockd
 
 mv /etc/knockd.conf /etc/knockd.conf.ori

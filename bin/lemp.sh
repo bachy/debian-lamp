@@ -8,13 +8,14 @@ echo '\033[35m
 /_/\___/_/ /_/ /_/ .___/
                 /_/
 \033[0m'
-echo "\033[35;1mLEMP server (Nginx Mysql Php) \033[0m"
-sleep 3
+echo "\033[35;1mLEMP server (Nginx Mysql Php-fpm) \033[0m"
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
+
+sleep 2
 
 echo '\033[35m
     __  ___                 __

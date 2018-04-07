@@ -8,6 +8,12 @@ echo '\033[35m
 \____//____/_____/_/ |_|
 \033[0m'
 echo "\033[35;1mCreate new user (you will be asked a user name and a password) \033[0m"
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
 sleep 3
 
 # TODO check if root

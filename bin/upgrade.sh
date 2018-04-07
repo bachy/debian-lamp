@@ -9,5 +9,12 @@ echo '\033[35m
 / /_/ / ____/ /_/ / _, _/ ___ |/ /_/ / /___
 \____/_/    \____/_/ |_/_/  |_/_____/_____/
 \033[0m'
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
 apt-get update
 apt-get dist-upgrade
+needrestart -rl

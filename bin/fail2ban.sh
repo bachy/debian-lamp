@@ -10,6 +10,13 @@ echo '\033[35m
 /_/    \__,_/_/_//____/_.___/\__,_/_/ /_/
 \033[0m'
 echo "\033[35;1mInstalling fall2ban \033[0m"
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+sleep 2
 apt-get --yes --force-yes install fail2ban
 cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 # ToDo ask for email and configure jail.local with it
