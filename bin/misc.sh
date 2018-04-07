@@ -1,8 +1,6 @@
 #!/bin/sh
 
-# TODO check if root
-
-echo '\033[35m
+echo -e '\033[35m
     __  ____
    /  |/  (_)_________
   / /|_/ / / ___/ ___/
@@ -23,3 +21,5 @@ locale-gen
 apt-get --yes --force-yes install ntp
 dpkg-reconfigure tzdata
 apt-get --yes --force-yes install needrestart
+
+echo -e "\033[92;1mMisc done \033[Om"

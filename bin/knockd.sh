@@ -2,14 +2,14 @@
 
 # TODO check if root
 
-echo '\033[35m
+echo -e '\033[35m
     __                    __       __
    / /______  ____  _____/ /______/ /
   / //_/ __ \/ __ \/ ___/ //_/ __  /
  / ,< / / / / /_/ / /__/ ,< / /_/ /
 /_/|_/_/ /_/\____/\___/_/|_|\__,_/
 \033[0m'
-echo "\033[35;1mInstalling knockd to control ssh port opening\033[0m"
+echo -e "\033[35;1mInstalling knockd to control ssh port opening\033[0m"
 
 if [ "$EUID" -ne 0 ]; then
   echo "Please run as root"
@@ -42,7 +42,7 @@ systemctl start knockd
 # patch https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=868015
 # systemctl enable knockd
 
-echo "\033[92;1mknockd installed and configured\033[Om"
-echo "\033[92;1mplease note this sequence for future ssh knocking\033[Om"
+echo -e "\033[92;1mknockd installed and configured\033[Om"
+echo -e "\033[92;1mplease note this sequence for future ssh knocking\033[Om"
 echo "$sq1"
 sleep 3
