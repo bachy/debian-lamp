@@ -72,7 +72,28 @@ else
   echo -e 'lemp server not installed'
 fi
 
-. bin/vhost.sh
+while [ "$_install_vhost" != "yes" ] && [ "$_install_vhost" != "no" ]
+do
+  echo -n "Should we install a vhost ? [yes|no] "
+  read _install_vhost
+done
+if [ "$_install_vhost" = "yes" ]; then
+  . bin/vhost.sh
+else
+  echo -e 'no vhost installed'
+fi
+
+while [ "$_install_zabbix_agent" != "yes" ] && [ "$_install_zabbix_agent" != "no" ]
+do
+  echo -n "Should we install zabbix-agent ? [yes|no] "
+  read _install_zabbix_agent
+done
+if [ "$_install_zabbix_agent" = "yes" ]; then
+  . bin/zabbix.sh
+else
+  echo -e 'zabbix-agent not installed'
+fi
+
 
 . bin/dotfiles.sh
 . bin/autoupdate.sh
