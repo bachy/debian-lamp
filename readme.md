@@ -1,4 +1,6 @@
-# Install Lamp server and secure it on debian 9
+# Install web server and secure it on debian 9
+
+Fail2ban, Ufw, Proftpd, Knockd, Nginx, Mariadb, php7.0-fpm, redis, vhosts, git barre repos, zabbix-agent, dotfiles and more
 
 ## how to use it
 on a fresh install
@@ -11,15 +13,15 @@ apt-get install git
 
 2 clone the repo
 ```
-git clone https://github.com/bachy/debian-lamp.git
+git clone https://github.com/bachy/debian-web-server.git
 ```
 
 3 run the script as root
 ```
 su
-cd debian-lamp
-chmod a+x install-debian-server.sh
-./install-debian-server.sh
+cd debian-web-server
+chmod a+x install.sh
+./install.sh
 
 ```
 
