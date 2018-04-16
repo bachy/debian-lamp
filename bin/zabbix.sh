@@ -82,6 +82,7 @@ sed -i "s/# allow ZABBIX-SERVER-IP/allow $_ip/g" /etc/nginx/sites-available/defa
 cp "$_assets"/zabbix/userparameter_nginx.conf "$_agent_conf_d"/
 mkdir /etc/zabbix/zabbix_agentd.scripts
 cp "$_assets"/zabbix/scripts/nginx-stat.py /etc/zabbix/zabbix_agentd.scripts/
+chmod +x /etc/zabbix/zabbix_agentd.scripts/nginx-stat.py
 
 echo -n "This is box is a proxmox CT? [Y|n] "
 read yn
