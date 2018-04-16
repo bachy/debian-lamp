@@ -47,9 +47,9 @@ if [ ! -d "$_agent_conf_d" ]; then
 fi
 
 # configure zabbix agent
-sed -i 's#Server=127.0.0.1#Server=$_ip#g' /etc/zabbix/zabbix_agentd.conf
-sed -i 's#ServerActive=127.0.0.1#ServerActive=$_ip#g' /etc/zabbix/zabbix_agentd.conf
-sed -i 's#Hostname=Zabbix server#Hostname=$_host_name#g' /etc/zabbix/zabbix_agentd.conf
+sed -i "s#Server=127.0.0.1#Server=$_ip#g" /etc/zabbix/zabbix_agentd.conf
+sed -i "s#ServerActive=127.0.0.1#ServerActive=$_ip#g" /etc/zabbix/zabbix_agentd.conf
+sed -i "s#Hostname=Zabbix server#Hostname=$_host_name#g" /etc/zabbix/zabbix_agentd.conf
 
 # APT
 # check for debian security updates
