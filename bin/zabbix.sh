@@ -83,6 +83,12 @@ cp "$_assets"/zabbix/userparameter_nginx.conf "$_agent_conf_d"/
 mkdir /etc/zabbix/zabbix_agentd.scripts
 cp "$_assets"/zabbix/nginx-stat.py /etc/zabbix/zabbix_agentd.scripts/
 
+echo -n "This is box is a proxmox CT? [Y|n] "
+read yn
+yn=${yn:-y}
+if [ "$yn" = "y" ]; then
+  cp "$_assets"/zabbix/proxmox-ct.conf "$_agent_conf_d"/
+fi
 
 # TODO add modules path to agent ??
 
