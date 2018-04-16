@@ -80,7 +80,7 @@ server {
 	  stub_status on;
 	  access_log   off;
 	  allow 127.0.0.1;
-	  allow ZABBIX-SERVER-IP;
+	  # allow ZABBIX-SERVER-IP;
 	  deny all;
 	}
 }

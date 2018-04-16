@@ -78,7 +78,7 @@ cp "$_assets"/zabbix/userparameter_mysql.conf "$_agent_conf_d"/
 # NGINX
 # https://github.com/sfuerte/zbx-nginx
 # nginxconf already included in default.nginxconf asset
-sed -i "s#ZABBIX-SERVER-IP#$_ip#g" /etc/nginx/sites-available/default
+sed -i "s/# allow ZABBIX-SERVER-IP/allow $_ip/g" /etc/nginx/sites-available/default
 cp "$_assets"/zabbix/userparameter_nginx.conf "$_agent_conf_d"/
 mkdir /etc/zabbix/zabbix_agentd.scripts
 cp "$_assets"/zabbix/nginx-stat.py /etc/zabbix/zabbix_agentd.scripts/
