@@ -81,7 +81,7 @@ cp "$_assets"/zabbix/userparameter_mysql.conf "$_agent_conf_d"/
 sed -i "s/# allow ZABBIX-SERVER-IP/allow $_ip/g" /etc/nginx/sites-available/default
 cp "$_assets"/zabbix/userparameter_nginx.conf "$_agent_conf_d"/
 mkdir /etc/zabbix/zabbix_agentd.scripts
-cp "$_assets"/zabbix/nginx-stat.py /etc/zabbix/zabbix_agentd.scripts/
+cp "$_assets"/zabbix/scripts/nginx-stat.py /etc/zabbix/zabbix_agentd.scripts/
 
 echo -n "This is box is a proxmox CT? [Y|n] "
 read yn
