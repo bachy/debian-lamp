@@ -16,7 +16,7 @@ server {
 
   #SSL Certificates
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-  ssl_certificate "/etc/letsencrypt/live/DOMAIN.LTD/cert.pem";
+  ssl_certificate "/etc/letsencrypt/live/DOMAIN.LTD/fullchain.pem";
   ssl_certificate_key "/etc/letsencrypt/live/DOMAIN.LTD/privkey.pem";
   ssl_dhparam /etc/nginx/ssl/certs/DOMAIN.LTD/dhparam.pem;
   ssl_session_cache shared:SSL:1m;
