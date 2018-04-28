@@ -51,7 +51,7 @@ urbackupclientbackend -v info
 
 # install and enable systemd service
 cp "$_assets"/urbackup.service /etc/ststemd/system/
-chmod a+x /etc/ststemd/system/urbackup.service
+chmod a+x /etc/systemd/system/urbackup.service
 
 systemctl --system daemon-reload
 systemctl start urbackup.service
