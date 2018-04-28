@@ -1,0 +1,12 @@
+[Unit]
+Description=Urbackup Backend
+ConditionPathExists=/usr/local/sbin/urbackupclientbackend
+
+[Service]
+Type=forking
+ExecStart=/usr/local/sbin/urbackupclientbackend -d
+PIDFile = /var/run/urbackup_clt.pid
+TimeoutSec=0
+
+[Install]
+WantedBy=multi-user.target
