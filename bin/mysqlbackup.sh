@@ -26,17 +26,17 @@ if [ ! -d "$_assets" ]; then
 fi
 
 # adding the script
-cp "$_assets"/mysqlbackups.sh /usr/local/bin/
-chmod +x /usr/local/bin/mysqlbackups.sh
+cp "$_assets"/mysqlbackup.sh /usr/local/bin/
+chmod +x /usr/local/bin/mysqlbackup.sh
 
 # configure
 echo -n "Please provide the mysql root passwd : "
 read _root_mysql_passwd
-sed -i "s/ROOTPASSWD/$_root_mysql_passwd/g" /usr/local/bin/mysqlbackups.sh
+sed -i "s/ROOTPASSWD/$_root_mysql_passwd/g" /usr/local/bin/mysqlbackup.sh
 
 # creating crontab
 touch /var/spool/cron/crontabs/root
 crontab -l > /tmp/mycron
-echo -e "0 2 */2 * * /usr/local/bin/mysqlbackups.sh" >> /tmp/mycron
+echo -e "0 2 */2 * * /usr/local/bin/mysqlbackup.sh" >> /tmp/mycron
 crontab /tmp/mycron
 rm /tmp/mycron
