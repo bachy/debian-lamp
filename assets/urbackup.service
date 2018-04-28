@@ -5,7 +5,7 @@ ConditionPathExists=/usr/local/sbin/urbackupclientbackend
 [Service]
 Type=forking
 ExecStart=/usr/local/sbin/urbackupclientbackend -d
-PIDFile = /var/run/urbackup_clt.pid
+PIDFile = /var/run/urbackup_srv.pid
 TimeoutSec=0
 
 [Install]

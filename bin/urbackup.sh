@@ -26,6 +26,8 @@ if [ ! -d "$_assets" ]; then
   fi
 fi
 
+
+
 # install urbackup client
 # https://www.urbackup.org/client_debian_ubuntu_install.html
 # https://blog.stephane-huc.net/systeme/debian/urbackup_client_gui
@@ -47,7 +49,23 @@ make -j4
 make install
 
 # Make sure that the UrBackup client backend runs correctly
-urbackupclientbackend -v info
+# urbackupclientbackend -v info
+
+# configure
+echo -n "Please provide the urbackup-server's ip : "
+read _ip
+echo -n "Please provide the internet_authkey of server : "
+read _authkey
+
+echo "internet_server=$_ip
+internet_server_port=55415
+internet_authkey=$_authkey
+internet_mode_enabled=true" > /usr/local/var/urbackup/data/settings.cfg
+
+# firewall
+ufw allow from "$_ip" to any port 35621
+ufw allow from "$_ip" to any port 35622
+ufw allow from "$_ip" to any port 35623
 
 # install and enable systemd service
 cp "$_assets"/urbackup.service /etc/ststemd/system/
