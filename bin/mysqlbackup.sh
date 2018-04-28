@@ -37,6 +37,6 @@ sed -i "s/ROOTPASSWD/$_root_mysql_passwd/g" /usr/local/bin/mysqlbackup.sh
 # creating crontab
 touch /var/spool/cron/crontabs/root
 crontab -l > /tmp/mycron
-echo -e "0 2 */2 * * /usr/local/bin/mysqlbackup.sh" >> /tmp/mycron
+echo -e "30 2 */2 * * /usr/local/bin/mysqlbackup.sh" >> /tmp/mycron
 crontab /tmp/mycron
 rm /tmp/mycron
