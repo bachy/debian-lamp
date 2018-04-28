@@ -29,6 +29,11 @@ fi
 cp "$_assets"/mysqlbackups.sh /usr/local/bin/
 chmod +x /usr/local/bin/mysqlbackups.sh
 
+# configure
+echo -n "Please provide the mysql root passwd : "
+read _root_mysql_passwd
+sed -i "s/ROOTPASSWD/$_root_mysql_passwd/g" /usr/local/bin/mysqlbackups.sh
+
 # creating crontab
 touch /var/spool/cron/crontabs/root
 crontab -l > /tmp/mycron
