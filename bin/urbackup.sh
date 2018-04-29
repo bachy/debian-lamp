@@ -56,13 +56,17 @@ echo -n "Please provide the urbackup-server's ip : "
 read _ip
 echo -n "Please provide the internet_authkey of server : "
 read _authkey
+echo -n "Please provide the computer name of this client : "
+read _computername
 
 echo "internet_server=$_ip
 internet_server_port=55415
 internet_authkey=$_authkey
 internet_mode_enabled=true
 internet_image_backups_def=false
-default_dirs_def=/etc;var/www;/var/backups/mysql" > /usr/local/var/urbackup/data/settings.cfg
+default_dirs_def=/etc;var/www;/var/backups/mysql
+tartup_backup_delay=3
+computername=$_computername" > /usr/local/var/urbackup/data/settings.cfg
 
 # firewall
 ufw allow from "$_ip" to any port 35621
