@@ -13,7 +13,7 @@ apt-get install git
 
 2 clone the repo
 ```
-git clone https://github.com/bachy/debian-web-server.git
+git clone https://figureslibres.io/gogs/bachir/debian-web-server.git
 ```
 
 3 run the script as root
