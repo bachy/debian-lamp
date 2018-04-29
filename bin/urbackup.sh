@@ -60,7 +60,9 @@ read _authkey
 echo "internet_server=$_ip
 internet_server_port=55415
 internet_authkey=$_authkey
-internet_mode_enabled=true" > /usr/local/var/urbackup/data/settings.cfg
+internet_mode_enabled=true
+internet_image_backups_def=false
+default_dirs_def=/etc;var/www;/var/backups/mysql" > /usr/local/var/urbackup/data/settings.cfg
 
 # firewall
 ufw allow from "$_ip" to any port 35621
