@@ -34,7 +34,7 @@ fi
 # https://urbackup.atlassian.net/wiki/spaces/US/pages/9142274/Headless+Linux+client+setup
 
 # Install the dependencies UrBackup needs
-apt install build-essential "g++" "libcrypto++-dev" libz-dev
+apt install build-essential "g++" "libcrypto++-dev" libz-dev -y
 #  libwxgtk3.0-dev
 
 # Download the UrBackup client source files and extract them
@@ -68,7 +68,7 @@ ufw allow from "$_ip" to any port 35622
 ufw allow from "$_ip" to any port 35623
 
 # install and enable systemd service
-cp "$_assets"/urbackup.service /etc/ststemd/system/
+cp "$_assets"/urbackup.service /etc/systemd/system/
 chmod a+x /etc/systemd/system/urbackup.service
 
 systemctl --system daemon-reload
