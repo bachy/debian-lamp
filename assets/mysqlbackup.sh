@@ -45,6 +45,6 @@ do
         additional_mysqldump_params=""
   fi
   echo "Creating backup of \"${database}\" database"
-  mysqldump ${additional_mysqldump_params} --user=${mysql_user} --password=${mysql_password} ${database} | gzip > "${backup_dir}/${database}.gz"
-  chmod 644 "${backup_dir}/${database}.gz"
+  mysqldump ${additional_mysqldump_params} --user=${mysql_user} --password=${mysql_password} ${database} | gzip > "${backup_dir}/${database}.sql.gz"
+  chmod 644 "${backup_dir}/${database}.sql.gz"
 done
