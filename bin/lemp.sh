@@ -130,6 +130,11 @@ echo -e "\033[35;1mInstalling Redis \033[0m"
 sleep 3
 apt-get --yes --force-yes install redis-server php-redis
 
+# TODO set maxmemory=2gb
+# TODO set maxmemory-policy=volatile-lru
+# TODO comment all save line
+
+
 systemctl enable redis-server
 systemctl restart redis-server
 echo -e "\033[92;1mRedis installed\033[Om"

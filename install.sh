@@ -94,10 +94,20 @@ else
   echo -e 'zabbix-agent not installed'
 fi
 
-# urbackup
+while [ "$_install_urbackup" != "yes" ] && [ "$_install_urbackup" != "no" ]
+do
+  echo -n "Should we install urbackup client ? [yes|no] "
+  read _install_urbackup
+done
+if [ "$_install_urbackup" = "yes" ]; then
+  . bin/urbackup.sh
+else
+  echo -e 'urbackup client not installed'
+fi
+
 
 . bin/dotfiles.sh
-. bin/autoupdate.sh
+# . bin/autoupdate.sh
 
 # echo -e '\033[35m
 #   ______________  _______

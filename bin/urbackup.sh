@@ -38,12 +38,12 @@ apt install build-essential "g++" "libcrypto++-dev" libz-dev -y
 #  libwxgtk3.0-dev
 
 # Download the UrBackup client source files and extract them
-wget -P /tmp/ https://hndl.urbackup.org/Client/latest/urbackup-client-2.2.5.tar.gz
+wget -P /tmp/ https://hndl.urbackup.org/Client/latest/urbackup-client-2.2.6.tar.gz
 cd /tmp
-tar xzf /tmp/urbackup-client-2.2.5.tar.gz
+tar xzf /tmp/urbackup-client-2.2.6.tar.gz
 
 # Build the UrBackup client and install it
-cd /tmp/urbackup-client-2.2.5.0
+cd /tmp/urbackup-client-2.2.6.0
 ./configure --enable-headless
 make -j4
 make install

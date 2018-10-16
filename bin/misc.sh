@@ -20,6 +20,6 @@ sed -i "s/^# en_GB.UTF-8/en_GB.UTF-8/g" /etc/locale.gen
 locale-gen
 apt-get --yes --force-yes install ntp
 dpkg-reconfigure tzdata
-apt-get --yes --force-yes install etckeeper needrestart
+apt-get --yes --force-yes install tmux etckeeper needrestart
 
 echo -e "\033[92;1mMisc done \033[Om"
