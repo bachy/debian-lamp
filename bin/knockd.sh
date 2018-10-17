@@ -44,5 +44,5 @@ systemctl start knockd
 
 echo -e "\033[92;1mknockd installed and configured\033[Om"
 echo -e "\033[92;1mplease note this sequence for future ssh knocking\033[Om"
-echo "$sq1"
+echo "$sq"
 sleep 3
