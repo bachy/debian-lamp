@@ -63,6 +63,7 @@ if [ "$vh" = "y" ]; then
   if [ "$_letsencrypt" = "yes" ]; then
     apt-get --yes --force-yes install certbot
     certbot certonly --standalone -d "$_domain" --cert-name "$_domain"
+    # TODO stop the whole process if letsencrypt faile
     mkdir -p /etc/nginx/ssl/certs/"$_domain"
     openssl dhparam -out /etc/nginx/ssl/certs/"$_domain"/dhparam.pem 2048
     # renewing
@@ -107,7 +108,7 @@ if [ "$vh" = "y" ]; then
   echo -n "Should we install a shortcut for a user? [Y|n] "
   read yn
   yn=${yn:-y}
-  if [ "$yn" = "y" ]; then
+  if [ "$yn" = "Y" ] || [ "$yn" = "y" ]; then
     # if $user var does not exists (vhost.sh ran directly) ask for it
     if [ -z ${user+x} ]; then
       while [ "$user" = "" ]
