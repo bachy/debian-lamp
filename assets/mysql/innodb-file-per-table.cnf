@@ -1,0 +1,11 @@
+# Use one file by InnoDB table.
+# Use Barracuda as InnoDB engine.
+# Allow InnoDB large indexs.
+# Use Dynamic row format.
+# Reduce disk usage, ease disk space reclaiming.
+[mysqld]
+innodb_file_per_table = 1
+innodb_file_format=Barracuda
+innodb_large_prefix=1
+; Option below only for MariaDB 10.2
+;innodb_default_row_format=DYNAMIC

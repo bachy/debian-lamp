@@ -22,4 +22,9 @@ apt-get --yes --force-yes install ntp
 dpkg-reconfigure tzdata
 apt-get --yes --force-yes install tmux etckeeper needrestart
 
+# TODO cron
+# https://askubuntu.com/questions/56683/where-is-the-cron-crontab-log/121560#121560
+
+
+
 echo -e "\033[92;1mMisc done \033[Om"

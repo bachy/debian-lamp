@@ -41,6 +41,9 @@ echo -e "\033[35;1minstalling Mysql \033[0m"
 sleep 3
 apt-get --yes --force-yes install mariadb-server
 mysql_secure_installation
+
+cp "$_assets"/mysql/innodb-file-per-table.cnf /etc/mysql/conf.d/
+
 systemctl enable mariadb.service
 systemctl restart mariadb.service
 echo -e "\033[92;1mmysql installed\033[Om"
