@@ -1,3 +1,4 @@
+# https://howto.biapy.com/fr/debian-gnu-linux/serveurs/mysql/installer-et-configurer-mysql-sur-debian
 # Use one file by InnoDB table.
 # Use Barracuda as InnoDB engine.
 # Allow InnoDB large indexs.

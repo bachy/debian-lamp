@@ -40,7 +40,7 @@ mysql_databases=`echo 'show databases' | mysql --user=${mysql_user} --password=$
 for database in $mysql_databases
 do
   if [ "${database}" == "information_schema" ] || [ "${database}" == "performance_schema" ]; then
-        additional_mysqldump_params="--skip-lock-tables"
+        additional_mysqldump_params="--skip-lock-tables --compact --no-autocommit "
   else
         additional_mysqldump_params=""
   fi
