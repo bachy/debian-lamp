@@ -57,7 +57,7 @@ echo -e '\033[35m
 \033[0m'
 echo -e "\033[35;1mInstalling PHP 7.0 \033[0m"
 sleep 3
-apt-get --yes --force-yes install php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached
+apt-get --yes --force-yes install php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached php7.0-imagick
 
 mv /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.back
 cp "$_assets"/php-fpm.ini /etc/php/7.0/fpm/php.ini
