@@ -93,6 +93,9 @@ if [ "$yn" = "Y" ] || [ "$yn" = "y" ]; then
   cp "$_assets"/zabbix/proxmox-ct.conf "$_agent_conf_d"/
 fi
 
+# SYSTEMD
+cp "$_assets"/zabbix/userparameter_systemd_services.conf "$_agent_conf_d"/
+
 # TODO add modules path to agent ??
 
 # allow comm. port with zabbix-server
