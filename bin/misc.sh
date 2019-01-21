@@ -20,7 +20,7 @@ sed -i "s/^# en_GB.UTF-8/en_GB.UTF-8/g" /etc/locale.gen
 locale-gen
 apt-get --yes --force-yes install ntp
 dpkg-reconfigure tzdata
-apt-get --yes --force-yes install tmux etckeeper needrestart htop lynx
+apt-get --yes --force-yes install tmux etckeeper needrestart htop lynx unzip
 
 # TODO cron
 # https://askubuntu.com/questions/56683/where-is-the-cron-crontab-log/121560#121560
