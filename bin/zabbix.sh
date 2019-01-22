@@ -94,6 +94,7 @@ if [ "$yn" = "Y" ] || [ "$yn" = "y" ]; then
 fi
 
 # SYSTEMD
+# https://github.com/MogiePete/zabbix-systemd-service-monitoring
 cp "$_assets"/zabbix/userparameter_systemd_services.conf "$_agent_conf_d"/
 
 # TODO add modules path to agent ??
