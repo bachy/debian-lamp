@@ -53,6 +53,6 @@ done
 
 # Rotate backups
 # Delete files older than 30 days
-find $backup_parent_dir/ -type f -mtime +30 -exec rm {} \;
+find $backup_parent_dir/ -type f -mtime +30 -delete;
 # Delete empty directories
 find $backup_parent_dir/ -type d -empty -delete;
