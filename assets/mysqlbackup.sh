@@ -24,8 +24,6 @@ else
   echo "MySQL ${mysql_user} password correct."
 fi
 
-# TODO rotate backups
-
 # Create backup directory and set permissions
 backup_date=`date +%Y_%m_%d_%H_%M`
 backup_dir="${backup_parent_dir}/${backup_date}"
@@ -48,3 +46,12 @@ do
   mysqldump ${additional_mysqldump_params} --user=${mysql_user} --password=${mysql_password} ${database} | gzip > "${backup_dir}/${database}.sql.gz"
   chmod 644 "${backup_dir}/${database}.sql.gz"
 done
+
+# compress the folder
+tar -zcvf "${backup_dir}.tar.gz" "${backup_dir}"
+rm -rf "${backup_dir}"
+
+
+# TODO rotate backups
+# Delete files older than 30 days
+# find $backup_parent_dir/*.zip -mtime +30 -exec rm -rf {} \;
