@@ -48,10 +48,11 @@ do
 done
 
 # compress the folder
-tar -zcvf "${backup_dir}.tar.gz" "${backup_dir}"
-rm -rf "${backup_dir}"
+# tar -zcvf "${backup_dir}.tar.gz" "${backup_dir}"
+# rm -rf "${backup_dir}"
 
-
-# TODO rotate backups
+# Rotate backups
 # Delete files older than 30 days
-# find $backup_parent_dir/*.zip -mtime +30 -exec rm -rf {} \;
+find $backup_parent_dir/ -type f -mtime +30 -exec rm {} \;
+# Delete empty directories
+find $backup_parent_dir/ -type d -empty -delete;
