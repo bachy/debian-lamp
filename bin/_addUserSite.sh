@@ -70,7 +70,7 @@ ln -s /home/"$user"/logs /var/www/"$_host_name"/logs
 
 # TODO create nginx vhost
 # cp "$_cwd"/assets/example.org.conf /etc/apache2/sites-available/"$_host_name".conf
-# sed -ir "s/example\.org/$_host_name/g" /etc/apache2/sites-available/"$_host_name".conf
+# sed -i -r "s/example\.org/$_host_name/g" /etc/apache2/sites-available/"$_host_name".conf
 #activate the vhost
 # a2ensite "$_host_name".conf
 #restart apache

@@ -102,8 +102,8 @@ if [ "$vh" = "yes" ]; then
   # cp "$_assets"/git-pre-receive /home/"$user"/git-repositories/"$_domain".git/hooks/pre-receive
   cp "$_assets"/git-post-receive /home/"$user"/git-repositories/"$_domain".git/hooks/post-receive
 
-  # sed -ir "s/PRODDIR=\"www\"/PRODDIR=/home/$user/www/$_domain/g" /home/"$user"/git-repositories/"$_domain".git/hooks/pre-receive
-  sed -ir "s#PRODDIR=\"www\"#PRODDIR=\"/home/$user/www/$_domain\"#g" /home/"$user"/git-repositories/"$_domain".git/hooks/post-receive
+  # sed -i -r "s/PRODDIR=\"www\"/PRODDIR=/home/$user/www/$_domain/g" /home/"$user"/git-repositories/"$_domain".git/hooks/pre-receive
+  sed -i -r "s#PRODDIR=\"www\"#PRODDIR=\"/home/$user/www/$_domain\"#g" /home/"$user"/git-repositories/"$_domain".git/hooks/post-receive
 
   chown -R "$user":"$user" /home/"$user"/git-repositories
 

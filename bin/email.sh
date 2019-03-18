@@ -66,8 +66,8 @@ if [ "$installdkim" = "y" ]; then
   chmod 440 /etc/exim4/dkim/"$domain"-private.pem
 
   cp "$_assets"/exim4_dkim.conf /etc/exim4/conf.d/main/00_local_macros
-  sed -ir "s/DOMAIN_TO_CHANGE/$domain/g" /etc/exim4/conf.d/main/00_local_macros
-  sed -ir "s/DATE_TO_CHANGE/$selector/g" /etc/exim4/conf.d/main/00_local_macros
+  sed -i -r "s/DOMAIN_TO_CHANGE/$domain/g" /etc/exim4/conf.d/main/00_local_macros
+  sed -i -r "s/DATE_TO_CHANGE/$selector/g" /etc/exim4/conf.d/main/00_local_macros
 
   update-exim4.conf
   systemctl restart exim4

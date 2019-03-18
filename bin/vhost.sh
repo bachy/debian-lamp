@@ -89,13 +89,13 @@ if [ "$vh" = "y" ]; then
   fi
 
   cp "$_assets/$_conffile" /etc/nginx/sites-available/"$_domain".conf
-  sed -ir "s/DOMAIN\.LTD/$_domain/g" /etc/nginx/sites-available/"$_domain".conf
+  sed -i -r "s/DOMAIN\.LTD/$_domain/g" /etc/nginx/sites-available/"$_domain".conf
 
   mkdir -p /var/www/"$_domain"/public_html
   mkdir /var/www/"$_domain"/log
 
   cp "$_assets/index.php" /var/www/"$_domain"/public_html/
-  sed -ir "s/DOMAIN\.LTD/$_domain/g" /var/www/"$_domain"/public_html/index.php
+  sed -i -r "s/DOMAIN\.LTD/$_domain/g" /var/www/"$_domain"/public_html/index.php
 
   #set proper right to user will handle the app
   chown -R root:admin  /var/www/"$_domain"/

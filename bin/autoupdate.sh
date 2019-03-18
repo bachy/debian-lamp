@@ -23,8 +23,8 @@ sleep 3
 echo -n "Enter an email: "
 read email
 
-sed -ir "s/EMAIL=\"root\"/EMAIL=\"$email\"/g" /etc/apticron/apticron.conf
-# sed -ir "s/# DIFF_ONLY=\"1\"/DIFF_ONLY=\"1\"/g" /etc/apticron/apticron.conf
-sed -ir "s/# NOTIFY_NEW=\"0\"/NOTIFY_NEW=\"0\"/g" /etc/apticron/apticron.conf
+sed -i -r "s/EMAIL=\"root\"/EMAIL=\"$email\"/g" /etc/apticron/apticron.conf
+# sed -i -r "s/# DIFF_ONLY=\"1\"/DIFF_ONLY=\"1\"/g" /etc/apticron/apticron.conf
+sed -i -r "s/# NOTIFY_NEW=\"0\"/NOTIFY_NEW=\"0\"/g" /etc/apticron/apticron.conf
 
 echo "\033[92;1mApticron installed and configured\033[0m"

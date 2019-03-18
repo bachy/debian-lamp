@@ -109,8 +109,8 @@ echo -e '\033[35m
 echo -e "\033[35;1mInstalling phpMyAdmin \033[0m"
 apt-get --yes --force-yes install phpmyadmin
 ln -s /usr/share/phpmyadmin /var/www/html/
-# cp "$_assets"/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
-# ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
+cp "$_assets"/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
+ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
 
 # echo -e "\033[35;1msecuring phpMyAdmin \033[0m"
 # sed -i "s/DirectoryIndex index.php/DirectoryIndex index.php\nAllowOverride all/"

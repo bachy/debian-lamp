@@ -44,7 +44,7 @@ done
 
 echo "Configuring proftpd"
 cp "$_assets"/proftpd.conf /etc/proftpd/conf.d/"$_server_name".conf
-sed -ir "s/example/$_server_name/g" /etc/proftpd/conf.d/"$_server_name".conf
+sed -i -r "s/example/$_server_name/g" /etc/proftpd/conf.d/"$_server_name".conf
 
 ufw allow ftp
 
