@@ -110,4 +110,8 @@ server {
       expires max;
       log_not_found off;
     }
+
+
+    # website should not be displayed inside a <frame>, an <iframe> or an <object>
+    add_header X-Frame-Options SAMEORIGIN;
 }

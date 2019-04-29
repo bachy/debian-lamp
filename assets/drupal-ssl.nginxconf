@@ -136,5 +136,5 @@ server {
   }
 
   # website should not be displayed inside a <frame>, an <iframe> or an <object>
-  add_header X-Frame-Options DENY;
+  add_header X-Frame-Options SAMEORIGIN;
 }
