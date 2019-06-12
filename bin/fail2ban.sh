@@ -20,6 +20,7 @@ sleep 2
 apt-get --yes --force-yes install fail2ban
 cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 # ToDo ask for email and configure jail.local with it
+touch /var/log/auth.log
 systemctl enable fail2ban
 systemctl restart fail2ban
 echo -e "\033[92;1mfail2ban installed and configured\033[Om"
