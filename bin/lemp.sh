@@ -8,7 +8,7 @@ echo -e '\033[35m
 /_/\___/_/ /_/ /_/ .___/
                 /_/
 \033[0m'
-echo "\033[35;1mLEMP server (Nginx Mysql Php-fpm) \033[0m"
+echo -e "\033[35;1mLEMP server (Nginx Mysql Php-fpm) \033[0m"
 
 if [ "$EUID" -ne 0 ]; then
   echo "Please run as root"
@@ -37,7 +37,7 @@ echo -e '\033[35m
 /_/  /_/\__, /____/\__, /_/
        /____/        /_/
 \033[0m'
-echo "\033[35;1minstalling Mysql \033[0m"
+echo -e "\033[35;1minstalling Mysql \033[0m"
 sleep 3
 apt-get --yesinstall mariadb-server
 mysql_secure_installation
@@ -46,7 +46,7 @@ cp "$_assets"/mysql/innodb-file-per-table.cnf /etc/mysql/conf.d/
 
 systemctl enable mariadb.service
 systemctl restart mariadb.service
-echo "\033[92;1mmysql installed\033[Om"
+echo -e "\033[92;1mmysql installed\033[Om"
 
 echo -e '\033[35m
     ____  __  ______
@@ -55,7 +55,7 @@ echo -e '\033[35m
  / ____/ __  / ____/
 /_/   /_/ /_/_/
 \033[0m'
-echo "\033[35;1mInstalling PHP 7.0 \033[0m"
+echo -e "\033[35;1mInstalling PHP 7.0 \033[0m"
 sleep 3
 apt-get --yesinstall php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached php7.0-imagick
 
@@ -78,7 +78,7 @@ systemctl start php7.0-fpm
 #
 # systemctl start memcached
 
-echo "\033[92;1mphp installed\033[Om"
+echo -e "\033[92;1mphp installed\033[Om"
 
 echo -e '\033[35m
     _   __      _
@@ -88,7 +88,7 @@ echo -e '\033[35m
 /_/ |_/\__, /_/_/ /_/_/|_|
       /____/
 \033[0m'
-echo "\033[35;1mInstalling Nginx \033[0m"
+echo -e "\033[35;1mInstalling Nginx \033[0m"
 sleep 3
 apt-get --yesinstall nginx
 mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.ori
@@ -96,7 +96,7 @@ cp "$_assets"/default.nginxconf /etc/nginx/sites-available/default
 
 systemctl enable nginx
 systemctl restart nginx
-echo "\033[92;1mNginx installed\033[Om"
+echo -e "\033[92;1mNginx installed\033[Om"
 
 echo -e '\033[35m
            __          __  ___      ___       __          _
@@ -106,21 +106,21 @@ echo -e '\033[35m
  / .___/_/ /_/ .___/_/  /_/\__, /_/  |_\__,_/_/ /_/ /_/_/_/ /_/
 /_/         /_/           /____/
 \033[0m'
-echo "\033[35;1mInstalling phpMyAdmin \033[0m"
+echo -e "\033[35;1mInstalling phpMyAdmin \033[0m"
 apt-get --yesinstall phpmyadmin
 ln -s /usr/share/phpmyadmin /var/www/html/
 cp "$_assets"/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
 ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
 
-# echo "\033[35;1msecuring phpMyAdmin \033[0m"
+# echo -e "\033[35;1msecuring phpMyAdmin \033[0m"
 # sed -i "s/DirectoryIndex index.php/DirectoryIndex index.php\nAllowOverride all/"
 # cp "$_assets"/phpmyadmin_htaccess > /usr/share/phpmyadmin/.htaccess
 # echo -n "define a user name for phpmyadmin : "
 # read un
 # htpasswd -c /etc/phpmyadmin/.htpasswd $un
 # service apache2 restart
-echo "\033[92;1mphpMyAdmin installed\033[Om"
-echo "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
+echo -e "\033[92;1mphpMyAdmin installed\033[Om"
+echo -e "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
 
 echo -e '\033[35m
     ____           ___
@@ -129,7 +129,7 @@ echo -e '\033[35m
  / _, _/  __/ /_/ / (__  )
 /_/ |_|\___/\__,_/_/____/
 \033[0m'
-echo "\033[35;1mInstalling Redis \033[0m"
+echo -e "\033[35;1mInstalling Redis \033[0m"
 sleep 3
 apt-get --yesinstall redis-server php-redis
 
@@ -141,7 +141,7 @@ apt-get --yesinstall redis-server php-redis
 systemctl enable redis-server
 systemctl restart redis-server
 systemctl restart php7.0-fpm
-echo "\033[92;1mRedis installed\033[Om"
+echo -e "\033[92;1mRedis installed\033[Om"
 
 echo -e '\033[35m
    ______
@@ -151,12 +151,12 @@ echo -e '\033[35m
 \____/\____/_/ /_/ /_/ .___/\____/____/\___/_/
                     /_/
 \033[0m'
-echo "\033[35;1mInstalling Composer \033[0m"
+echo -e "\033[35;1mInstalling Composer \033[0m"
 sleep 3
 export COMPOSER_HOME=/usr/local/composer
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-echo "\033[92;1mComposer installed\033[Om"
+echo -e "\033[92;1mComposer installed\033[Om"
 
 
 echo -e '\033[35m
@@ -166,13 +166,13 @@ echo -e '\033[35m
  / /_/ / /  / /_/ (__  ) / / /
 /_____/_/   \__,_/____/_/ /_/
 \033[0m'
-echo "\033[35;1mInstalling Drush and DrupalConsole\033[0m"
+echo -e "\033[35;1mInstalling Drush and DrupalConsole\033[0m"
 sleep 3
 curl https://drupalconsole.com/installer -L -o /usr/local/bin/drupal
 chmod +x /usr/local/bin/drupal
 curl https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar -L -o /usr/local/bin/drush
 chmod +x /usr/local/bin/drush
-echo "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
+echo -e "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 
 
 
@@ -183,7 +183,7 @@ echo "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 #  / /|_/ / _ \/ _ \/ / __/ _/_/  / /|_/ / // / _ \/ / _ \
 # /_/  /_/\___/_//_/_/\__/ /_/   /_/  /_/\_,_/_//_/_/_//_/
 # \033[0m'
-# echo "\033[35;1mInstalling Munin \033[0m"
+# echo -e "\033[35;1mInstalling Munin \033[0m"
 # sleep 3
 # # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/
 # apt-get --yesinstall munin munin-node munin-plugins-extra
@@ -220,9 +220,9 @@ echo "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 #
 # service apache2 restart
 # service munin-node restart
-# echo "\033[92;1mMunin installed\033[Om"
+# echo -e "\033[92;1mMunin installed\033[Om"
 #
-# echo "\033[35;1mInstalling Monit \033[0m"
+# echo -e "\033[35;1mInstalling Monit \033[0m"
 # sleep 3
 # # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/2/
 # apt-get --yesinstall monit
@@ -253,7 +253,7 @@ echo "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 #
 # service monit start
 #
-# echo "\033[92;1mMonit installed\033[Om"
+# echo -e "\033[92;1mMonit installed\033[Om"
 
 
 # echo -e '\033[35m
@@ -263,7 +263,7 @@ echo "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 #  / ___ | |/ |/ (__  ) /_/ /_/ / /_
 # /_/  |_|__/|__/____/\__/\__,_/\__/
 # \033[0m'
-# echo "\033[35;1mInstalling Awstat \033[0m"
+# echo -e "\033[35;1mInstalling Awstat \033[0m"
 # sleep 3
 # apt-get --yesinstall awstats
 # # Configure AWStats
@@ -273,4 +273,4 @@ echo "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 # fi
 # # Disable Awstats from executing every 10 minutes. Put a hash in front of any line.
 # sed -i 's/^[^#]/#&/' /etc/cron.d/awstats
-# echo "\033[92;1mAwstat installed\033[Om"
+# echo -e "\033[92;1mAwstat installed\033[Om"

@@ -18,4 +18,4 @@ sed -i 's/PermitRootLogin\ yes/PermitRootLogin no/g' /etc/ssh/sshd_config
 sed -i 's/PermitEmptyPasswords\ yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
 sed -i 's/Protocol\ [0-9]/Protocol 2/g' /etc/ssh/sshd_config
 systemctl reload ssh
-echo "\033[92;1mSSH secured\033[Om"
+echo -e "\033[92;1mSSH secured\033[Om"

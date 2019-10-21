@@ -13,7 +13,7 @@ echo -e '\033[35m
 /_____/\___/_.___/_/\__,_/_/ /_/   /____/\___/_/    |___/\___/_/
 
 \033[0m'
-echo "\033[35;1mThis script has been tested only on Linux Debian 10 \033[0m"
+echo -e "\033[35;1mThis script has been tested only on Linux Debian 10 \033[0m"
 
 if [[ $EUID -ne 0 ]]; then
   echo "Please run as root"
@@ -156,14 +156,14 @@ fi
 #   # Remove old tmp dir
 #   rm -rf /var/tmpbackup
 
-#   echo "\033[35;1m /tmp and /var/tmp secured using tmpfs. \033[0m"
+#   echo -e "\033[35;1m /tmp and /var/tmp secured using tmpfs. \033[0m"
 # } # End function secure_tmp_tmpfs
 
 # check_tmp_secured
 # if [ $? = 0  ]; then
 #     secure_tmp_tmpfs
 # else
-#     echo "\033[35;1mFunction canceled. /tmp already secured. \033[0m"
+#     echo -e "\033[35;1mFunction canceled. /tmp already secured. \033[0m"
 # fi
 
 # TODO add warning message on ssh connection if system needs updates
@@ -179,4 +179,4 @@ echo -e '\033[35m
 /  __/ / / / /_/ /
 \___/_/ /_/\__,_/
 \033[0m'
-echo "\033[35;1m* * script done * * \033[0m"
+echo -e "\033[35;1m* * script done * * \033[0m"

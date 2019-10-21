@@ -6,7 +6,7 @@ echo -e '\033[35m
 | |/ / / / / /_/ (__  ) /_
 |___/_/ /_/\____/____/\__/
 \033[0m'
-echo "\033[35;1mNginx VHOST install \033[0m"
+echo -e "\033[35;1mNginx VHOST install \033[0m"
 while [ "$vh" != "y" ] && [ "$vh" != "n" ]
 do
   echo -n "Should we install a vhost? [y|n] "
@@ -50,7 +50,7 @@ if [ "$vh" = "y" ]; then
   # ask for let's encrypt
   while [ "$_letsencrypt" != "yes" ] && [ "$_letsencrypt" != "no" ]
   do
-    echo "\033[35;1mLet's encrypt \033[0m"
+    echo -e "\033[35;1mLet's encrypt \033[0m"
     echo "Let's encrypt needs a public registered domain name with proper DNS records ( A records or CNAME records for subdomains pointing to your server)."
     echo -n "Should we install let's encrypt certificate with $_domain? [yes|no] "
     read _letsencrypt
@@ -147,7 +147,7 @@ if [ "$vh" = "y" ]; then
 
   # restart nginx
   systemctl start nginx
-  echo "\033[92;1mvhost $_domain configured \033[Om"
+  echo -e "\033[92;1mvhost $_domain configured \033[Om"
 else
   echo "Vhost installation aborted"
 fi

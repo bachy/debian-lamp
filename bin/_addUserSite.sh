@@ -11,7 +11,7 @@ echo -e '\033[35m
 / /_/ /___/ / /___/ _, _/
 \____//____/_____/_/ |_|
 \033[0m'
-echo "\033[35;1mCreate new user (you will be asked a user name and a password) \033[0m"
+echo -e "\033[35;1mCreate new user (you will be asked a user name and a password) \033[0m"
 sleep 3
 while [ "$user" = "" ]
 do
@@ -41,7 +41,7 @@ echo -e '\033[35m
 | |/ / / / / /_/ (__  ) /_
 |___/_/ /_/\____/____/\__/
 \033[0m'
-echo "\033[35;1mVHOST install \033[0m"
+echo -e "\033[35;1mVHOST install \033[0m"
 
 while [ "$_host_name" = "" ]
 do
@@ -75,7 +75,7 @@ ln -s /home/"$user"/logs /var/www/"$_host_name"/logs
 # a2ensite "$_host_name".conf
 #restart apache
 # service apache2 restart
-echo "\033[92;1mvhost $_host_name configured\033[Om"
+echo -e "\033[92;1mvhost $_host_name configured\033[Om"
 
 
 # todo add mysql user and database
@@ -88,7 +88,7 @@ echo -e '\033[35m
 /_/  /_/\__, /____/\__, /_/
        /____/        /_/
 \033[0m'
-echo "\033[35;1mMysql database \033[0m"
+echo -e "\033[35;1mMysql database \033[0m"
 
 while [ "$_dbname" = "" ]
 do

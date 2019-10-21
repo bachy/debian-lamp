@@ -7,7 +7,7 @@ echo -e '\033[35m
  / /  / / ___ |_/ // /___
 /_/  /_/_/  |_/___/_____/
 \033[0m'
-echo "\033[35;1mEnable mail sending for php \033[0m"
+echo -e "\033[35;1mEnable mail sending for php \033[0m"
 
 if [ "$EUID" -ne 0 ]; then
   echo "Please run as root"
@@ -29,7 +29,7 @@ fi
 # http://www.sycha.com/lamp-setup-debian-linux-apache-mysql-php#anchor13
 sleep 2
 apt-get --yesinstall exim4
-echo "\033[35;1mConfiguring EXIM4 \033[0m"
+echo -e "\033[35;1mConfiguring EXIM4 \033[0m"
 while [ "$configexim" != "y" ] && [ "$configexim" != "n" ]
 do
   echo -n "Should we configure exim4 ? [y|n] "
@@ -48,7 +48,7 @@ systemctl restart exim4
 
 # dkim spf
 # https://debian-administration.org/article/718/DKIM-signing_outgoing_mail_with_exim4
-echo "\033[35;1mConfiguring DKIM \033[0m"
+echo -e "\033[35;1mConfiguring DKIM \033[0m"
 while [ "$installdkim" != "y" ] && [ "$installdkim" != "n" ]
 do
   echo -n "Should we install dkim for exim4 ? [y|n] "

@@ -28,4 +28,4 @@ apt-get --yesinstall tmux etckeeper needrestart htop lynx unzip
 
 
 
-echo "\033[92;1mMisc done \033[Om"
+echo -e "\033[92;1mMisc done \033[Om"

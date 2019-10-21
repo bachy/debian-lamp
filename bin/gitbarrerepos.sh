@@ -11,7 +11,7 @@ echo -e '\033[35m
 / /_/ / / /_
 \____/_/\__/
 \033[0m'
-echo "\033[35;1mCreate new git barre repos and deploy script\033[0m"
+echo -e "\033[35;1mCreate new git barre repos and deploy script\033[0m"
 echo "Git barre repo will be installed in chosen user home directory"
 echo "git prod repos will be installed in public_html directory of provided domain, the domain have to exists as shortcut in chosen user/www before running this script. Please run first vhost.sh script and say yes to the question create a shortcut !"
 

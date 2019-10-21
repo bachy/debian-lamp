@@ -8,7 +8,7 @@ echo -e '\033[35m
 /_____/\____/\__/  /_/   /_/_/\___/____/
 \033[0m'
 #installing better prompt and some goodies
-echo "\033[35;1mInstalling shell prompt for current user $USER \033[0m"
+echo -e "\033[35;1mInstalling shell prompt for current user $USER \033[0m"
 sleep 2
 # get the current position
 _cwd="$(pwd)"
@@ -19,4 +19,4 @@ git clone https://figureslibres.io/gogs/bachir/dotfiles-server.git ~/.dotfiles-s
 source ~/.bashrc
 # return to working directory
 cd "$_cwd"
-echo "\033[92;1mDot files installed for $USER\033[0m"
+echo -e "\033[92;1mDot files installed for $USER\033[0m"
