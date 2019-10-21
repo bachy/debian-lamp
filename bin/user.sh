@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo '\033[35m
+echo -e '\033[35m
    __  _______ __________
   / / / / ___// ____/ __ \
  / / / /\__ \/ __/ / /_/ /
@@ -37,7 +37,7 @@ do
   fi
 done
 
-# TODO 
+# TODO
 # ./install.sh: 42: bin/user.sh: adduser: not found
 # adding dev to admin group and limiting su to the admin group
 # ./install.sh: 44: bin/user.sh: groupadd: not found

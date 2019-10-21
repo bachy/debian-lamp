@@ -4,7 +4,7 @@
 # get the current position
 _cwd="$(pwd)"
 
-echo '\033[35m
+echo -e '\033[35m
    _______ __
   / ____(_) /_
  / / __/ / __/

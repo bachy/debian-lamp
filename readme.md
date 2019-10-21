@@ -17,7 +17,13 @@ apt-get install git
 git clone https://figureslibres.io/gogs/bachir/debian-web-server.git
 ```
 
-3 run the script as root
+3 change defaut shell from dash to bash
+```
+dpkg-reconfigure dash
+```
+and answer NO to the the question
+
+4 run the script as root
 ```
 su
 cd debian-web-server

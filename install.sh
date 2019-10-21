@@ -5,7 +5,7 @@
 # http://web-74.com/blog/reseaux/gerer-le-deploiement-facilement-avec-git/
 #
 
-echo '\033[35m
+echo -e '\033[35m
     ____       __    _                _____
    / __ \___  / /_  (_)___ _____     / ___/___  ______   _____  _____
   / / / / _ \/ __ \/ / __ `/ __ \    \__ \/ _ \/ ___/ | / / _ \/ ___/
@@ -15,7 +15,7 @@ echo '\033[35m
 \033[0m'
 echo "\033[35;1mThis script has been tested only on Linux Debian 10 \033[0m"
 
-if [ "$EUID" -ne 0 ]; then
+if [[ $EUID -ne 0 ]]; then
   echo "Please run as root"
   exit
 fi
@@ -109,7 +109,7 @@ fi
 . bin/dotfiles.sh
 # . bin/autoupdate.sh
 
-# echo '\033[35m
+# echo -e '\033[35m
 #   ______________  _______
 #  /_  __/ ____/  |/  / __ \
 #   / / / __/ / /|_/ / /_/ /
@@ -172,7 +172,7 @@ fi
 
 
 
-echo '\033[35m
+echo -e '\033[35m
                   __
   ___  ____  ____/ /
  / _ \/ __ \/ __  /

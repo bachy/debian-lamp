@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo '\033[35m
+echo -e '\033[35m
     __
    / /__  ____ ___  ____
   / / _ \/ __ `__ \/ __ \
@@ -29,7 +29,7 @@ fi
 
 sleep 2
 
-echo '\033[35m
+echo -e '\033[35m
     __  ___                 __
    /  |/  /_  ___________ _/ /
   / /|_/ / / / / ___/ __ `/ /
@@ -48,7 +48,7 @@ systemctl enable mariadb.service
 systemctl restart mariadb.service
 echo "\033[92;1mmysql installed\033[Om"
 
-echo '\033[35m
+echo -e '\033[35m
     ____  __  ______
    / __ \/ / / / __ \
   / /_/ / /_/ / /_/ /
@@ -80,7 +80,7 @@ systemctl start php7.0-fpm
 
 echo "\033[92;1mphp installed\033[Om"
 
-echo '\033[35m
+echo -e '\033[35m
     _   __      _
    / | / /___ _(_)___  _  __
   /  |/ / __ `/ / __ \| |/_/
@@ -98,7 +98,7 @@ systemctl enable nginx
 systemctl restart nginx
 echo "\033[92;1mNginx installed\033[Om"
 
-echo '\033[35m
+echo -e '\033[35m
            __          __  ___      ___       __          _
     ____  / /_  ____  /  |/  /_  __/   | ____/ /___ ___  (_)___
    / __ \/ __ \/ __ \/ /|_/ / / / / /| |/ __  / __ `__ \/ / __ \
@@ -122,7 +122,7 @@ ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmya
 echo "\033[92;1mphpMyAdmin installed\033[Om"
 echo "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
 
-echo '\033[35m
+echo -e '\033[35m
     ____           ___
    / __ \___  ____/ (_)____
   / /_/ / _ \/ __  / / ___/
@@ -143,7 +143,7 @@ systemctl restart redis-server
 systemctl restart php7.0-fpm
 echo "\033[92;1mRedis installed\033[Om"
 
-echo '\033[35m
+echo -e '\033[35m
    ______
   / ____/___  ____ ___  ____  ____  ________  _____
  / /   / __ \/ __ `__ \/ __ \/ __ \/ ___/ _ \/ ___/
@@ -159,7 +159,7 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 echo "\033[92;1mComposer installed\033[Om"
 
 
-echo '\033[35m
+echo -e '\033[35m
     ____                  __
    / __ \_______  _______/ /_
   / / / / ___/ / / / ___/ __ \
@@ -177,7 +177,7 @@ echo "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 
 
 # TODO supervising
-# echo '\033[35m
+# echo -e '\033[35m
 #    __  ___          _ __      __  __  ___          _
 #   /  |/  /__  ___  (_) /_   _/_/ /  |/  /_ _____  (_)__
 #  / /|_/ / _ \/ _ \/ / __/ _/_/  / /|_/ / // / _ \/ / _ \
@@ -256,7 +256,7 @@ echo "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 # echo "\033[92;1mMonit installed\033[Om"
 
 
-# echo '\033[35m
+# echo -e '\033[35m
 #     ___                __        __
 #    /   |_      _______/ /_____ _/ /_
 #   / /| | | /| / / ___/ __/ __ `/ __/

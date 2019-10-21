@@ -4,7 +4,7 @@
 
 # TODO check if root
 
-echo '\033[35m
+echo -e '\033[35m
    __  _______ __________
   / / / / ___// ____/ __ \
  / / / /\__ \/ __/ / /_/ /
@@ -34,7 +34,7 @@ mkdir /home/$user/backups
 
 chmod -w /home/"$user"
 
-echo '\033[35m
+echo -e '\033[35m
         __               __
  _   __/ /_  ____  _____/ /_
 | | / / __ \/ __ \/ ___/ __/
@@ -80,7 +80,7 @@ echo "\033[92;1mvhost $_host_name configured\033[Om"
 
 # todo add mysql user and database
 
-echo '\033[35m
+echo -e '\033[35m
     __  ___                 __
    /  |/  /_  ___________ _/ /
   / /|_/ / / / / ___/ __ `/ /
