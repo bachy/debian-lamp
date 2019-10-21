@@ -39,7 +39,8 @@ sed -i "s/7000,8000,9000/$sq/g" /etc/knockd.conf
 sed -i 's/START_KNOCKD=0/START_KNOCKD=1/g' /etc/default/knockd
 # /etc/init.d/knockd start
 # patch https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=868015
-echo -e "
+# TODO this line is buggy
+echo "
 
 # patch https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=868015
 [Install]
