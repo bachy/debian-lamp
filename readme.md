@@ -1,4 +1,4 @@
-# Install web server and secure it on debian 9
+# Install LEMP web server and secure it on debian 10
 
 Fail2ban, Ufw, Proftpd, Knockd, Nginx, Mariadb, php7.0-fpm, redis, vhosts, git barre repos, zabbix-agent, dotfiles and more
 
