@@ -4,7 +4,8 @@ Fail2ban, Ufw, Proftpd, Knockd, Nginx, Mariadb, php7.0-fpm, redis, vhosts, git b
 
 ## how to use it
 on a fresh install
-as root
+
+All commands below are run as root user. Either log in as root user directly or log in as your normal user and then use the command ```su -``` to become root user on your server before you proceed. IMPORTANT: You must use ```su -``` and not just ```su```, otherwise your PATH variable is set wrong by Debian.
 
 1 install git
 ```

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-echo -e '\033[35m
+echo '\033[35m
  _____         __    __    _
 /__  /  ____ _/ /_  / /_  (_)  __
   / /  / __ `/ __ \/ __ \/ / |/_/
@@ -112,6 +112,6 @@ ufw allow from "$_ip" to any port 22
 systemctl restart zabbix-agent
 systemctl enable zabbix-agent
 
-echo -e "\033[92;1mZabbix-agent installed and configured, please add the host $_host_name in your zabbix-server \033[Om"
-echo -e "\033[92;1mAnd import requested templates in assets/zabbix/templates/ \033[Om"
-echo -e "\033[92;1mzabbix user mysql password is $_passwd \033[Om"
+echo "\033[92;1mZabbix-agent installed and configured, please add the host $_host_name in your zabbix-server \033[Om"
+echo "\033[92;1mAnd import requested templates in assets/zabbix/templates/ \033[Om"
+echo "\033[92;1mzabbix user mysql password is $_passwd \033[Om"

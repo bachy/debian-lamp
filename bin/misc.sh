@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo -e '\033[35m
+echo '\033[35m
     __  ____
    /  |/  (_)_________
   / /|_/ / / ___/ ___/
@@ -15,16 +15,17 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 sleep 2
-apt-get --yes --force-yes install vim curl
+# TODO --force-yes is deprecated, use one of the options starting with --allow instead.
+apt-get --yesinstall vim curl
 sed -i "s/^# en_GB.UTF-8/en_GB.UTF-8/g" /etc/locale.gen
 locale-gen
-apt-get --yes --force-yes install ntp
+apt-get --yesinstall ntp
 dpkg-reconfigure tzdata
-apt-get --yes --force-yes install tmux etckeeper needrestart htop lynx unzip
+apt-get --yesinstall tmux etckeeper needrestart htop lynx unzip
 
 # TODO cron
 # https://askubuntu.com/questions/56683/where-is-the-cron-crontab-log/121560#121560
 
 
 
-echo -e "\033[92;1mMisc done \033[Om"
+echo "\033[92;1mMisc done \033[Om"

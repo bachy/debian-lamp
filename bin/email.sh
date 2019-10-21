@@ -28,7 +28,7 @@ fi
 
 # http://www.sycha.com/lamp-setup-debian-linux-apache-mysql-php#anchor13
 sleep 2
-apt-get --yes --force-yes install exim4
+apt-get --yesinstall exim4
 echo "\033[35;1mConfiguring EXIM4 \033[0m"
 while [ "$configexim" != "y" ] && [ "$configexim" != "n" ]
 do

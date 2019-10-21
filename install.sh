@@ -5,7 +5,7 @@
 # http://web-74.com/blog/reseaux/gerer-le-deploiement-facilement-avec-git/
 #
 
-echo -e '\033[35m
+echo '\033[35m
     ____       __    _                _____
    / __ \___  / /_  (_)___ _____     / ___/___  ______   _____  _____
   / / / / _ \/ __ \/ / __ `/ __ \    \__ \/ _ \/ ___/ | / / _ \/ ___/
@@ -13,10 +13,10 @@ echo -e '\033[35m
 /_____/\___/_.___/_/\__,_/_/ /_/   /____/\___/_/    |___/\___/_/
 
 \033[0m'
-echo -e "\033[35;1mThis script has been tested only on Linux Debian 9 \033[0m"
+echo "\033[35;1mThis script has been tested only on Linux Debian 10 \033[0m"
 
 if [ "$EUID" -ne 0 ]; then
-  echo -e "Please run as root"
+  echo "Please run as root"
   exit
 fi
 
@@ -24,7 +24,7 @@ echo -n "Should we start? [Y|n] "
 read yn
 yn=${yn:-y}
 if [ "$yn" != "y" ]; then
-  echo -e "aborting script!"
+  echo "aborting script!"
   exit
 fi
 
@@ -48,7 +48,7 @@ done
 if [ "$securssh" = "yes" ]; then
   . bin/ssh.sh
 else
-  echo -e 'root user can still conect through ssh'
+  echo 'root user can still conect through ssh'
 fi
 
 
@@ -58,7 +58,7 @@ yn=${yn:-y}
 if [ "$yn" = "y" ]; then
   . bin/ftp.sh
 else
-  echo -e 'ftp server not installed'
+  echo 'ftp server not installed'
 fi
 
 while [ "$lemp" != "yes" ] && [ "$lemp" != "no" ]
@@ -69,7 +69,7 @@ done
 if [ "$lemp" = "yes" ]; then
   . bin/lemp.sh
 else
-  echo -e 'lemp server not installed'
+  echo 'lemp server not installed'
 fi
 
 while [ "$_install_vhost" != "yes" ] && [ "$_install_vhost" != "no" ]
@@ -80,7 +80,7 @@ done
 if [ "$_install_vhost" = "yes" ]; then
   . bin/vhost.sh
 else
-  echo -e 'no vhost installed'
+  echo 'no vhost installed'
 fi
 
 while [ "$_install_zabbix_agent" != "yes" ] && [ "$_install_zabbix_agent" != "no" ]
@@ -91,7 +91,7 @@ done
 if [ "$_install_zabbix_agent" = "yes" ]; then
   . bin/zabbix.sh
 else
-  echo -e 'zabbix-agent not installed'
+  echo 'zabbix-agent not installed'
 fi
 
 while [ "$_install_urbackup" != "yes" ] && [ "$_install_urbackup" != "no" ]
@@ -102,14 +102,14 @@ done
 if [ "$_install_urbackup" = "yes" ]; then
   . bin/urbackup.sh
 else
-  echo -e 'urbackup client not installed'
+  echo 'urbackup client not installed'
 fi
 
 
 . bin/dotfiles.sh
 # . bin/autoupdate.sh
 
-# echo -e '\033[35m
+# echo '\033[35m
 #   ______________  _______
 #  /_  __/ ____/  |/  / __ \
 #   / / / __/ / /|_/ / /_/ /
@@ -139,7 +139,7 @@ fi
 
 #   mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
 #   chmod 1777 /tmp
-#   echo -e "tmpfs /tmp tmpfs rw,noexec,nosuid 0 0" >> /etc/fstab
+#   echo "tmpfs /tmp tmpfs rw,noexec,nosuid 0 0" >> /etc/fstab
 
 #   # Restore /tmp
 #   cp -Rpf /tmpbackup/* /tmp/ >/dev/null 2>&1
@@ -156,14 +156,14 @@ fi
 #   # Remove old tmp dir
 #   rm -rf /var/tmpbackup
 
-#   echo -e "\033[35;1m /tmp and /var/tmp secured using tmpfs. \033[0m"
+#   echo "\033[35;1m /tmp and /var/tmp secured using tmpfs. \033[0m"
 # } # End function secure_tmp_tmpfs
 
 # check_tmp_secured
 # if [ $? = 0  ]; then
 #     secure_tmp_tmpfs
 # else
-#     echo -e "\033[35;1mFunction canceled. /tmp already secured. \033[0m"
+#     echo "\033[35;1mFunction canceled. /tmp already secured. \033[0m"
 # fi
 
 # TODO add warning message on ssh connection if system needs updates
@@ -172,11 +172,11 @@ fi
 
 
 
-echo -e '\033[35m
+echo '\033[35m
                   __
   ___  ____  ____/ /
  / _ \/ __ \/ __  /
 /  __/ / / / /_/ /
 \___/_/ /_/\__,_/
 \033[0m'
-echo -e "\033[35;1m* * script done * * \033[0m"
+echo "\033[35;1m* * script done * * \033[0m"
