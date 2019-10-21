@@ -61,7 +61,7 @@ if [ "$vh" = "y" ]; then
   # lets'encrypt
   # https://certbot.eff.org/lets-encrypt/debianstretch-nginx
   if [ "$_letsencrypt" = "yes" ]; then
-    apt-get --yesinstall certbot
+    apt-get --yes install certbot
     certbot certonly --standalone -d "$_domain" --cert-name "$_domain"
     # TODO stop the whole process if letsencrypt faile
     mkdir -p /etc/nginx/ssl/certs/"$_domain"

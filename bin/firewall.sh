@@ -17,7 +17,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 sleep 2
-apt-get --yesinstall ufw
+apt-get --yes install ufw
 # ufw allow ssh # knockd will open the ssh port
 ufw allow http
 ufw allow https

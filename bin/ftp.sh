@@ -28,7 +28,7 @@ if [ ! -d "$_assets" ]; then
 fi
 
 echo "installing proftpd"
-apt-get --yesinstall proftpd
+apt-get --yes install proftpd
 while [ "$_server_name" = "" ]
 do
 read -p "enter a server name ? " _server_name

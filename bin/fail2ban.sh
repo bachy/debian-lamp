@@ -17,7 +17,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 sleep 2
-apt-get --yesinstall fail2ban
+apt-get --yes install fail2ban
 cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 # ToDo ask for email and configure jail.local with it
 touch /var/log/auth.log

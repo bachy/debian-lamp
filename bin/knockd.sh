@@ -29,7 +29,7 @@ if [ ! -d "$_assets" ]; then
 fi
 
 sleep 2
-apt-get --yesinstall knockd
+apt-get --yes install knockd
 
 mv /etc/knockd.conf /etc/knockd.conf.ori
 cp "$_assets"/knockd.conf /etc/knockd.conf

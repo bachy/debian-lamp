@@ -16,12 +16,12 @@ fi
 
 sleep 2
 # TODO --force-yes is deprecated, use one of the options starting with --allow instead.
-apt-get --yesinstall vim curl
+apt-get --yes install vim curl
 sed -i "s/^# en_GB.UTF-8/en_GB.UTF-8/g" /etc/locale.gen
 locale-gen
-apt-get --yesinstall ntp
+apt-get --yes install ntp
 dpkg-reconfigure tzdata
-apt-get --yesinstall tmux etckeeper needrestart htop lynx unzip
+apt-get --yes install tmux etckeeper needrestart htop lynx unzip
 
 # TODO cron
 # https://askubuntu.com/questions/56683/where-is-the-cron-crontab-log/121560#121560

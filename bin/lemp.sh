@@ -39,7 +39,7 @@ echo -e '\033[35m
 \033[0m'
 echo -e "\033[35;1minstalling Mysql \033[0m"
 sleep 3
-apt-get --yesinstall mariadb-server
+apt-get --yes install mariadb-server
 mysql_secure_installation
 
 cp "$_assets"/mysql/innodb-file-per-table.cnf /etc/mysql/conf.d/
@@ -57,7 +57,7 @@ echo -e '\033[35m
 \033[0m'
 echo -e "\033[35;1mInstalling PHP 7.0 \033[0m"
 sleep 3
-apt-get --yesinstall php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached php7.0-imagick
+apt-get --yes install php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached php7.0-imagick
 
 mv /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.back
 cp "$_assets"/php-fpm.ini /etc/php/7.0/fpm/php.ini
@@ -73,7 +73,7 @@ systemctl start php7.0-fpm
 
 # echo "Installing memecached"
 # replaced by redis
-# apt-get --yesinstall memcached
+# apt-get --yes install memcached
 # sed -i "s/-m\s64/-m 128/g" /etc/memcached.conf
 #
 # systemctl start memcached
@@ -90,7 +90,7 @@ echo -e '\033[35m
 \033[0m'
 echo -e "\033[35;1mInstalling Nginx \033[0m"
 sleep 3
-apt-get --yesinstall nginx
+apt-get --yes install nginx
 mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.ori
 cp "$_assets"/default.nginxconf /etc/nginx/sites-available/default
 
@@ -107,7 +107,7 @@ echo -e '\033[35m
 /_/         /_/           /____/
 \033[0m'
 echo -e "\033[35;1mInstalling phpMyAdmin \033[0m"
-apt-get --yesinstall phpmyadmin
+apt-get --yes install phpmyadmin
 ln -s /usr/share/phpmyadmin /var/www/html/
 cp "$_assets"/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
 ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
@@ -131,7 +131,7 @@ echo -e '\033[35m
 \033[0m'
 echo -e "\033[35;1mInstalling Redis \033[0m"
 sleep 3
-apt-get --yesinstall redis-server php-redis
+apt-get --yes install redis-server php-redis
 
 # TODO set maxmemory=2gb
 # TODO set maxmemory-policy=volatile-lru
@@ -186,7 +186,7 @@ echo -e "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 # echo -e "\033[35;1mInstalling Munin \033[0m"
 # sleep 3
 # # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/
-# apt-get --yesinstall munin munin-node munin-plugins-extra
+# apt-get --yes install munin munin-node munin-plugins-extra
 # # Configure Munin
 # # enable plugins
 # ln -s /usr/share/munin/plugins/mysql_ /etc/munin/plugins/mysql_
@@ -225,7 +225,7 @@ echo -e "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 # echo -e "\033[35;1mInstalling Monit \033[0m"
 # sleep 3
 # # https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/2/
-# apt-get --yesinstall monit
+# apt-get --yes install monit
 # # TODO setup monit rc
 # cat "$_assets"/monitrc > /etc/monit/monitrc
 #
@@ -265,7 +265,7 @@ echo -e "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
 # \033[0m'
 # echo -e "\033[35;1mInstalling Awstat \033[0m"
 # sleep 3
-# apt-get --yesinstall awstats
+# apt-get --yes install awstats
 # # Configure AWStats
 # temp=`grep -i sitedomain /etc/awstats/awstats.conf.local | wc -l`
 # if [ $temp -lt 1 ]; then

@@ -17,7 +17,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 echo -e "\033[35;1mInstalling apticron \033[0m"
-apt-get --yesinstall apticron
+apt-get --yes install apticron
 
 sleep 3
 echo -n "Enter an email: "
