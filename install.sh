@@ -105,8 +105,9 @@ else
   echo 'urbackup client not installed'
 fi
 
-
+# ./install.sh: line 109: bin/dotfiles.sh: No such file or directory
 . bin/dotfiles.sh
+
 # . bin/autoupdate.sh
 
 # echo -e '\033[35m

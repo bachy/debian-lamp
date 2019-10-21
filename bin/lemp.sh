@@ -57,10 +57,18 @@ echo -e '\033[35m
 \033[0m'
 echo -e "\033[35;1mInstalling PHP 7.0 \033[0m"
 sleep 3
-apt-get --yes install php7.0-fpm php7.0-mysql php7.0-opcache php7.0-curl php7.0-mbstring php7.0-zip php7.0-xml php7.0-gd php7.0-mcrypt php-memcached php7.0-imagick
 
-mv /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.back
-cp "$_assets"/php-fpm.ini /etc/php/7.0/fpm/php.ini
+# mv: cannot stat '/etc/php/7.0/fpm/php.ini': No such file or directory
+# cp: cannot create regular file '/etc/php/7.0/fpm/php.ini': No such file or directory
+# Configuring PHP
+# Failed to enable unit: Unit file php7.0-fpm.service does not exist.
+# Failed to start php7.0-fpm.service: Unit php7.0-fpm.service not found.
+
+apt-get --yes install php7.3-fpm php7.3-mysql php7.3-opcache php7.3-curl php7.3-mbstring php7.3-zip php7.3-xml php7.3-gd php-memcached php7.3-imagick
+# php7.3-mcrypt  ??
+
+mv /etc/php/7.3/fpm/php.ini /etc/php/7.3/fpm/php.ini.back
+cp "$_assets"/php-fpm.ini /etc/php/7.3/fpm/php.ini
 
 echo "Configuring PHP"
 
@@ -68,8 +76,8 @@ mkdir /var/log/php
 chown www-data /var/log/php
 cp "$_assets"/logrotate-php /etc/logrotate.d/php
 
-systemctl enable php7.0-fpm
-systemctl start php7.0-fpm
+systemctl enable php7.3-fpm
+systemctl start php7.3-fpm
 
 # echo "Installing memecached"
 # replaced by redis
@@ -107,20 +115,23 @@ echo -e '\033[35m
 /_/         /_/           /____/
 \033[0m'
 echo -e "\033[35;1mInstalling phpMyAdmin \033[0m"
-apt-get --yes install phpmyadmin
-ln -s /usr/share/phpmyadmin /var/www/html/
-cp "$_assets"/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
-ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
+##### Building dependency tree
+##### Reading state information... Done
+##### Package phpmyadmin is not available, but is referred to by another package.
+##### This may mean that the package is missing, has been obsoleted, or
+##### is only available from another source
+#####
+##### E: Package 'phpmyadmin' has no installation candidate
+##### cp: missing destination file operand after '/root/debian-web-server/assets/nginx-phpmyadmin.conf'
+##### Try 'cp --help' for more information.
 
-# echo -e "\033[35;1msecuring phpMyAdmin \033[0m"
-# sed -i "s/DirectoryIndex index.php/DirectoryIndex index.php\nAllowOverride all/"
-# cp "$_assets"/phpmyadmin_htaccess > /usr/share/phpmyadmin/.htaccess
-# echo -n "define a user name for phpmyadmin : "
-# read un
-# htpasswd -c /etc/phpmyadmin/.htpasswd $un
-# service apache2 restart
-echo -e "\033[92;1mphpMyAdmin installed\033[Om"
-echo -e "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
+# TODO no pma package available :(
+# apt-get --yes install phpmyadmin
+# ln -s /usr/share/phpmyadmin /var/www/html/
+# cp "$_assets"/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
+# ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
+# echo -e "\033[92;1mphpMyAdmin installed\033[Om"
+# echo -e "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
 
 echo -e '\033[35m
     ____           ___
