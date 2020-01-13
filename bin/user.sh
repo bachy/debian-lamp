@@ -37,13 +37,6 @@ do
   fi
 done
 
-# TODO
-# ./install.sh: 42: bin/user.sh: adduser: not found
-# adding dev to admin group and limiting su to the admin group
-# ./install.sh: 44: bin/user.sh: groupadd: not found
-# ./install.sh: 45: bin/user.sh: usermod: not found
-# dpkg-statoverride: error: group 'admin' does not exist
-
 adduser "$user"
 echo "adding $user to admin group and limiting su to the admin group"
 groupadd admin

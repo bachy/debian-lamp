@@ -60,10 +60,11 @@ if [ "$installdkim" = "y" ]; then
   selector=$(date +%Y%m%d)
 
   mkdir /etc/exim4/dkim
-  openssl genrsa -out /etc/exim4/dkim/"$domain"-private.pem 1024 -outform PEM
-  openssl rsa -in /etc/exim4/dkim/"$domain"-private.pem -out /etc/exim4/dkim/"$domain".pem -pubout -outform PEM
-  chown root:Debian-exim /etc/exim4/dkim/"$domain"-private.pem
-  chmod 440 /etc/exim4/dkim/"$domain"-private.pem
+  # openssl genrsa -out /etc/exim4/dkim/"$domain"-private.pem 1024 -outform PEM
+  openssl genrsa -out /etc/exim4/dkim/"$domain"-private.key 1024
+  openssl rsa -in /etc/exim4/dkim/"$domain"-private.key -out /etc/exim4/dkim/"$domain".pub -pubout
+  chown root:Debian-exim /etc/exim4/dkim/"$domain"-private.key
+  chmod 440 /etc/exim4/dkim/"$domain"-private.key
 
   cp "$_assets"/exim4_dkim.conf /etc/exim4/conf.d/main/00_local_macros
   sed -i -r "s/DOMAIN_TO_CHANGE/$domain/g" /etc/exim4/conf.d/main/00_local_macros
@@ -73,7 +74,7 @@ if [ "$installdkim" = "y" ]; then
   systemctl restart exim4
   echo "please create a TXT entry in your dns zone : $selector._domainkey.$domain \n"
   echo "your public key is : \n"
-  cat /etc/exim4/dkim/"$domain".pem
+  cat /etc/exim4/dkim/"$domain".pub
   echo "press any key to continue."
   read continu
 else

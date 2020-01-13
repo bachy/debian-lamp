@@ -26,6 +26,10 @@ if [ ! -d "$_assets" ]; then
   fi
 fi
 
+# not necessary anymore zabbix-agent 4 is in apt
+# https://packages.debian.org/fr/buster/zabbix-agent
+# TODO downgrade zabbix-agent to 3.4
+
 wget -P /tmp/ http://repo.zabbix.com/zabbix/3.4/debian/pool/main/z/zabbix-release/zabbix-release_3.4-1+stretch_all.deb
 dpkg -i /tmp/zabbix-release_3.4-1+stretch_all.deb
 
