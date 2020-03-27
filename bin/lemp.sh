@@ -55,7 +55,7 @@ echo -e '\033[35m
  / ____/ __  / ____/
 /_/   /_/ /_/_/
 \033[0m'
-echo -e "\033[35;1mInstalling PHP 7.0 \033[0m"
+echo -e "\033[35;1mInstalling PHP 7.3 \033[0m"
 sleep 3
 
 # mv: cannot stat '/etc/php/7.0/fpm/php.ini': No such file or directory
