@@ -165,7 +165,7 @@ apt-get --yes install redis-server php-redis
 
 systemctl enable redis-server
 systemctl restart redis-server
-systemctl restart php7.0-fpm
+systemctl restart php7.3-fpm
 echo -e "\033[92;1mRedis installed\033[Om"
 
 echo -e '\033[35m
