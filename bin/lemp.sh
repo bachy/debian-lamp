@@ -133,6 +133,20 @@ echo -e "\033[35;1mInstalling phpMyAdmin \033[0m"
 # echo -e "\033[92;1mphpMyAdmin installed\033[Om"
 # echo -e "\033[92;1mYou can access it at yourip/phpmyadmin\033[Om"
 
+# install from source
+apt-get install php-{mbstring,zip,gd,xml,pear,gettext,cgi}
+cd /var/www/html/
+wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip
+unzip phpMyAdmin-latest-all-languages.zip
+mv phpMyAdmin-*-all-languages pma
+rm phpMyAdmin-latest-all-languages.zip
+# cp "$_assets"/nginx-phpmyadmin.conf > /etc/nginx/sites-available/phpmyadmin.conf
+# ln -s /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
+echo -e "\033[92;1mphpMyAdmin installed\033[Om"
+echo -e "\033[92;1mYou can access it at yourip/pma\033[Om"
+
+
+
 echo -e '\033[35m
     ____           ___
    / __ \___  ____/ (_)____
