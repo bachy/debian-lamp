@@ -43,11 +43,11 @@ wget -P /tmp/ https://hndl.urbackup.org/Client/2.4.10/urbackup-client-2.4.10.0.t
 
 cd /tmp
 # tar xzf /tmp/urbackup-client-2.3.4.0.tar.gz
-tar xzf /tmp/urbackup-client-2.4.8.0.tar.gz
+tar xzf /tmp/urbackup-client-2.4.10.0.tar.gz
 
 # Build the UrBackup client and install it
 # cd /tmp/urbackup-client-2.3.4.0
-cd /tmp/urbackup-client-2.4.8.0
+cd /tmp/urbackup-client-2.4.10.0
 ./configure --enable-headless
 make -j4
 make install
