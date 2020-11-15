@@ -195,6 +195,7 @@ echo -e "\033[35;1mInstalling Drush and DrupalConsole\033[0m"
 sleep 3
 curl https://drupalconsole.com/installer -L -o /usr/local/bin/drupal
 chmod +x /usr/local/bin/drupal
-curl https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar -L -o /usr/local/bin/drush
+# curl https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar -L -o /usr/local/bin/drush
+wget -O /usr/local/bin/drush https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
 chmod +x /usr/local/bin/drush
 echo -e "\033[92;1mDrush and DrupalConsoleinstalled\033[Om"
