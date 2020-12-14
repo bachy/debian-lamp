@@ -1,6 +1,6 @@
 # https://www.nginx.com/resources/wiki/start/topics/recipes/drupal/
 server {
-    listen 80;
+    listen [::]:80;
     server_name DOMAIN.LTD;
     root /var/www/DOMAIN.LTD/public_html;
 
