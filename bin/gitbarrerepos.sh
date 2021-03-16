@@ -111,12 +111,12 @@ if [ "$vh" = "yes" ]; then
   chmod +x post-receive # pre-receive
 
   # setup git repo on site folder
-  cd /home/"$user"/www/"$_domain"/public_html
+  cd /home/"$user"/www/"$_domain"/app
   git init
   # link to the bare repo
   git remote add origin /home/"$user"/git-repositories/"$_domain".git
 
-  chown -R "$user":"$user" /home/"$user"/www/"$_domain"/public_html
+  chown -R "$user":"$user" /home/"$user"/www/"$_domain"/app
 
   cd "$_cwd"
   # done
