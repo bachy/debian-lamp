@@ -64,7 +64,7 @@ sleep 3
 # Failed to enable unit: Unit file php7.0-fpm.service does not exist.
 # Failed to start php7.0-fpm.service: Unit php7.0-fpm.service not found.
 
-apt-get --yes install php7.3-fpm php7.3-mysql php7.3-opcache php7.3-curl php7.3-mbstring php7.3-zip php7.3-xml php7.3-gd php-memcached php7.3-imagick
+apt-get --yes install php7.3-fpm php7.3-mysql php7.3-opcache php7.3-curl php7.3-mbstring php7.3-zip php7.3-xml php7.3-gd php-memcached php7.3-imagick php7.3-apcu
 # php7.3-mcrypt  ??
 
 mv /etc/php/7.3/fpm/php.ini /etc/php/7.3/fpm/php.ini.back
