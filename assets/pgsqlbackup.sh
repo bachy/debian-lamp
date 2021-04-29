@@ -4,25 +4,21 @@
 # Parent backup directory
 backup_parent_dir="/var/backups/postgresql"
 
-# MySQL settings
-postgresql_user="root"
-postgresql_password="ROOTPASSWD"
+# PostgreSQL settings
+pg_host="HOST"
+pg_port="PORT"
+pg_user="USER"
+pg_password="PASSWD"
 
-# Read MySQL password from stdin if empty
-# if [ -z "${mysql_password}" ]; then
-#   echo -n "Enter MySQL ${mysql_user} password: "
-#   read -s mysql_password
-#   echo
-# fi
 
 # Check MySQL password
-echo exit | mysql --user=${mysql_user} --password=${mysql_password} -B 2>/dev/null
-if [ "$?" -gt 0 ]; then
-  echo "MySQL ${mysql_user} password incorrect"
-  exit 1
-else
-  echo "MySQL ${mysql_user} password correct."
-fi
+# echo exit | mysql --user=${mysql_user} --password=${mysql_password} -B 2>/dev/null
+# if [ "$?" -gt 0 ]; then
+#   echo "MySQL ${mysql_user} password incorrect"
+#   exit 1
+# else
+#   echo "MySQL ${mysql_user} password correct."
+# fi
 
 # Create backup directory and set permissions
 backup_date=`date +%Y_%m_%d_%H_%M`
@@ -32,19 +28,24 @@ mkdir -p "${backup_dir}"
 chmod 644 "${backup_dir}"
 
 # Get postgresql databases
-pgsql_databases=`echo 'show databases' | psql -h localhost -U postgres `
+pgsql_databases=`psql "host=$pg_host port=$pg_port user=$pg_user password=$pg_password" -At -c "select datname from pg_database where not datistemplate and datallowconn;"`
+
 
 # Backup and compress each database
-for database in $mysql_databases
+for database in $pgsql_databases
 do
-  if [ "${database}" == "information_schema" ] || [ "${database}" == "performance_schema" ]; then
-        additional_mysqldump_params="--skip-lock-tables --compact --no-autocommit "
-  else
-        additional_mysqldump_params=""
-  fi
   echo "Creating backup of \"${database}\" database"
-  mysqldump ${additional_mysqldump_params} --user=${mysql_user} --password=${mysql_password} ${database} | gzip > "${backup_dir}/${database}.sql.gz"
-  chmod 644 "${backup_dir}/${database}.sql.gz"
+  # mysqldump ${additional_mysqldump_params} --user=${mysql_user} --password=${mysql_password} ${database} | gzip > "${backup_dir}/${database}.sql.gz"
+  # chmod 644 "${backup_dir}/${database}.sql.gz"
+	set -o pipefail
+	# if ! pg_dump -Fp -h "$pg_host" -U "$pg_user" "$database" | gzip > $backup_dir"/$database".sql.gz.in_progress; then
+  # if ! pg_dump -Fp "host=$pg_host port=$pg_port user=$pg_user password=$pg_password" "$database" | gzip > $backup_dir"/$database".sql.gz.in_progress; then
+  if ! pg_dump -Fp --dbname="postgresql://$pg_user:$pg_password@$pg_host:$pg_port/$database" | gzip > $backup_dir"/$database".sql.gz.in_progress; then
+		echo "[!!ERROR!!] Failed to produce plain backup database $database" 1>&2
+	else
+		mv $backup_dir"/$database".sql.gz.in_progress $backup_dir"/$database".sql.gz
+	fi
+	set +o pipefail
 done
 
 # compress the folder
