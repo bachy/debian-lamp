@@ -35,7 +35,7 @@ _cwd="$(pwd)"
 . bin/misc.sh
 . bin/firewall.sh
 . bin/fail2ban.sh
-. bin/knockd.sh
+# . bin/knockd.sh
 . bin/user.sh
 . bin/email.sh
 

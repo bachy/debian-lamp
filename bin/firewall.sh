@@ -18,7 +18,7 @@ fi
 
 sleep 2
 apt-get --yes install ufw
-# ufw allow ssh # knockd will open the ssh port
+ufw allow ssh
 ufw allow http
 ufw allow https
 
