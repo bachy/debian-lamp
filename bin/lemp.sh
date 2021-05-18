@@ -64,11 +64,11 @@ sleep 3
 # Failed to enable unit: Unit file php7.0-fpm.service does not exist.
 # Failed to start php7.0-fpm.service: Unit php7.0-fpm.service not found.
 
-apt-get --yes install php7.3-fpm php7.3-mysql php7.3-opcache php7.3-curl php7.3-mbstring php7.3-zip php7.3-xml php7.3-gd php-memcached php7.3-imagick php7.3-apcu
+apt-get --yes install php7.3-{fpm,mysql,opcache,curl,mbstring,zip,xml,gd,imagick,apcu} php-memcached
 # php7.3-mcrypt  ??
 
 mv /etc/php/7.3/fpm/php.ini /etc/php/7.3/fpm/php.ini.back
-cp "$_assets"/php-fpm.ini /etc/php/7.3/fpm/php.ini
+cp "$_assets"/php7.3-fpm.ini /etc/php/7.3/fpm/php.ini
 
 echo "Configuring PHP"
 
@@ -85,6 +85,19 @@ systemctl start php7.3-fpm
 # sed -i "s/-m\s64/-m 128/g" /etc/memcached.conf
 #
 # systemctl start memcached
+
+echo -e "\033[35;1mInstalling PHP 7.4 \033[0m"
+apt-get -y install lsb-release apt-transport-https ca-certificates
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+apt-get update
+apt-get -y install php7.4 php7.4-{fpm,mysql,opcache,curl,mbstring,zip,xml,gd,imagick,apcu}
+
+mv /etc/php/7.4/fpm/php.ini /etc/php/7.4/fpm/php.ini.back
+cp "$_assets"/php7.4-fpm.ini /etc/php/7.4/fpm/php.ini
+
+systemctl enable php7.4-fpm
+systemctl start php7.4-fpm
 
 echo -e "\033[92;1mphp installed\033[Om"
 
