@@ -13,4 +13,4 @@ cp "$_assets"/php7.4-fpm.ini /etc/php/7.4/fpm/php.ini
 systemctl enable php7.4-fpm
 systemctl start php7.4-fpm
 
-echo -e "\033[92;1mphp7.4-fpm installed\033[Om"
+echo -e "\033[92;1mphp7.4-fpm installed\033[O"

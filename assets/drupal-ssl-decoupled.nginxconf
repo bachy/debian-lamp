@@ -1,6 +1,7 @@
 # https://www.nginx.com/resources/wiki/start/topics/recipes/drupal/
 server {
   listen 80;
+  listen [::]:80;
   server_name DOMAIN.LTD;
   return 301 https://$server_name$request_uri;
 }
@@ -8,6 +9,7 @@ server {
 
 server {
   listen 443 ssl;
+  listen [::]:443 ssl;
   server_name DOMAIN.LTD;
 
   #SSL Certificates

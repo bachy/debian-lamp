@@ -1,117 +1,118 @@
 # https://www.nginx.com/resources/wiki/start/topics/recipes/drupal/
 server {
-    listen [::]:80;
-    server_name DOMAIN.LTD;
-    root /var/www/DOMAIN.LTD/public_html;
+  listen 80;
+  listen [::]:80;
+  server_name DOMAIN.LTD;
+  root /var/www/DOMAIN.LTD/public_html;
 
-    charset utf-8;
+  charset utf-8;
 
-    location = /favicon.ico {
-      access_log off;
-      log_not_found off;
-    }
+  location = /favicon.ico {
+    access_log off;
+    log_not_found off;
+  }
 
-    location = /robots.txt  {
+  location = /robots.txt  {
+    allow all;
+    access_log off;
+    log_not_found off;
+  }
+
+  location ~ \..*/.*\.php$ {
+    return 403;
+  }
+
+  location ~ ^/sites/.*/private/ {
+    return 403;
+  }
+
+  # Block access to scripts in site files directory
+  location ~ ^/sites/[^/]+/files/.*\.php$ {
+    deny all;
+  }
+
+  # Allow "Well-Known URIs" as per RFC 5785
+  location ~* ^/.well-known/ {
       allow all;
-      access_log off;
-      log_not_found off;
-    }
+  }
 
-    location ~ \..*/.*\.php$ {
-      return 403;
-    }
+  # Block access to "hidden" files and directories whose names begin with a
+  # period. This includes directories used by version control systems such
+  # as Subversion or Git to store control files.
+  location ~ (^|/)\. {
+    return 403;
+  }
 
-    location ~ ^/sites/.*/private/ {
-      return 403;
-    }
+  location / {
+    # try_files $uri @rewrite; # For Drupal <= 6
+    try_files $uri /index.php?$query_string; # For Drupal >= 7
+  }
 
-    # Block access to scripts in site files directory
-    location ~ ^/sites/[^/]+/files/.*\.php$ {
-      deny all;
-    }
+  location @rewrite {
+    rewrite ^/(.*)$ /index.php?q=$1;
+  }
 
-    # Allow "Well-Known URIs" as per RFC 5785
-    location ~* ^/.well-known/ {
-        allow all;
-    }
+  # Don't allow direct access to PHP files in the vendor directory.
+  location ~ /vendor/.*\.php$ {
+    deny all;
+    return 404;
+  }
 
-    # Block access to "hidden" files and directories whose names begin with a
-    # period. This includes directories used by version control systems such
-    # as Subversion or Git to store control files.
-    location ~ (^|/)\. {
-      return 403;
-    }
+  location ~ /\.ht {
+    deny all;
+  }
 
-    location / {
-      # try_files $uri @rewrite; # For Drupal <= 6
-      try_files $uri /index.php?$query_string; # For Drupal >= 7
-    }
+  access_log on;
+  error_log /var/www/DOMAIN.LTD/log/error.log;
 
-    location @rewrite {
-      rewrite ^/(.*)$ /index.php?q=$1;
-    }
+  sendfile off;
 
-    # Don't allow direct access to PHP files in the vendor directory.
-    location ~ /vendor/.*\.php$ {
-      deny all;
-      return 404;
-    }
+  client_max_body_size 100m;
 
-    location ~ /\.ht {
-      deny all;
-    }
+  # In Drupal 8, we must also match new paths where the '.php' appears in
+  # the middle, such as update.php/selection. The rule we use is strict,
+  # and only allows this pattern with the update.php front controller.
+  # This allows legacy path aliases in the form of
+  # blog/index.php/legacy-path to continue to route to Drupal nodes. If
+  # you do not have any paths like that, then you might prefer to use a
+  # laxer rule, such as:
+  #   location ~ \.php(/|$) {
+  # The laxer rule will continue to work if Drupal uses this new URL
+  # pattern with front controllers other than update.php in a future
+  # release.
+  location ~ '\.php$|^/update.php' {
+    # fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_split_path_info ^(.+?\.php)(|/.*)$;
+    include fastcgi_params;
+    # Block httpoxy attacks. See https://httpoxy.org/.
+    fastcgi_param HTTP_PROXY "";
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_param QUERY_STRING $query_string;
+    fastcgi_intercept_errors on;
+    # fastcgi_buffer_size 16k;
+    # fastcgi_buffers 4 16k;
+    fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+  }
+  # Fighting with Styles? This little gem is amazing.
+  # location ~ ^/sites/.*/files/imagecache/ { # For Drupal <= 6
+  location ~ ^/sites/.*/files/styles/ { # For Drupal >= 7
+    try_files $uri @rewrite;
+  }
 
-    access_log on;
-    error_log /var/www/DOMAIN.LTD/log/error.log;
+  # Handle private files through Drupal. Private file's path can come
+  # with a language prefix.
+  location ~ ^(/[a-z\-]+)?/system/files/ { # For Drupal >= 7
+    try_files $uri /index.php?$query_string;
+  }
 
-    sendfile off;
-
-    client_max_body_size 100m;
-
-    # In Drupal 8, we must also match new paths where the '.php' appears in
-    # the middle, such as update.php/selection. The rule we use is strict,
-    # and only allows this pattern with the update.php front controller.
-    # This allows legacy path aliases in the form of
-    # blog/index.php/legacy-path to continue to route to Drupal nodes. If
-    # you do not have any paths like that, then you might prefer to use a
-    # laxer rule, such as:
-    #   location ~ \.php(/|$) {
-    # The laxer rule will continue to work if Drupal uses this new URL
-    # pattern with front controllers other than update.php in a future
-    # release.
-    location ~ '\.php$|^/update.php' {
-      # fastcgi_split_path_info ^(.+\.php)(/.+)$;
-      fastcgi_split_path_info ^(.+?\.php)(|/.*)$;
-      include fastcgi_params;
-      # Block httpoxy attacks. See https://httpoxy.org/.
-      fastcgi_param HTTP_PROXY "";
-      fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-      fastcgi_param PATH_INFO $fastcgi_path_info;
-      fastcgi_param QUERY_STRING $query_string;
-      fastcgi_intercept_errors on;
-      # fastcgi_buffer_size 16k;
-      # fastcgi_buffers 4 16k;
-      fastcgi_pass unix:/run/php/php7.3-fpm.sock;
-    }
-    # Fighting with Styles? This little gem is amazing.
-    # location ~ ^/sites/.*/files/imagecache/ { # For Drupal <= 6
-    location ~ ^/sites/.*/files/styles/ { # For Drupal >= 7
-      try_files $uri @rewrite;
-    }
-
-    # Handle private files through Drupal. Private file's path can come
-    # with a language prefix.
-    location ~ ^(/[a-z\-]+)?/system/files/ { # For Drupal >= 7
-      try_files $uri /index.php?$query_string;
-    }
-
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
-      try_files $uri @rewrite;
-      expires max;
-      log_not_found off;
-    }
+  location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+    try_files $uri @rewrite;
+    expires max;
+    log_not_found off;
+  }
 
 
-    # website should not be displayed inside a <frame>, an <iframe> or an <object>
-    add_header X-Frame-Options SAMEORIGIN;
+  # website should not be displayed inside a <frame>, an <iframe> or an <object>
+  add_header X-Frame-Options SAMEORIGIN;
 }
